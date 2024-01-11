@@ -1,6 +1,0 @@
-@Wheelingful_HostAddress = http://localhost:5151
-
-GET {{Wheelingful_HostAddress}}/***/
-Accept: application/json
-
-###
