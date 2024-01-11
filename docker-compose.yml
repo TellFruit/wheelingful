@@ -4,7 +4,7 @@ services:
   api:
     build:
       context: ./
-      dockerfile: Dockerfile
+      dockerfile: backend/Dockerfile
     ports:
       - "5000:8080"
     depends_on:
