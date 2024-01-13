@@ -20,7 +20,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Wheelingful.Core\Wheelingful.Core.csproj" />
     <ProjectReference Include="..\Wheelingful.Data\Wheelingful.Data.csproj" />
+    <ProjectReference Include="..\Wheelingful.Services\Wheelingful.Services.csproj" />
   </ItemGroup>
 
 </Project>

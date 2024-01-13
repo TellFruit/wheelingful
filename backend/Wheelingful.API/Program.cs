@@ -1,4 +1,6 @@
+using Wheelingful.Core;
 using Wheelingful.Data;
+using Wheelingful.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 builder.Services.AddDbContext(builder.Configuration);
+builder.Services.AddServices();
+builder.Services.AddOptions();
 
 var app = builder.Build();
 
