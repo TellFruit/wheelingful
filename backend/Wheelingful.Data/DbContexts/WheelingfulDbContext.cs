@@ -7,6 +7,8 @@ namespace Wheelingful.Data.DbContexts;
 
 internal class WheelingfulDbContext : IdentityDbContext<User>
 {
+    public DbSet<RefreshToken> RefreshTokens { get; set; }
+
     public WheelingfulDbContext(DbContextOptions<WheelingfulDbContext> options) 
         : base(options) { }
 

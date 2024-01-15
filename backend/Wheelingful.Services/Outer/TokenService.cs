@@ -60,7 +60,7 @@ internal class TokenService : ITokenService
         return new ClaimsIdentity(claims);
     }
 
-    public string GenerateRefreshToken()
+    public string GenerateRefreshSignature()
     {
         var salt = new byte[RefreshTokenBytesLength];
 

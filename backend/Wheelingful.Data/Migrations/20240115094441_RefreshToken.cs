@@ -38,13 +38,6 @@ namespace Wheelingful.Data.Migrations
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: "1",
-                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
-                values: new object[] { "b1a2d127-e0dc-4895-b327-763dae96d947", "AQAAAAIAAYagAAAAEIm8XJbZuVRYdlOh8SJMwcv7reZBW2+LVkuOopmSyfu2WSf0kW5T7Yfwuk1HEWSObw==" });
-
             migrationBuilder.CreateIndex(
                 name: "IX_RefreshToken_UserId",
                 table: "RefreshToken",
@@ -56,13 +49,6 @@ namespace Wheelingful.Data.Migrations
         {
             migrationBuilder.DropTable(
                 name: "RefreshToken");
-
-            migrationBuilder.UpdateData(
-                table: "AspNetUsers",
-                keyColumn: "Id",
-                keyValue: "1",
-                columns: new[] { "ConcurrencyStamp", "PasswordHash" },
-                values: new object[] { "73af3e96-ffcd-4dcd-a47b-23c8561ee42b", "AQAAAAIAAYagAAAAEOxX3lTDE3xcO/g6nmW+RJwJE2CNv5edbWoj9ZDXf8iI6E1LzwX8Zm+j+jsrd36iWg==" });
         }
     }
 }

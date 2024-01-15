@@ -57,21 +57,21 @@ internal class LoginService : ILoginService
     {
         var refreshTokenTask = _refreshTokenManager.GetRefreshToken(request.RefreshSignature);
 
-        var accessClaims = await _tokenService.GetClaimsFromAccessToken(request.AccessToken);
+        var accessIdentity = await _tokenService.GetClaimsFromAccessToken(request.AccessToken);
 
-        var accessTokenEmail = accessClaims.Claims
+        var accessEmail = accessIdentity.Claims
             .First(c => c.Type.Equals(nameof(AccessTokenDescriptor.Email)))
             .Value;
 
-        var userTask = _userManager.FindByEmailAsync(accessTokenEmail);
+        var userTask = _userManager.FindByEmailAsync(accessEmail);
 
-        var accessTokenId = accessClaims.Claims
+        var accessTokenId = accessIdentity.Claims
             .First(c => c.Type.Equals("Jti"))
             .Value;
 
         var refreshToken = await refreshTokenTask;
 
-        if (!refreshToken.Email.Equals(accessTokenEmail))
+        if (!refreshToken.Email.Equals(accessEmail))
         {
             throw new ArgumentException("Invalid refresh token");
         }
@@ -92,7 +92,7 @@ internal class LoginService : ILoginService
 
         var tokenDescription = new AccessTokenDescriptor
         {
-            Email = accessTokenEmail,
+            Email = accessEmail,
             Roles = roles
         };
 

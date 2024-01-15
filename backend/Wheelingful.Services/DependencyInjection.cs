@@ -7,7 +7,7 @@ namespace Wheelingful.Services;
 
 public static class DependencyInjection
 {
-    public static void AddServicesCore(this IServiceCollection services)
+    public static void AddServicesOuter(this IServiceCollection services)
     {
         services.AddScoped<ITokenService, TokenService>();
 

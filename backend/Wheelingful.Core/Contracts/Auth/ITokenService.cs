@@ -7,5 +7,5 @@ public interface ITokenService
 {
     string GenerateAccessToken(AccessTokenDescriptor tokenModel);
     Task<ClaimsIdentity> GetClaimsFromAccessToken(string token);
-    string GenerateRefreshToken();
+    string GenerateRefreshSignature();
 }
