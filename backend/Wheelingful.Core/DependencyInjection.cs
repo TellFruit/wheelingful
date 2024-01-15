@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wheelingful.Core.DTO.Options;
+using Wheelingful.Core.DTO.Auth;
 
 namespace Wheelingful.Core;
 

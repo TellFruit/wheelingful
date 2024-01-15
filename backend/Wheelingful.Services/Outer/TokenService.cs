@@ -3,14 +3,16 @@ using Microsoft.IdentityModel.JsonWebTokens;
 using System.Security.Claims;
 using Wheelingful.Core.Contracts.Auth;
 using Wheelingful.Core.DTO.Auth;
-using Wheelingful.Core.DTO.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.Data;
+using System.Security.Cryptography;
 
 namespace Wheelingful.Services.Outer.Auth;
 
 internal class TokenService : ITokenService
 {
+    private static int RefreshTokenBytesLength = 32;
+
     private readonly JwtOptions _jwtOptions;
     private readonly JsonWebTokenHandler _tokenHandler;
 
@@ -20,7 +22,7 @@ internal class TokenService : ITokenService
         _tokenHandler = tokenHandler;
     }
 
-    public string GenerateAccessToken(UserTokenModel tokenModel)
+    public string GenerateAccessToken(AccessTokenDescriptor tokenModel)
     {
         var now = DateTime.UtcNow;
 
@@ -42,12 +44,10 @@ internal class TokenService : ITokenService
 
     private SigningCredentials GetSigningCredentials(string secretKey)
     {
-        var signingKey = new SymmetricSecurityKey(Convert.FromBase64String(secretKey));
-
-        return new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256Signature);
+        return new SigningCredentials(GetSigningKeyKey(secretKey), SecurityAlgorithms.HmacSha256Signature);
     }
 
-    private ClaimsIdentity GetClaims(UserTokenModel tokenModel)
+    private ClaimsIdentity GetClaims(AccessTokenDescriptor tokenModel)
     {
         var claims = new List<Claim>
         {
@@ -58,5 +58,41 @@ internal class TokenService : ITokenService
         claims.AddRange(tokenModel.Roles.Select(role => new Claim(ClaimTypes.Role, role)));
 
         return new ClaimsIdentity(claims);
+    }
+
+    public string GenerateRefreshToken()
+    {
+        var salt = new byte[RefreshTokenBytesLength];
+
+        using (var rng = RandomNumberGenerator.Create())
+        {
+            rng.GetBytes(salt);
+
+            return Convert.ToBase64String(salt);
+        }
+    }
+
+    public async Task<ClaimsIdentity> GetClaimsFromAccessToken(string token)
+    {
+        var result = await _tokenHandler.ValidateTokenAsync(token, new TokenValidationParameters
+        {
+            ValidateAudience = false,
+            ValidateIssuer = false,
+            ValidateIssuerSigningKey = true,
+            ValidateLifetime = false,
+            IssuerSigningKey = GetSigningKeyKey(_jwtOptions.SecretKey),
+        });
+
+        if (result.IsValid)
+        {
+            return result.ClaimsIdentity;
+        }
+
+        throw result.Exception;
+    }
+
+    private SymmetricSecurityKey GetSigningKeyKey(string secretKey)
+    {
+        return new SymmetricSecurityKey(Convert.FromBase64String(secretKey));
     }
 }

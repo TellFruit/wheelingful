@@ -1,7 +1,9 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Wheelingful.Core.Contracts.Auth;
 using Wheelingful.Data.DbContexts;
+using Wheelingful.Data.Outer;
 
 namespace Wheelingful.Data;
 
@@ -13,5 +15,10 @@ public static class DependencyInjection
 
         services.AddDbContext<WheelingfulDbContext>(options =>
             options.UseMySql(config.GetConnectionString("DefaultConnection"), serverVersion));
+    }
+
+    public static void AddDataCore(this IServiceCollection services)
+    {
+        services.AddScoped<ILoginService, LoginService>();
     }
 }
