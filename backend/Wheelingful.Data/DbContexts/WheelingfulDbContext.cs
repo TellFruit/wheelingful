@@ -1,17 +1,19 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Wheelingful.Data.Entities;
 using Wheelingful.Data.Extensions;
 
 namespace Wheelingful.Data.DbContexts;
 
-internal class WheelingfulDbContext : IdentityDbContext<IdentityUser>
+internal class WheelingfulDbContext : IdentityDbContext<User>
 {
     public WheelingfulDbContext(DbContextOptions<WheelingfulDbContext> options) 
         : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        modelBuilder.BuildModels();
+
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.SeedRoles();

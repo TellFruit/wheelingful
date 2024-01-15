@@ -24,7 +24,7 @@ internal class TokenService : ITokenService
     {
         var now = DateTime.UtcNow;
 
-        var expires = now.AddHours(Convert.ToDouble(_jwtOptions.HoursUntilExpired));
+        var expires = now.AddHours(Convert.ToDouble(_jwtOptions.HoursUntilAccessExpired));
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {

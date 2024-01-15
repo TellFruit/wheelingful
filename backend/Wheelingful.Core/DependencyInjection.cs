@@ -14,7 +14,8 @@ public static class DependencyInjection
         {
             options.Issuer = jwtAppOptions[nameof(JwtOptions.Issuer)]!;
             options.Audience = jwtAppOptions[nameof(JwtOptions.Audience)]!;
-            options.HoursUntilExpired = int.Parse(jwtAppOptions[nameof(JwtOptions.HoursUntilExpired)]!);
+            options.HoursUntilAccessExpired = int.Parse(jwtAppOptions["HoursUntil:AcessExpired"]!);
+            options.HoursUntilRefershExpired = int.Parse(jwtAppOptions["HoursUntil:RefreshExpired"]!);
             options.SecretKey = jwtAppOptions[nameof(JwtOptions.SecretKey)]!;
         });
     }
