@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Wheelingful.Core.Enums;
-using Wheelingful.Data.Entities;
 
 namespace Wheelingful.Data.Extensions;
 
@@ -34,10 +33,10 @@ internal static class SeedExtension
 
     public static void SeedUsers(this ModelBuilder builder)
     {
-        var passwordHasher = new PasswordHasher<User>();
+        var passwordHasher = new PasswordHasher<IdentityUser>();
 
-        builder.Entity<User>().HasData(
-            new User
+        builder.Entity<IdentityUser>().HasData(
+            new IdentityUser
             {
                 Id = "1",
                 UserName = "admin@wheelingful.com",

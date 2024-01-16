@@ -1,14 +1,12 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Wheelingful.Data.Entities;
 using Wheelingful.Data.Extensions;
 
 namespace Wheelingful.Data.DbContexts;
 
-internal class WheelingfulDbContext : IdentityDbContext<User>
+internal class WheelingfulDbContext : IdentityDbContext<IdentityUser>
 {
-    public DbSet<RefreshToken> RefreshTokens { get; set; }
-
     public WheelingfulDbContext(DbContextOptions<WheelingfulDbContext> options) 
         : base(options) { }
 

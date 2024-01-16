@@ -19,4 +19,8 @@
     <ProjectReference Include="..\Wheelingful.Core\Wheelingful.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Outer\" />
+  </ItemGroup>
+
 </Project>
