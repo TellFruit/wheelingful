@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wheelingful.Data.DbContexts;
@@ -13,5 +14,15 @@ public static class DependencyInjection
 
         services.AddDbContext<WheelingfulDbContext>(options =>
             options.UseMySql(config.GetConnectionString("DefaultConnection"), serverVersion));
+    }
+
+    public static void AddIdentityDataStores(this IdentityBuilder builder)
+    {
+        builder.AddEntityFrameworkStores<WheelingfulDbContext>();
+    }
+
+    public static void AddDataOuter(this IServiceCollection services)
+    {
+
     }
 }
