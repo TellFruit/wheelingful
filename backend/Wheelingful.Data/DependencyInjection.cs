@@ -19,10 +19,9 @@ public static class DependencyInjection
             options.UseMySql(config.GetConnectionString("DefaultConnection"), serverVersion));
     }
 
-    public static void AddIdentity(this IServiceCollection services)
+    public static void AddIdentityDataStores(this IdentityBuilder builder)
     {
-        services.AddIdentityCore<User>()
-            .AddEntityFrameworkStores<WheelingfulDbContext>();
+        builder.AddEntityFrameworkStores<WheelingfulDbContext>();
     }
 
     public static void AddDataOuter(this IServiceCollection services)
