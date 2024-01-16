@@ -25,12 +25,12 @@ namespace Wheelingful.Data.Migrations
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "1", 0, "73af3e96-ffcd-4dcd-a47b-23c8561ee42b", "admin@wheelingful.com", true, false, null, "ADMIN@WHEELINGFUL.COM", "ADMIN@WHEELINGFUL.COM", "AQAAAAIAAYagAAAAEOxX3lTDE3xcO/g6nmW+RJwJE2CNv5edbWoj9ZDXf8iI6E1LzwX8Zm+j+jsrd36iWg==", null, false, "", false, "admin@wheelingful.com" });
+                values: new object[] { "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59", 0, "", "admin@wheelingful.com", true, false, null, "ADMIN@WHEELINGFUL.COM", "ADMIN@WHEELINGFUL.COM", "", null, false, "", false, "admin@wheelingful.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "1", "1" });
+                values: new object[] { "1", "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59" });
         }
 
         /// <inheritdoc />
@@ -49,7 +49,7 @@ namespace Wheelingful.Data.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetUserRoles",
                 keyColumns: new[] { "RoleId", "UserId" },
-                keyValues: new object[] { "1", "1" });
+                keyValues: new object[] { "1", "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59" });
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
@@ -59,7 +59,7 @@ namespace Wheelingful.Data.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetUsers",
                 keyColumn: "Id",
-                keyValue: "1");
+                keyValue: "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59");
         }
     }
 }

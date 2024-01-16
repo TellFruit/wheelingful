@@ -38,14 +38,15 @@ internal static class SeedExtension
         builder.Entity<IdentityUser>().HasData(
             new IdentityUser
             {
-                Id = "1",
+                Id = "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59",
                 UserName = "admin@wheelingful.com",
                 NormalizedUserName = "ADMIN@WHEELINGFUL.COM",
                 Email = "admin@wheelingful.com",
                 NormalizedEmail = "ADMIN@WHEELINGFUL.COM",
                 EmailConfirmed = true,
-                PasswordHash = passwordHasher.HashPassword(null, "#SYSADMIN123"),
-                SecurityStamp = string.Empty
+                PasswordHash = string.Empty,
+                SecurityStamp = string.Empty,
+                ConcurrencyStamp = string.Empty,
             }
         );
     }
@@ -55,7 +56,7 @@ internal static class SeedExtension
         builder.Entity<IdentityUserRole<string>>().HasData(
             new IdentityUserRole<string>
             {
-                UserId = "1",
+                UserId = "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59",
                 RoleId = "1"
             }
         );

@@ -2,7 +2,7 @@
 
 public enum UserRoleEnum
 {
-    Admin,
     Reader,
     Author,
+    Admin,
 }

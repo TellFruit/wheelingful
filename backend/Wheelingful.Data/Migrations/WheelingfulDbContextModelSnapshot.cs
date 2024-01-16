@@ -16,7 +16,7 @@ namespace Wheelingful.Data.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "7.0.15")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 64);
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -154,15 +154,15 @@ namespace Wheelingful.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1",
+                            Id = "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "73af3e96-ffcd-4dcd-a47b-23c8561ee42b",
+                            ConcurrencyStamp = "",
                             Email = "admin@wheelingful.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@WHEELINGFUL.COM",
                             NormalizedUserName = "ADMIN@WHEELINGFUL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEOxX3lTDE3xcO/g6nmW+RJwJE2CNv5edbWoj9ZDXf8iI6E1LzwX8Zm+j+jsrd36iWg==",
+                            PasswordHash = "",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -232,7 +232,7 @@ namespace Wheelingful.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "1",
+                            UserId = "ff38c4e9-8a0a-4a95-bb82-1f7685db3c59",
                             RoleId = "1"
                         });
                 });
