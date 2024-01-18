@@ -1,3 +1,3 @@
 export const SHARED_CONFIG = {
-    serverApiUrl: ''
-}
+  serverApiUrl: 'https://localhost:7277',
+};

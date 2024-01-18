@@ -1,8 +1,8 @@
-import LoginPage from "./components/login-page";
+import LoginPage from '../components/login-page'
 
 export const authRootRoutes = [
   {
-    path: "login",
+    path: 'login',
     Component: LoginPage,
   },
 ];

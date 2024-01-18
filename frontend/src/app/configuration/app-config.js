@@ -1,3 +1,3 @@
 export const APP_CONFIG = {
-    isDevelopment: true
-}
+  isDevelopment: false,
+};

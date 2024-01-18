@@ -7,6 +7,16 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowClientApp", corsBuilder =>
+    {
+        corsBuilder.WithOrigins(builder.Configuration["CORS:ClientOrigin"]!)
+               .AllowAnyHeader()
+               .AllowAnyMethod();
+    });
+});
+
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services
     .AddIdentityApiEndpoints<IdentityUser>()
@@ -22,6 +32,8 @@ builder.Services
 builder.Services.AddAuthorization();
 
 var app = builder.Build();
+
+app.UseCors("AllowClientApp");
 
 if (app.Environment.IsDevelopment())
 {
