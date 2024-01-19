@@ -6,11 +6,22 @@ import {
   Stack,
   TextField,
   Typography,
+  Alert,
 } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { getSearchParam } from '../../../app';
 
-export default function AuthComponent({onSubmit, title, authTitle, redirectTitle, redirectTo, isLoading, isSuccess }) {
+export default function AuthComponent({
+  onSubmit,
+  title,
+  authTitle,
+  redirectTitle,
+  redirectTo,
+  error,
+  isLoading,
+  isSuccess,
+  isError,
+}) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
@@ -30,7 +41,7 @@ export default function AuthComponent({onSubmit, title, authTitle, redirectTitle
 
   const handleRedirect = () => {
     navigate(redirectTo);
-  }
+  };
 
   return (
     <Container maxWidth="xs">
@@ -55,6 +66,11 @@ export default function AuthComponent({onSubmit, title, authTitle, redirectTitle
           onChange={(e) => setPassword(e.target.value)}
           sx={{ marginBottom: 2 }}
         />
+        {isError && (
+          <Alert severity="error" sx={{ marginBottom: 2 }}>
+            {error}
+          </Alert>
+        )}
         <Stack direction={'row'} spacing={2}>
           <Button
             variant="contained"

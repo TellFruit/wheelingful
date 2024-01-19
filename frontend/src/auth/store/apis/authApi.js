@@ -8,6 +8,7 @@ const onAuthQueryStarted = async (arg, { dispatch, queryFulfilled }) => {
     const { data } = await queryFulfilled;
     dispatch(setTokens(data));
   } catch (error) {
+    // TODO: Remove throwing error in production
     console.error(error);
   }
 };
