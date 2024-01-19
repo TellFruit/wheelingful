@@ -21,7 +21,7 @@ const authSlice = createSlice({
       state.refreshToken = '';
       state.tokenType = '';
       state.isSignedIn = false;
-      window.location.href = AUTH_CONFIG.routes.login;
+      window.location.href = AUTH_CONFIG.routes.api.login;
     },
   },
 });

@@ -8,7 +8,7 @@ const onAuthQueryStarted = async (arg, { dispatch, queryFulfilled }) => {
     const { data } = await queryFulfilled;
     dispatch(setTokens(data));
   } catch (error) {
-    /* empty */
+    console.error(error);
   }
 };
 
@@ -20,7 +20,7 @@ export const authApi = createApi({
       signUp: builder.mutation({
         query: (credentials) => {
           return {
-            url: AUTH_CONFIG.routes.register,
+            url: AUTH_CONFIG.routes.api.register,
             body: {
               email: credentials.email,
               password: credentials.password,
@@ -33,7 +33,7 @@ export const authApi = createApi({
       signIn: builder.mutation({
         query: (credentials) => {
           return {
-            url: AUTH_CONFIG.routes.login,
+            url: AUTH_CONFIG.routes.api.login,
             body: {
               email: credentials.email,
               password: credentials.password,

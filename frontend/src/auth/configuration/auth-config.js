@@ -1,7 +1,13 @@
 export const AUTH_CONFIG = {
   routes: {
-    register: "/auth/register",
-    login: "/auth/login",
-    refresh: "/auth/refresh",
+    router: {
+      register: 'register',
+      login: 'login',
+    },
+    api: {
+      register: '/auth/register',
+      login: '/auth/login',
+      refresh: '/auth/refresh',
+    },
   },
 };

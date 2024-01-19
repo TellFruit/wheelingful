@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import {
   Box,
   Button,
@@ -6,40 +7,36 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { useSignInMutation } from '../store/apis/authApi';
+import { getSearchParam } from '../../../app';
 
-function LoginPage() {
+export default function AuthComponent({onSubmit, title, authTitle, redirectTitle, redirectTo, isLoading, isSuccess }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [signIn, results] = useSignInMutation();
+
   const location = useLocation();
   const navigate = useNavigate();
 
-  const params = new URLSearchParams(location.search);
-  const from = params.get('from') || '/';
-  
   useEffect(() => {
-    if (results.isSuccess) {
+    if (isSuccess) {
+      const from = getSearchParam(location.search, 'from') || '/';
       navigate(from);
     }
-  }, [navigate, results]);
+  }, [isSuccess, navigate]);
 
-  const handleLogin = () => {
-    signIn({
-      email,
-      password,
-    });
+  const handleSubmit = () => {
+    onSubmit({ email, password });
   };
 
-  const handleRegisterRedirect = () => {};
+  const handleRedirect = () => {
+    navigate(redirectTo);
+  }
 
   return (
     <Container maxWidth="xs">
       <Box sx={{ marginTop: 10 }}>
         <Typography variant="h3" sx={{ textAlign: 'left', marginBottom: 2 }}>
-          Please, enter your credentials.
+          {title}
         </Typography>
         <TextField
           label="Email"
@@ -62,23 +59,21 @@ function LoginPage() {
           <Button
             variant="contained"
             color="primary"
-            onClick={handleLogin}
-            disabled={results.isLoading}
+            onClick={handleSubmit}
+            disabled={isLoading}
           >
-            Sign in
+            {authTitle}
           </Button>
           <Button
             variant="outlined"
             color="primary"
-            onClick={handleRegisterRedirect}
-            disabled={results.isLoading}
+            onClick={handleRedirect}
+            disabled={isLoading}
           >
-            Sign up
+            {redirectTitle}
           </Button>
         </Stack>
       </Box>
     </Container>
   );
 }
-
-export default LoginPage;
