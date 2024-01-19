@@ -44,10 +44,11 @@ public static class IdentityApiEndpointRouteBuilderExtensions
 
         // NOTE: We cannot inject UserManager<TUser> directly because the TUser generic parameter is currently unsupported by RDG.
         // https://github.com/dotnet/aspnetcore/issues/47338
-        authGroup.MapPost("/register", async Task<Results<Ok, ValidationProblem>>
+        authGroup.MapPost("/register", async Task<Results<Ok<AccessTokenResponse>, ValidationProblem, EmptyHttpResult, ProblemHttpResult>>
             ([FromBody] RegisterRequest registration, HttpContext context, [FromServices] IServiceProvider sp) =>
         {
             var userManager = sp.GetRequiredService<UserManager<TUser>>();
+            var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
 
             if (!userManager.SupportsUserEmail)
             {
@@ -73,7 +74,19 @@ public static class IdentityApiEndpointRouteBuilderExtensions
                 return CreateValidationProblem(result);
             }
 
-            return TypedResults.Ok();
+            var login = new LoginRequest() { 
+                Email = registration.Email, 
+                Password = registration.Password 
+            };
+
+            var loginResult = await signInManager.SignIn(login);
+
+            if (loginResult is ProblemHttpResult problem)
+            {
+                return problem;
+            }
+
+            return TypedResults.Empty;
         });
 
         authGroup.MapPost("/login", async Task<Results<Ok<AccessTokenResponse>, EmptyHttpResult, ProblemHttpResult>>
@@ -81,30 +94,13 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         {
             var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
 
-            var useCookieScheme = (useCookies == true) || (useSessionCookies == true);
-            var isPersistent = (useCookies == true) && (useSessionCookies != true);
-            signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
+            var result = await signInManager.SignIn(login, useCookies, useSessionCookies);
 
-            var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
-
-            if (result.RequiresTwoFactor)
+            if (result is ProblemHttpResult problem)
             {
-                if (!string.IsNullOrEmpty(login.TwoFactorCode))
-                {
-                    result = await signInManager.TwoFactorAuthenticatorSignInAsync(login.TwoFactorCode, isPersistent, rememberClient: isPersistent);
-                }
-                else if (!string.IsNullOrEmpty(login.TwoFactorRecoveryCode))
-                {
-                    result = await signInManager.TwoFactorRecoveryCodeSignInAsync(login.TwoFactorRecoveryCode);
-                }
+                return problem;
             }
 
-            if (!result.Succeeded)
-            {
-                return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
-            }
-
-            // The signInManager already produced the needed response in the form of a cookie or bearer token.
             return TypedResults.Empty;
         });
 
@@ -129,6 +125,35 @@ public static class IdentityApiEndpointRouteBuilderExtensions
         });
 
         return new IdentityEndpointsConventionBuilder(authGroup);
+    }
+
+    private static async Task<IResult> SignIn<TUser>(this SignInManager<TUser> signInManager, LoginRequest login, bool? useCookies = null, bool? useSessionCookies = null) where TUser : class
+    {
+        var useCookieScheme = (useCookies == true) || (useSessionCookies == true);
+        var isPersistent = (useCookies == true) && (useSessionCookies != true);
+        signInManager.AuthenticationScheme = useCookieScheme ? IdentityConstants.ApplicationScheme : IdentityConstants.BearerScheme;
+
+        var result = await signInManager.PasswordSignInAsync(login.Email, login.Password, isPersistent, lockoutOnFailure: true);
+
+        if (result.RequiresTwoFactor)
+        {
+            if (!string.IsNullOrEmpty(login.TwoFactorCode))
+            {
+                result = await signInManager.TwoFactorAuthenticatorSignInAsync(login.TwoFactorCode, isPersistent, rememberClient: isPersistent);
+            }
+            else if (!string.IsNullOrEmpty(login.TwoFactorRecoveryCode))
+            {
+                result = await signInManager.TwoFactorRecoveryCodeSignInAsync(login.TwoFactorRecoveryCode);
+            }
+        }
+
+        if (!result.Succeeded)
+        {
+            return TypedResults.Problem(result.ToString(), statusCode: StatusCodes.Status401Unauthorized);
+        }
+
+        // The signInManager already produced the needed response in the form of a cookie or bearer token.
+        return TypedResults.Empty;
     }
 
     private static ValidationProblem CreateValidationProblem(string errorCode, string errorDescription) =>
