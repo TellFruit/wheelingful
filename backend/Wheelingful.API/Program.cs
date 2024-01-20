@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Identity;
 using Wheelingful.Data;
+using Wheelingful.Data.Entities;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services
-    .AddIdentityApiEndpoints<IdentityUser>()
+    .AddIdentityApiEndpoints<AppUser>()
     .AddIdentityDataStores();
 
 builder.Services.AddDataOuter();
@@ -48,6 +48,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapIdentityPartialApi<IdentityUser>();
+app.MapIdentityPartialApi<AppUser>();
 
 app.Run();
