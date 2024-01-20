@@ -364,3 +364,6 @@ FodyWeavers.xsd
 
 # Development settings with frequent changes and sensitive data
 /backend/Wheelingful.API/appsettings.Development.json
+
+# Package-lock is an auto-generated file
+/frontend/package-lock.json
