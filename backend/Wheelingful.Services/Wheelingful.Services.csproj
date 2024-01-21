@@ -8,10 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Wheelingful.Core\Wheelingful.Core.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Outer\" />
+    <ProjectReference Include="..\Wheelingful.Data\Wheelingful.Data.csproj" />
   </ItemGroup>
 
 </Project>

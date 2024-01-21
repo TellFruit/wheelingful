@@ -12,5 +12,5 @@ public sealed class Book : BaseEntity, IBaseTimestamp
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    public List<AppUser> Users { get; set; } = [];
+    public List<AppUser> Authors { get; set; } = [];
 }

@@ -11,10 +11,4 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="8.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Contracts\" />
-    <Folder Include="DTO\" />
-    <Folder Include="Constants\" />
-  </ItemGroup>
-
 </Project>

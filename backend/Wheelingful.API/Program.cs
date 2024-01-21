@@ -48,6 +48,6 @@ app.UseAuthorization();
 
 app.MapControllers();
 
-app.MapIdentityPartialApi<AppUser>();
+app.MapIdentityApi<AppUser>();
 
 app.Run();

@@ -9,7 +9,7 @@ internal static class BuildModelExtension
     {
         builder.Entity<AppUser>()
             .HasMany(u => u.Books)
-            .WithMany(b => b.Users)
+            .WithMany(b => b.Authors)
             .UsingEntity("Authorship");
 
         builder.Entity<Book>()
