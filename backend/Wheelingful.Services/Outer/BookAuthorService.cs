@@ -1,66 +1,49 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
+﻿using Wheelingful.Core.Contracts.Auth;
 using Wheelingful.Core.Contracts.Books;
-using Wheelingful.Core.DTO.Author.Abstract;
 using Wheelingful.Core.DTO.Books;
-using Wheelingful.Data.Entities;
+using Wheelingful.Services.Extensions;
 
 namespace Wheelingful.Services.Outer;
 
 public class BookAuthorService : IBookAuthorService
 {
     private readonly IBookManager _bookManager;
-    private readonly UserManager<AppUser> _userManager;
+    private readonly ICurrentUser _currentUser;
 
-    public BookAuthorService(IBookManager bookManager, UserManager<AppUser> userManager)
+    public BookAuthorService(IBookManager bookManager, ICurrentUser currentUser)
     {
         _bookManager = bookManager;
-        _userManager = userManager;
+        _currentUser = currentUser;
     }
 
-    public async Task CreateBook(CreateBookRequest request)
+    public async Task CreateBook(NewBookModel model)
     {
-        var author = await _userManager.GetUserAsync(request.AuthorClaims);
+        model.AuthorId = _currentUser.Id;
 
-        request.NewBook.AuthorId = author!.Id;
-
-        await _bookManager.CreateBook(request.NewBook);
+        await _bookManager.CreateBook(model);
     }
 
-    public async Task UpdateBook(UpdateBookRequest request)
+    public async Task UpdateBook(UpdatedBookModel model)
     {
-        var check = await IsActualAuthor(request, request.UpdatedBook.Id);
+        var check = await _bookManager.IsActualAuthor(model.Id, _currentUser.Id);
 
         if (check is false)
         {
             return;
         }
 
-        await _bookManager.UpdateBook(request.UpdatedBook);
+        await _bookManager.UpdateBook(model);
     }
 
-    public async Task DeleteBook(DeleteBookRequest request)
+    public async Task DeleteBook(int bookId)
     {
-        var check = await IsActualAuthor(request, request.BookId);
+        var check = await _bookManager.IsActualAuthor(bookId, _currentUser.Id);
 
         if (check is false)
         {
             return;
         }
 
-        await _bookManager.DeleteBook(request.BookId);
-    }
-
-    private async Task<bool> IsActualAuthor(AuthorAuthorizeRequest request, int bookId)
-    {
-        var authorTask = _userManager.GetUserAsync(request.AuthorClaims);
-
-        var bookToUpdate = await _bookManager
-            .ReadBoooks()
-            .FirstAsync(b => b.Id == bookId);
-
-        var author = await authorTask;
-
-        return bookToUpdate.AuthorId != author!.Id;
+        await _bookManager.DeleteBook(bookId);
     }
 }

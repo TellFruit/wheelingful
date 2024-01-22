@@ -1,5 +1,8 @@
+using Wheelingful.API.Extensions;
+using Wheelingful.API.Extensions.MinimalAPI;
 using Wheelingful.Data;
 using Wheelingful.Data.Entities;
+using Wheelingful.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,8 +15,8 @@ builder.Services.AddCors(options =>
     options.AddPolicy("AllowClientApp", corsBuilder =>
     {
         corsBuilder.WithOrigins(builder.Configuration["CORS:ClientOrigin"]!)
-               .AllowAnyHeader()
-               .AllowAnyMethod();
+            .AllowAnyHeader()
+            .AllowAnyMethod();
     });
 });
 
@@ -22,14 +25,22 @@ builder.Services
     .AddIdentityApiEndpoints<AppUser>()
     .AddIdentityDataStores();
 
+builder.Services.AddApiOuter();
 builder.Services.AddDataOuter();
+builder.Services.AddServicesOuter();
+
+builder.Services.AddApiInner();
 
 builder.Services.AddOptions();
 
 builder.Services
     .AddAuthentication()
     .AddBearerToken();
-builder.Services.AddAuthorization();
+
+builder.Services.AddAuthorizationBuilder()
+  .AddPolicy("allow_author", policy =>
+        policy
+            .RequireRole("Admin", "Author"));
 
 var app = builder.Build();
 
@@ -46,8 +57,7 @@ app.UseHttpsRedirection();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.MapControllers();
-
-app.MapIdentityApi<AppUser>();
+app.MapIdentityPartialApi<AppUser>();
+app.MapBookAuthorApi();
 
 app.Run();
