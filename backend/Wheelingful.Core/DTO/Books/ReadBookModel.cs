@@ -10,4 +10,5 @@ public class ReadBookModel
     public required string Description { get; set; }
     public BookCategoryEnum Category { get; set; }
     public BookStatusEnum Status { get; set; }
+    public required string CoverId { get; set; }
 }

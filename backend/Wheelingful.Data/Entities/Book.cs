@@ -9,8 +9,9 @@ public sealed class Book : BaseEntity, IBaseTimestamp
     public required string Description { get; set; }
     public BookCategoryEnum Category { get; set; }
     public BookStatusEnum Status { get; set; }
+    public required string CoverId { get; set; }
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
-    public List<AppUser> Authors { get; set; } = [];
+    public List<AppUser> Users { get; set; } = [];
 }

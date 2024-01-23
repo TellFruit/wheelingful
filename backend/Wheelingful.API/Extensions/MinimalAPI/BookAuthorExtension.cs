@@ -9,26 +9,26 @@ public static class BookAuthorExtension
 {
     public static void MapBookAuthorApi(this IEndpointRouteBuilder endpoints)
     {
-        var bookAuthorGroup = endpoints.MapGroup("/bookAuthor").RequireAuthorization("allow_author");
+        var bookAuthorGroup = endpoints.MapGroup("/bookAuthor")/*.RequireAuthorization("allow_author")*/;
 
         bookAuthorGroup.MapPost("/createBook", async Task<Results<Created, ValidationProblem, ForbidHttpResult>>
-            ([FromBody] NewBookModel newBook, [FromServices] IBookAuthorService ba) =>
+            ([FromBody] NewBookModel model, [FromServices] IBookAuthorService ba) =>
         {
-            await ba.CreateBook(newBook);
+            await ba.CreateBook(model);
 
             return TypedResults.Created();
         });
 
-        bookAuthorGroup.MapPost("/updateBook", async Task<Results<Ok, ValidationProblem, ForbidHttpResult>>
-            ([FromBody] UpdatedBookModel updatedBook, [FromServices] IBookAuthorService ba) =>
+        bookAuthorGroup.MapPut("/updateBook", async Task<Results<Ok, ValidationProblem, ForbidHttpResult>>
+            ([FromBody] UpdatedBookModel model, [FromServices] IBookAuthorService ba) =>
         {
-            await ba.UpdateBook(updatedBook);
+            await ba.UpdateBook(model);
 
             return TypedResults.Ok();
         });
 
-        bookAuthorGroup.MapPost("/deleteBook", async Task<Results<NotFound, ValidationProblem, ForbidHttpResult>>
-            ([FromBody] int bookId, [FromServices] IBookAuthorService ba) =>
+        bookAuthorGroup.MapDelete("/deleteBook/{bookId}", async Task<Results<NotFound, ValidationProblem, ForbidHttpResult>>
+            ([FromRoute] int bookId, [FromServices] IBookAuthorService ba) =>
         {
             await ba.DeleteBook(bookId);
 

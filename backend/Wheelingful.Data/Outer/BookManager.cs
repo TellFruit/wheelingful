@@ -22,32 +22,34 @@ internal class BookManager : IBookManager
             Title = model.Title,
             Description = model.Description,
             Category = model.Category,
-            Status = model.Status
+            Status = model.Status,
+            CoverId = model.CoverId,
         };
 
         var author = _dbContext.Users
             .First(u => u.Id == model.AuthorId);
 
-        newBook.Authors.Add(author);
+        newBook.Users.Add(author);
 
         _dbContext.Add(newBook);
 
         await _dbContext.SaveChangesAsync();
     }
 
-    public IQueryable<ReadBookModel> ReadBoooks()
+    public IQueryable<ReadBookModel> GetBooks()
     {
         return _dbContext.Books
-            .Include(b => b.Authors)
+            .Include(b => b.Users)
             .Select(b => new ReadBookModel
-        {
-            Id = b.Id,
-            Title = b.Title,
-            Description = b.Description,
-            Category = b.Category,
-            Status = b.Status,
-            AuthorId = b.Authors.First().Id
-        });
+            {
+                Id = b.Id,
+                Title = b.Title,
+                Description = b.Description,
+                Category = b.Category,
+                Status = b.Status,
+                AuthorId = b.Users.First().Id,
+                CoverId = b.CoverId,
+            });
     }
 
     public async Task UpdateBook(UpdatedBookModel model)
@@ -58,6 +60,7 @@ internal class BookManager : IBookManager
         book.Description = model.Description;
         book.Category = model.Category;
         book.Status = model.Status;
+        book.CoverId = model.CoverId ?? book.CoverId;
 
         _dbContext.Update(book);
 

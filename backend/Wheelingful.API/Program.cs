@@ -1,5 +1,6 @@
 using Wheelingful.API.Extensions;
 using Wheelingful.API.Extensions.MinimalAPI;
+using Wheelingful.Core;
 using Wheelingful.Data;
 using Wheelingful.Data.Entities;
 using Wheelingful.Services;
@@ -32,6 +33,7 @@ builder.Services.AddServicesOuter();
 builder.Services.AddApiInner();
 
 builder.Services.AddOptions();
+builder.Services.AddCoreOptions(builder.Configuration);
 
 builder.Services
     .AddAuthentication()

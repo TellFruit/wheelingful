@@ -8,7 +8,7 @@ public static class BookManagerExtension
     public static async Task<bool> IsActualAuthor(this IBookManager manager, int bookId, string userId)
     {
         return await manager
-            .ReadBoooks()
+            .GetBooks()
             .AnyAsync(b => b.Id == bookId && b.AuthorId == userId);
     }
 }
