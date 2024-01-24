@@ -7,11 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wheelingful.Core\Wheelingful.Core.csproj" />
+    <PackageReference Include="Imagekit" Version="4.0.1" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Outer\" />
+    <ProjectReference Include="..\Wheelingful.Core\Wheelingful.Core.csproj" />
+    <ProjectReference Include="..\Wheelingful.Data\Wheelingful.Data.csproj" />
   </ItemGroup>
 
 </Project>
