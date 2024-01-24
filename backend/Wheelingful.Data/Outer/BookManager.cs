@@ -69,7 +69,7 @@ internal class BookManager : IBookManager
 
     public async Task DeleteBook(int bookId)
     {
-        var book = await _dbContext.Books
+        await _dbContext.Books
             .Where(b => b.Id == bookId)
             .ExecuteDeleteAsync();
     }

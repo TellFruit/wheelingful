@@ -30,9 +30,9 @@ internal class BookAuthorService : IBookAuthorService
 
     public async Task UpdateBook(UpdatedBookModel model)
     {
-        var check = await _bookManager.IsActualAuthor(model.Id, _currentUser.Id);
+        var isActualAuthor = await _bookManager.IsActualAuthor(model.Id, _currentUser.Id);
 
-        if (check is false)
+        if (!isActualAuthor)
         {
             return;
         }
@@ -53,9 +53,9 @@ internal class BookAuthorService : IBookAuthorService
 
     public async Task DeleteBook(int bookId)
     {
-        var check = await _bookManager.IsActualAuthor(bookId, _currentUser.Id);
+        var isActualAuthor = await _bookManager.IsActualAuthor(bookId, _currentUser.Id);
 
-        if (check is false)
+        if (!isActualAuthor)
         {
             return;
         }
