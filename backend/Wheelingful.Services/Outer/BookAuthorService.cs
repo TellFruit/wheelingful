@@ -30,12 +30,6 @@ internal class BookAuthorService : IBookAuthorService
 
     public async Task UpdateBook(UpdatedBookModel model)
     {
-        var oldCoverTask = _bookManager
-            .GetBooks()
-            .Where(b => b.Id == model.Id)
-            .Select(b => b.CoverId)
-            .FirstAsync();
-
         var check = await _bookManager.IsActualAuthor(model.Id, _currentUser.Id);
 
         if (check is false)
@@ -45,7 +39,11 @@ internal class BookAuthorService : IBookAuthorService
 
         if (model.CoverBase64 != null)
         {
-            var oldCoverId = await oldCoverTask;
+            var oldCoverId = await _bookManager
+                .GetBooks()
+                .Where(b => b.Id == model.Id)
+                .Select(b => b.CoverId)
+                .FirstAsync();
 
             model.CoverId = await _bookCover.UpdateCover(oldCoverId, model.CoverBase64, model.Title, _currentUser.Id);
         }
@@ -55,12 +53,6 @@ internal class BookAuthorService : IBookAuthorService
 
     public async Task DeleteBook(int bookId)
     {
-        var oldCoverTask = _bookManager
-            .GetBooks()
-            .Where(b => b.Id == bookId)
-            .Select(b => b.CoverId)
-            .FirstAsync();
-
         var check = await _bookManager.IsActualAuthor(bookId, _currentUser.Id);
 
         if (check is false)
@@ -68,7 +60,11 @@ internal class BookAuthorService : IBookAuthorService
             return;
         }
 
-        var oldCoverId = await oldCoverTask;
+        var oldCoverId = await _bookManager
+            .GetBooks()
+            .Where(b => b.Id == bookId)
+            .Select(b => b.CoverId)
+            .FirstAsync();
 
         await _bookCover.DeleteCover(oldCoverId);
 

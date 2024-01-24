@@ -12,7 +12,7 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUser, CurrentUser>();
     }
 
-    public static void AddApiInner(this IServiceCollection services)
+    public static void AddApiInternalServices(this IServiceCollection services)
     {
         services.AddScoped<IClaimsTransformation, ClaimsTransformation>();
     }

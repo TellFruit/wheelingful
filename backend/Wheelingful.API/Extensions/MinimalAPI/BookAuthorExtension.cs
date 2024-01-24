@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
+using Wheelingful.API.Constants;
 using Wheelingful.Core.Contracts.Books;
 using Wheelingful.Core.DTO.Books;
 
@@ -9,9 +10,9 @@ public static class BookAuthorExtension
 {
     public static void MapBookAuthorApi(this IEndpointRouteBuilder endpoints)
     {
-        var bookAuthorGroup = endpoints.MapGroup("/bookAuthor")/*.RequireAuthorization("allow_author")*/;
+        var bookAuthorGroup = endpoints.MapGroup("/book-author").RequireAuthorization(PolicyContants.AuthorizeAuthor);
 
-        bookAuthorGroup.MapPost("/createBook", async Task<Results<Created, ValidationProblem, ForbidHttpResult>>
+        bookAuthorGroup.MapPost("/books", async Task<Results<Created, ValidationProblem>>
             ([FromBody] NewBookModel model, [FromServices] IBookAuthorService ba) =>
         {
             await ba.CreateBook(model);
@@ -19,7 +20,7 @@ public static class BookAuthorExtension
             return TypedResults.Created();
         });
 
-        bookAuthorGroup.MapPut("/updateBook", async Task<Results<Ok, ValidationProblem, ForbidHttpResult>>
+        bookAuthorGroup.MapPut("/books", async Task<Results<Ok, ValidationProblem>>
             ([FromBody] UpdatedBookModel model, [FromServices] IBookAuthorService ba) =>
         {
             await ba.UpdateBook(model);
@@ -27,12 +28,12 @@ public static class BookAuthorExtension
             return TypedResults.Ok();
         });
 
-        bookAuthorGroup.MapDelete("/deleteBook/{bookId}", async Task<Results<NotFound, ValidationProblem, ForbidHttpResult>>
+        bookAuthorGroup.MapDelete("/books/{bookId}", async Task<Results<NoContent, ValidationProblem>>
             ([FromRoute] int bookId, [FromServices] IBookAuthorService ba) =>
         {
             await ba.DeleteBook(bookId);
 
-            return TypedResults.NotFound();
+            return TypedResults.NoContent();
         });
     }
 }
