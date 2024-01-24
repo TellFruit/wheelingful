@@ -1,12 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
+using System.Data;
 using System.Security.Claims;
 using Wheelingful.Core.Contracts.Auth;
 using Wheelingful.Data.Entities;
 
 namespace Wheelingful.API.Services;
 
-public class ClaimsTransformation : IClaimsTransformation
+internal class ClaimsTransformation : IClaimsTransformation
 {
     private readonly ICurrentUser _currentUser;
     private readonly UserManager<AppUser> _userManager;
@@ -25,6 +26,19 @@ public class ClaimsTransformation : IClaimsTransformation
 
         _currentUser.Id = found.Id;
 
-        return principal;
+        var newPrincipal = principal.Clone();
+
+        var claimsIdentity = principal.Identity as ClaimsIdentity;
+
+        ArgumentNullException.ThrowIfNull(claimsIdentity);
+
+        var roles = await _userManager.GetRolesAsync(found);
+
+        foreach (var role in roles) 
+        {
+            claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, role));
+        }
+
+        return newPrincipal;
     }
 }

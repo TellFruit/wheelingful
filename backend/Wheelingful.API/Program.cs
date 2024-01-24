@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Identity;
 using Wheelingful.API.Constants;
 using Wheelingful.API.Extensions;
 using Wheelingful.API.Extensions.MinimalAPI;
@@ -26,6 +27,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services
     .AddIdentityApiEndpoints<AppUser>()
+    .AddRoles<IdentityRole>()
     .AddIdentityDataStores();
 
 builder.Services.AddApiOuter();
