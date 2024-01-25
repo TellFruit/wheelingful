@@ -2,7 +2,7 @@
 
 namespace Wheelingful.BLL.Models.Books;
 
-public class ReadBookModel
+public class FetchBookModel
 {
     public int Id { get; set; }
     public required string AuthorId { get; set; }

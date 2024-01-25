@@ -1,12 +1,12 @@
 using Microsoft.AspNetCore.Identity;
 using Wheelingful.API.Constants;
 using Wheelingful.API.Extensions;
-using Wheelingful.API.Extensions.MinimalAPI;
 using Wheelingful.BLL;
 using Wheelingful.DAL;
 using Wheelingful.DAL.Enums;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.DbContexts;
+using Wheelingful.API.Extensions.Endpoints;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -62,5 +62,6 @@ app.UseAuthorization();
 
 app.MapIdentityPartialApi<AppUser>();
 app.MapBookAuthorApi();
+app.MapBookReaderApi();
 
 app.Run();

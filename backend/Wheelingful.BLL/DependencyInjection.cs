@@ -3,10 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
+using Wheelingful.BLL.Contracts.Generic;
 using Wheelingful.BLL.Contracts.Images;
 using Wheelingful.BLL.Models.Books;
 using Wheelingful.BLL.Services.Auth;
 using Wheelingful.BLL.Services.Books;
+using Wheelingful.BLL.Services.Generic;
 using Wheelingful.BLL.Services.Images;
 
 namespace Wheelingful.BLL;
@@ -23,6 +25,8 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUser, CurrentUser>();
 
         services.AddScoped<IBookAuthorService, BookAuthorService>();
+        services.AddScoped<IBookCoverManager, BookCoverManager>();
+        services.AddScoped<IBookReaderService, BookReaderService>();
 
         services.AddScoped(provider =>
         {
@@ -34,8 +38,8 @@ public static class DependencyInjection
 
             return new ImagekitClient(publicKey, privateKey, endpoint);
         });
-
         services.AddScoped<IImageManager, ImageManager>();
-        services.AddScoped<IBookCoverManager, BookCoverManager>();
+
+        services.AddScoped(typeof(ICountPaginationPages<>), typeof(CountPaginationPages<>));
     }
 }
