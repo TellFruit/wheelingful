@@ -8,24 +8,16 @@ using Wheelingful.Data.Entities;
 
 namespace Wheelingful.Core.Services.Books;
 
-internal class BookAuthorService : IBookAuthorService
+internal class BookAuthorService(
+    IBookCoverManager bookCover, 
+    ICurrentUser currentUser, 
+    WheelingfulDbContext dbContext) : IBookAuthorService
 {
-    private readonly IBookCoverManager _bookCover;
-    private readonly ICurrentUser _currentUser;
-    private readonly WheelingfulDbContext _dbContext;
-
-    public BookAuthorService(IBookCoverManager bookCover, ICurrentUser currentUser, WheelingfulDbContext dbContext)
-    {
-        _bookCover = bookCover;
-        _currentUser = currentUser;
-        _dbContext = dbContext;
-    }
-
     public async Task CreateBook(NewBookModel model)
     {
-        model.AuthorId = _currentUser.Id;
+        model.AuthorId = currentUser.Id;
 
-        model.CoverId = await _bookCover.UploadCover(model.CoverBase64, model.Title, model.AuthorId);
+        model.CoverId = await bookCover.UploadCover(model.CoverBase64, model.Title, model.AuthorId);
 
         var newBook = new Book
         {
@@ -36,38 +28,32 @@ internal class BookAuthorService : IBookAuthorService
             CoverId = model.CoverId,
         };
 
-        var author = _dbContext.Users
+        var author = dbContext.Users
             .First(u => u.Id == model.AuthorId);
 
         newBook.Users.Add(author);
 
-        _dbContext.Add(newBook);
+        dbContext.Add(newBook);
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
 
     }
 
     public async Task UpdateBook(UpdatedBookModel model)
     {
-        var isActualAuthor = await _dbContext.Books.IsActualAuthor(model.Id, _currentUser.Id);
+        var isActualAuthor = await dbContext.Books.IsActualAuthor(model.Id, currentUser.Id);
 
         if (!isActualAuthor)
         {
             return;
         }
 
+        var book = await dbContext.Books.FirstAsync(b => b.Id == model.Id);
+
         if (model.CoverBase64 != null)
         {
-            var oldCoverId = await _dbContext
-                .Books
-                .Where(b => b.Id == model.Id)
-                .Select(b => b.CoverId)
-                .FirstAsync();
-
-            model.CoverId = await _bookCover.UpdateCover(oldCoverId, model.CoverBase64, model.Title, _currentUser.Id);
+            model.CoverId = await bookCover.UpdateCover(book.CoverId, model.CoverBase64, model.Title, currentUser.Id);
         }
-
-        var book = _dbContext.Books.First(b => b.Id == model.Id);
 
         book.Title = model.Title;
         book.Description = model.Description;
@@ -75,29 +61,29 @@ internal class BookAuthorService : IBookAuthorService
         book.Status = model.Status;
         book.CoverId = model.CoverId ?? book.CoverId;
 
-        _dbContext.Update(book);
+        dbContext.Update(book);
 
-        await _dbContext.SaveChangesAsync();
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task DeleteBook(int bookId)
     {
-        var isActualAuthor = await _dbContext.Books.IsActualAuthor(bookId, _currentUser.Id);
+        var isActualAuthor = await dbContext.Books.IsActualAuthor(bookId, currentUser.Id);
 
         if (!isActualAuthor)
         {
             return;
         }
 
-        var oldCoverId = await _dbContext
+        var oldCoverId = await dbContext
             .Books
             .Where(b => b.Id == bookId)
             .Select(b => b.CoverId)
             .FirstAsync();
 
-        await _bookCover.DeleteCover(oldCoverId);
+        await bookCover.DeleteCover(oldCoverId);
 
-        await _dbContext.Books
+        await dbContext.Books
             .Where(b => b.Id == bookId)
             .ExecuteDeleteAsync();
     }

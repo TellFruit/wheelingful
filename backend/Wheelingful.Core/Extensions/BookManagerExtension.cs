@@ -9,7 +9,6 @@ public static class BookManagerExtension
     {
         return await set
             .Include(b => b.Users)
-            .AsQueryable()
             .Select(b => new
             {
                 b.Id,

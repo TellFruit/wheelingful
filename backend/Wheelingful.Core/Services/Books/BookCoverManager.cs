@@ -6,16 +6,9 @@ using Wheelingful.Core.DTO.Images;
 
 namespace Wheelingful.Core.Services.Books;
 
-internal class BookCoverManager : IBookCoverManager
+internal class BookCoverManager(IImageManager imageManager, IOptions<BookCoverOptions> options) : IBookCoverManager
 {
-    private readonly IImageManager _imageManager;
-    private readonly BookCoverOptions _coverOptions;
-
-    public BookCoverManager(IImageManager imageManager, IOptions<BookCoverOptions> options)
-    {
-        _imageManager = imageManager;
-        _coverOptions = options.Value;
-    }
+    private readonly BookCoverOptions _coverOptions = options.Value;
 
     public string GetCoverUrl(string bookTitle, string authorId)
     {
@@ -23,7 +16,7 @@ internal class BookCoverManager : IBookCoverManager
 
         var relativePath = $"{_coverOptions.Folder}/{coverName}.{_coverOptions.Extension}";
 
-        return _imageManager.GetImageUrl(relativePath, new TransformationOptions
+        return imageManager.GetImageUrl(relativePath, new TransformationOptions
         {
             Width = _coverOptions.Width,
             Height = _coverOptions.Height
@@ -32,7 +25,7 @@ internal class BookCoverManager : IBookCoverManager
 
     public async Task<string> UploadCover(string base64, string bookTitle, string authorId)
     {
-        return await _imageManager.UploadImage(new UploadImageModel
+        return await imageManager.UploadImage(new UploadImageModel
         {
             Base64 = base64,
             Name = GetBookCoverName(bookTitle, authorId),
@@ -42,7 +35,7 @@ internal class BookCoverManager : IBookCoverManager
 
     public async Task<string> UpdateCover(string imageId, string base64, string bookTitle, string authorId)
     {
-        return await _imageManager.UpdateImage(imageId, new UploadImageModel
+        return await imageManager.UpdateImage(imageId, new UploadImageModel
         {
             Base64 = base64,
             Name = GetBookCoverName(bookTitle, authorId),
@@ -52,7 +45,7 @@ internal class BookCoverManager : IBookCoverManager
 
     public async Task DeleteCover(string imageId)
     {
-        await _imageManager.DeleteImage(imageId);
+        await imageManager.DeleteImage(imageId);
     }
 
     private string GetBookCoverName(string bookTitle, string authorId)

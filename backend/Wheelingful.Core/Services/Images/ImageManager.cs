@@ -4,15 +4,8 @@ using Wheelingful.Core.DTO.Images;
 
 namespace Wheelingful.Core.Services.Images;
 
-internal class ImageManager : IImageManager
+internal class ImageManager(ImagekitClient imagekitClient) : IImageManager
 {
-    private readonly ImagekitClient _imagekitClient;
-
-    public ImageManager(ImagekitClient imagekitClient)
-    {
-        _imagekitClient = imagekitClient;
-    }
-
     public string GetImageUrl(string relativePath, TransformationOptions options)
     {
         var transform = new Transformation();
@@ -27,7 +20,7 @@ internal class ImageManager : IImageManager
             transform.Height((int)options.Height);
         }
 
-        return _imagekitClient
+        return imagekitClient
             .Url(transform)
             .Path(relativePath)
             .TransformationPosition("query")
@@ -43,7 +36,7 @@ internal class ImageManager : IImageManager
             folder = model.Fodler,
         };
 
-        return (await _imagekitClient.UploadAsync(newImage)).fileId;
+        return (await imagekitClient.UploadAsync(newImage)).fileId;
     }
 
     public async Task<string> UpdateImage(string imageId, UploadImageModel model)
@@ -54,6 +47,6 @@ internal class ImageManager : IImageManager
 
     public async Task DeleteImage(string imageId)
     {
-        await _imagekitClient.DeleteFileAsync(imageId);
+        await imagekitClient.DeleteFileAsync(imageId);
     }
 }
