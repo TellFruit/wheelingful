@@ -1,4 +1,5 @@
-﻿using Wheelingful.DAL.Enums;
+﻿using Wheelingful.DAL.Entities;
+using Wheelingful.DAL.Enums;
 
 namespace Wheelingful.BLL.Models.Books;
 

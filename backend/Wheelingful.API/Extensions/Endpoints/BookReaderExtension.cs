@@ -26,6 +26,14 @@ public static class BookReaderExtension
             return TypedResults.Ok(result);
         });
 
+        bookReaderGroup.MapGet("/{bookId}", async Task<Results<Ok<FetchBookModel>, ValidationProblem>>
+            ([FromRoute] int bookId, [FromServices] IBookReaderService handler) =>
+        {
+            var result = await handler.GetBook(bookId);
+
+            return TypedResults.Ok(result);
+        });
+
         bookReaderGroup.MapGet("/pages", async Task<Results<Ok<int>, ValidationProblem>>
             ([FromQuery] int pageSize, [FromServices] ICountPaginationPages<Book> handler) =>
         {

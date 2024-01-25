@@ -26,4 +26,21 @@ public class BookReaderService(WheelingfulDbContext dbContext) : IBookReaderServ
             .Paginate(request.PageNumber, request.PageSize)
             .ToListAsync();
     }
+
+    public Task<FetchBookModel> GetBook(int bookId)
+    {
+        return dbContext
+            .Books
+            .Include(b => b.Users)
+            .Select(b => new FetchBookModel
+            {
+                Id = b.Id,
+                AuthorId = b.Users.First().Id,
+                Title = b.Title,
+                Description = b.Description,
+                Category = b.Category,
+                CoverId = b.CoverId,
+            })
+            .FirstAsync(b => b.Id == bookId);
+    }
 }

@@ -6,4 +6,5 @@ namespace Wheelingful.BLL.Contracts.Books;
 public interface IBookReaderService
 {
     Task<List<FetchBookModel>> GetBooks(FetchRequest filter);
+    Task<FetchBookModel> GetBook(int bookId);
 }
