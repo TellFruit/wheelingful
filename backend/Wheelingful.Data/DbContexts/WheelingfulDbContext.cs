@@ -5,7 +5,7 @@ using Wheelingful.Data.Extensions;
 
 namespace Wheelingful.Data.DbContexts;
 
-internal class WheelingfulDbContext : IdentityDbContext<AppUser>
+public class WheelingfulDbContext : IdentityDbContext<AppUser>
 {
     public DbSet<Book> Books { get; set; }
 

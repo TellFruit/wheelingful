@@ -2,9 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Wheelingful.Core.Contracts.Books;
+using Wheelingful.Data.Contracts.Books;
 using Wheelingful.Data.DbContexts;
-using Wheelingful.Data.Outer;
 
 namespace Wheelingful.Data;
 
@@ -21,10 +20,5 @@ public static class DependencyInjection
     public static void AddIdentityDataStores(this IdentityBuilder builder)
     {
         builder.AddEntityFrameworkStores<WheelingfulDbContext>();
-    }
-
-    public static void AddDataOuter(this IServiceCollection services)
-    {
-        services.AddScoped<IBookManager, BookManager>();
     }
 }

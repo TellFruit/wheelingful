@@ -3,10 +3,9 @@ using Wheelingful.API.Constants;
 using Wheelingful.API.Extensions;
 using Wheelingful.API.Extensions.MinimalAPI;
 using Wheelingful.Core;
-using Wheelingful.Core.Enums;
+using Wheelingful.Data.Enums;
 using Wheelingful.Data;
 using Wheelingful.Data.Entities;
-using Wheelingful.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,11 +29,8 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddIdentityDataStores();
 
-builder.Services.AddApiOuter();
-builder.Services.AddDataOuter();
-builder.Services.AddServicesOuter();
-
-builder.Services.AddApiInternalServices();
+builder.Services.AddCoreServices();
+builder.Services.AddApiServices();
 
 builder.Services.AddOptions();
 builder.Services.AddCoreOptions(builder.Configuration);

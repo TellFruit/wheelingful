@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Wheelingful.Core.Enums;
+using Wheelingful.Data.Enums;
 using Wheelingful.Data.Entities;
 
 namespace Wheelingful.Data.Extensions;

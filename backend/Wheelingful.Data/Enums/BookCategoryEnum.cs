@@ -1,4 +1,4 @@
-﻿namespace Wheelingful.Core.Enums;
+﻿namespace Wheelingful.Data.Enums;
 
 public enum BookCategoryEnum
 {

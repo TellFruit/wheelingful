@@ -1,4 +1,4 @@
-﻿using Wheelingful.Core.Enums;
+﻿using Wheelingful.Data.Enums;
 
 namespace Wheelingful.Core.DTO.Books;
 

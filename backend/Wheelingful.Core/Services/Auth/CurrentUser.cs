@@ -1,6 +1,6 @@
 ﻿using Wheelingful.Core.Contracts.Auth;
 
-namespace Wheelingful.API.Services.Outer;
+namespace Wheelingful.Core.Services.Auth;
 
 public class CurrentUser : ICurrentUser
 {

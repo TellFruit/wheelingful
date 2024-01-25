@@ -1,4 +1,4 @@
-﻿using Wheelingful.Core.Enums;
+﻿using Wheelingful.Data.Enums;
 using Wheelingful.Data.Entities.Abstract;
 
 namespace Wheelingful.Data.Entities;

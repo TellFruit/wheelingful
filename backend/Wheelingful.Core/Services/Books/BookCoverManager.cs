@@ -4,7 +4,7 @@ using Wheelingful.Core.Contracts.Images;
 using Wheelingful.Core.DTO.Books;
 using Wheelingful.Core.DTO.Images;
 
-namespace Wheelingful.Services.Outer;
+namespace Wheelingful.Core.Services.Books;
 
 internal class BookCoverManager : IBookCoverManager
 {
