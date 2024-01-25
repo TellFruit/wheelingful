@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Identity;
 using System.Security.Claims;
-using Wheelingful.Core.Contracts.Auth;
-using Wheelingful.Data.Entities;
+using Wheelingful.BLL.Contracts.Auth;
+using Wheelingful.DAL.Entities;
 
 namespace Wheelingful.API.Services;
 

@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Wheelingful.Core\Wheelingful.Core.csproj" />
+    <ProjectReference Include="..\Wheelingful.BLL\Wheelingful.BLL.csproj" />
   </ItemGroup>
 
 </Project>

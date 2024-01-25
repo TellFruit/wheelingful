@@ -3,14 +3,14 @@ WORKDIR /api
 
 COPY *.sln .
 COPY Wheelingful.API/*.csproj ./Wheelingful.API/
-COPY Wheelingful.Core/*.csproj ./Wheelingful.Core/
-COPY Wheelingful.Data/*.csproj ./Wheelingful.Data/
-COPY Wheelingful.Services/*.csproj ./Wheelingful.Services/
+COPY Wheelingful.BLL/*.csproj ./Wheelingful.BLL/
+COPY Wheelingful.DAL/*.csproj ./Wheelingful.DAL/
 
 RUN dotnet restore
 
 COPY Wheelingful.API/. ./Wheelingful.API/
-COPY Wheelingful.Data/. ./Wheelingful.Data/
+COPY Wheelingful.BLL/. ./Wheelingful.BLL/
+COPY Wheelingful.DAL/. ./Wheelingful.DAL/
 
 WORKDIR /api/Wheelingful.API
 RUN dotnet publish -c Release -o out

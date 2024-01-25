@@ -2,11 +2,11 @@ using Microsoft.AspNetCore.Identity;
 using Wheelingful.API.Constants;
 using Wheelingful.API.Extensions;
 using Wheelingful.API.Extensions.MinimalAPI;
-using Wheelingful.Core;
-using Wheelingful.Data;
-using Wheelingful.Data.Enums;
-using Wheelingful.Data.Entities;
-using Wheelingful.Data.DbContexts;
+using Wheelingful.BLL;
+using Wheelingful.DAL;
+using Wheelingful.DAL.Enums;
+using Wheelingful.DAL.Entities;
+using Wheelingful.DAL.DbContexts;
 
 var builder = WebApplication.CreateBuilder(args);
 

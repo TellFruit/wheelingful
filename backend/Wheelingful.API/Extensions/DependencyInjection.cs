@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Wheelingful.API.Services;
-using Wheelingful.Core.Services;
-using Wheelingful.Core.Contracts.Auth;
+using Wheelingful.BLL.Services;
+using Wheelingful.BLL.Contracts.Auth;
 
 namespace Wheelingful.API.Extensions;
 

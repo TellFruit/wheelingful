@@ -5,9 +5,9 @@ VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheelingful.API", "Wheelingful.API\Wheelingful.API.csproj", "{9D9B3049-582D-44ED-9091-BE63174F22E0}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheelingful.Data", "Wheelingful.Data\Wheelingful.Data.csproj", "{84950E5E-94E3-4D39-A310-8DFB99C9837A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheelingful.DAL", "Wheelingful.DAL\Wheelingful.DAL.csproj", "{84950E5E-94E3-4D39-A310-8DFB99C9837A}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheelingful.Core", "Wheelingful.Core\Wheelingful.Core.csproj", "{13666C78-30AB-4353-B142-AD0AE2FC58AB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wheelingful.BLL", "Wheelingful.BLL\Wheelingful.BLL.csproj", "{13666C78-30AB-4353-B142-AD0AE2FC58AB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

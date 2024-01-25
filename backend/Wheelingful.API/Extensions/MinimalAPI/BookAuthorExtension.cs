@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Wheelingful.API.Constants;
-using Wheelingful.Core.Contracts.Books;
-using Wheelingful.Core.DTO.Books;
+using Wheelingful.BLL.Contracts.Books;
+using Wheelingful.BLL.Models.Books;
 
 namespace Wheelingful.API.Extensions.MinimalAPI;
 
