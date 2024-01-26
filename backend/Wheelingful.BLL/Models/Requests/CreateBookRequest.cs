@@ -1,8 +1,8 @@
 ﻿using Wheelingful.DAL.Enums;
 
-namespace Wheelingful.BLL.Models.Books;
+namespace Wheelingful.BLL.Models.Requests;
 
-public class CreateBookModel
+public class CreateBookRequest
 {
     public required string Title { get; set; }
     public required string CoverBase64 { get; set; }

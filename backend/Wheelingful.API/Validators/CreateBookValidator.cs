@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
 using Wheelingful.API.Extensions.Validation;
-using Wheelingful.BLL.Models.Books;
+using Wheelingful.BLL.Models.Requests;
 namespace Wheelingful.API.Validators;
 
-public class CreateBookValidator : AbstractValidator<CreateBookModel>
+public class CreateBookValidator : AbstractValidator<CreateBookRequest>
 {
     public CreateBookValidator()
     {

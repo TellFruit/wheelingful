@@ -5,7 +5,7 @@ using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Contracts.Generic;
 using Wheelingful.BLL.Contracts.Images;
-using Wheelingful.BLL.Models.Books;
+using Wheelingful.BLL.Models.Options;
 using Wheelingful.BLL.Services.Auth;
 using Wheelingful.BLL.Services.Books;
 using Wheelingful.BLL.Services.Generic;

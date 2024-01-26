@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Options;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Contracts.Images;
-using Wheelingful.BLL.Models.Books;
-using Wheelingful.BLL.Models.Images;
+using Wheelingful.BLL.Models.Options;
+using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.BLL.Services.Books;
 

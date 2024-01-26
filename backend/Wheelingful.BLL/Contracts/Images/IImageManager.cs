@@ -1,4 +1,5 @@
-﻿using Wheelingful.BLL.Models.Images;
+﻿using Wheelingful.BLL.Models.Options;
+using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.BLL.Contracts.Images;
 

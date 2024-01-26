@@ -1,4 +1,4 @@
-﻿namespace Wheelingful.BLL.Models.Images;
+﻿namespace Wheelingful.BLL.Models.Requests;
 
 public class UploadImageModel
 {

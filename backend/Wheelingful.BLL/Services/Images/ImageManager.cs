@@ -1,6 +1,7 @@
 ﻿using Imagekit.Sdk;
 using Wheelingful.BLL.Contracts.Images;
-using Wheelingful.BLL.Models.Images;
+using Wheelingful.BLL.Models.Options;
+using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.BLL.Services.Images;
 

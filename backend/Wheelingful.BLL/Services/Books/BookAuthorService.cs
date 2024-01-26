@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
-using Wheelingful.BLL.Models.Books;
+using Wheelingful.BLL.Models.Requests;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.DAL.Entities;
 
@@ -12,7 +12,7 @@ internal class BookAuthorService(
     ICurrentUser currentUser, 
     WheelingfulDbContext dbContext) : IBookAuthorService
 {
-    public async Task CreateBook(CreateBookModel model)
+    public async Task CreateBook(CreateBookRequest model)
     {
         var coverId = await bookCover.UploadCover(model.CoverBase64, model.Title, currentUser.Id);
 
@@ -57,7 +57,7 @@ internal class BookAuthorService(
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteBook(DeleteBookModel model)
+    public async Task DeleteBook(DeleteBookRequest model)
     {
         var coverId = await dbContext
             .Books

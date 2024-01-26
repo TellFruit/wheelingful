@@ -1,6 +1,6 @@
 ﻿using Wheelingful.DAL.Enums;
 
-namespace Wheelingful.BLL.Models.Books;
+namespace Wheelingful.BLL.Models.Requests;
 
 public class UpdateBookModel
 {
