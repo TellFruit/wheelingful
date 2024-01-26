@@ -7,6 +7,7 @@ using Wheelingful.DAL.Enums;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -30,11 +31,14 @@ builder.Services
     .AddRoles<IdentityRole>()
     .AddEntityFrameworkStores<WheelingfulDbContext>();
 
-builder.Services.AddCoreServices();
-builder.Services.AddApiServices();
-
 builder.Services.AddOptions();
 builder.Services.AddCoreOptions(builder.Configuration);
+
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddApiValidators();
+
+builder.Services.AddCoreServices();
+builder.Services.AddApiServices();
 
 builder.Services
     .AddAuthentication()
