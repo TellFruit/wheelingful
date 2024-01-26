@@ -4,7 +4,7 @@ using Wheelingful.API.Constants;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Models.Books;
 
-namespace Wheelingful.API.Extensions.MinimalAPI;
+namespace Wheelingful.API.Extensions.Endpoints;
 
 public static class BookAuthorExtension
 {
@@ -13,11 +13,11 @@ public static class BookAuthorExtension
         var bookAuthorGroup = endpoints.MapGroup("/book-author").RequireAuthorization(PolicyContants.AuthorizeAuthor);
 
         bookAuthorGroup.MapPost("/books", async Task<Results<Created, ValidationProblem>>
-            ([FromBody] NewBookModel model, [FromServices] IBookAuthorService ba) =>
+            ([FromBody] NewBookModel model, [FromServices] IBookAuthorService handler) =>
         {
             try
             {
-                await ba.CreateBook(model);
+                await handler.CreateBook(model);
             }
             catch (Exception error)
             {
@@ -28,11 +28,11 @@ public static class BookAuthorExtension
         });
 
         bookAuthorGroup.MapPut("/books", async Task<Results<Ok, ValidationProblem>>
-            ([FromBody] UpdatedBookModel model, [FromServices] IBookAuthorService ba) =>
+            ([FromBody] UpdatedBookModel model, [FromServices] IBookAuthorService handler) =>
         {
             try
             {
-                await ba.UpdateBook(model);
+                await handler.UpdateBook(model);
             }
             catch (Exception error)
             {
@@ -43,11 +43,11 @@ public static class BookAuthorExtension
         });
 
         bookAuthorGroup.MapDelete("/books/{bookId}", async Task<Results<NoContent, ValidationProblem>>
-            ([FromRoute] int bookId, [FromServices] IBookAuthorService ba) =>
+            ([FromRoute] int bookId, [FromServices] IBookAuthorService handler) =>
         {
             try
             {
-                await ba.DeleteBook(bookId);
+                await handler.DeleteBook(bookId);
             }
             catch (Exception error)
             {

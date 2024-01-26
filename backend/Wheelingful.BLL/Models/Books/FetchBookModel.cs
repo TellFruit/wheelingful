@@ -1,8 +1,9 @@
-﻿using Wheelingful.DAL.Enums;
+﻿using Wheelingful.DAL.Entities;
+using Wheelingful.DAL.Enums;
 
 namespace Wheelingful.BLL.Models.Books;
 
-public class ReadBookModel
+public class FetchBookModel
 {
     public int Id { get; set; }
     public required string AuthorId { get; set; }
