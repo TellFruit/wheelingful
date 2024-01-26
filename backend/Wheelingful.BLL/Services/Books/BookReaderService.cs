@@ -1,20 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Extensions.Generic;
-using Wheelingful.BLL.Models.Books;
-using Wheelingful.BLL.Models.General;
+using Wheelingful.BLL.Models.Requests;
+using Wheelingful.BLL.Models.Requests.General;
+using Wheelingful.BLL.Models.Responses;
 using Wheelingful.DAL.DbContexts;
 
 namespace Wheelingful.BLL.Services.Books;
 
 public class BookReaderService(WheelingfulDbContext dbContext) : IBookReaderService
 {
-    public Task<List<FetchBookModel>> GetBooks(FetchRequest request)
+    public Task<List<FetchBookResponse>> GetBooks(FetchPaginationRequest request)
     {
         return dbContext
             .Books
             .Include(b => b.Users)
-            .Select(b => new FetchBookModel
+            .Select(b => new FetchBookResponse
             {
                 Id = b.Id,
                 AuthorId = b.Users.First().Id,
@@ -27,12 +28,12 @@ public class BookReaderService(WheelingfulDbContext dbContext) : IBookReaderServ
             .ToListAsync();
     }
 
-    public Task<FetchBookModel> GetBook(int bookId)
+    public Task<FetchBookResponse> GetBook(FetchBookRequest request)
     {
         return dbContext
             .Books
             .Include(b => b.Users)
-            .Select(b => new FetchBookModel
+            .Select(b => new FetchBookResponse
             {
                 Id = b.Id,
                 AuthorId = b.Users.First().Id,
@@ -41,6 +42,6 @@ public class BookReaderService(WheelingfulDbContext dbContext) : IBookReaderServ
                 Category = b.Category,
                 CoverId = b.CoverId,
             })
-            .FirstAsync(b => b.Id == bookId);
+            .FirstAsync(b => b.Id == request.Id);
     }
 }
