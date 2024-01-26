@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Wheelingful.API.Constants;
 using Wheelingful.BLL.Contracts.Books;
-using Wheelingful.BLL.Models.Books;
+using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.API.Extensions.Endpoints;
 
@@ -16,7 +16,7 @@ public static class BookAuthorExtension
             .AddFluentValidationAutoValidation();
 
         bookAuthorGroup.MapPost("/", async Task<Results<Created, ValidationProblem>>(
-             [FromBody] CreateBookModel model, [FromServices] IBookAuthorService handler) =>
+             [FromBody] CreateBookRequest model, [FromServices] IBookAuthorService handler) =>
         {
             await handler.CreateBook(model);
 
@@ -32,7 +32,7 @@ public static class BookAuthorExtension
         });
 
         bookAuthorGroup.MapDelete("/", async Task<Results<NoContent, ValidationProblem>>
-            ([AsParameters] DeleteBookModel model, [FromServices] IBookAuthorService handler) =>
+            ([AsParameters] DeleteBookRequest model, [FromServices] IBookAuthorService handler) =>
         {
             await handler.DeleteBook(model);
 

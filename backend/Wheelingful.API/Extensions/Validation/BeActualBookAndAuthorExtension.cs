@@ -3,22 +3,8 @@ using Wheelingful.DAL.Entities;
 
 namespace Wheelingful.API.Extensions.Validation;
 
-public static class FluentValidationExtension
+public static class BeActualBookAndAuthorExtension
 {
-    public static bool BeValidBase64(this string value)
-    {
-        try
-        {
-            _ = Convert.FromBase64String(value);
-            
-            return true;
-        }
-        catch
-        {
-            return false;
-        }
-    }
-
     public static Task<bool> BeActualBookAndAuthor(this DbSet<Book> set, int bookId, string userId)
     {
         return set

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using Wheelingful.API.Extensions.Validation;
 using Wheelingful.BLL.Contracts.Auth;
-using Wheelingful.BLL.Models.Books;
+using Wheelingful.BLL.Models.Requests;
 using Wheelingful.DAL.DbContexts;
 
 namespace Wheelingful.API.Validators;
@@ -34,5 +34,11 @@ public class UpdateBookValidator : AbstractValidator<UpdateBookModel>
         RuleFor(b => b.Category)
             .IsInEnum()
                 .WithMessage("Book category is out of defined options.");
+
+        RuleFor(b => b.CoverBase64)
+            .NotEmpty()
+                .WithMessage("Cover image is required.")
+            .Must((x) => x.BeValidBase64())
+                .WithMessage("Cover image is corrupted.");
     }
 }
