@@ -1,13 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wheelingful.DAL.Entities;
 
-namespace Wheelingful.BLL.Extensions;
+namespace Wheelingful.API.Extensions.Validation;
 
-public static class BookManagerExtension
+public static class BeActualBookAndAuthorExtension
 {
-    public static async Task<bool> IsActualAuthor(this DbSet<Book> set, int bookId, string userId)
+    public static Task<bool> BeActualBookAndAuthor(this DbSet<Book> set, int bookId, string userId)
     {
-        return await set
+        return set
             .Include(b => b.Users)
             .Select(b => new
             {

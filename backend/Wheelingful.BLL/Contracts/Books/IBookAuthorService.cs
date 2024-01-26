@@ -4,7 +4,7 @@ namespace Wheelingful.BLL.Contracts.Books;
 
 public interface IBookAuthorService
 {
-    Task CreateBook(NewBookModel model);
-    Task UpdateBook(UpdatedBookModel model);
-    Task DeleteBook(int bookId);
+    Task CreateBook(CreateBookModel model);
+    Task UpdateBook(UpdateBookModel model);
+    Task DeleteBook(DeleteBookModel model);
 }
