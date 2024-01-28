@@ -8,13 +8,20 @@ namespace Wheelingful.DAL.DbContexts;
 public class WheelingfulDbContext : IdentityDbContext<AppUser>
 {
     public DbSet<Book> Books { get; set; }
+    public DbSet<Chapter> Chapters { get; set; }
 
     public WheelingfulDbContext(DbContextOptions<WheelingfulDbContext> options) 
         : base(options) { }
 
+    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+    {
+        optionsBuilder.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    }
+
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.BuildModels();
+        modelBuilder.BuildBook();
+        modelBuilder.BuildChapter();
 
         base.OnModelCreating(modelBuilder);
 

@@ -5,7 +5,7 @@ namespace Wheelingful.DAL.Extensions;
 
 internal static class BuildModelExtension
 {
-    public static void BuildModels(this ModelBuilder builder)
+    public static void BuildBook(this ModelBuilder builder)
     {
         builder.Entity<AppUser>()
             .HasMany(u => u.Books)
@@ -23,5 +23,12 @@ internal static class BuildModelExtension
         builder.Entity<Book>()
             .Property(b => b.CoverId)
             .HasMaxLength(24);
+    }
+
+    public static void BuildChapter(this ModelBuilder builder)
+    {
+        builder.Entity<Chapter>()
+            .Property(b => b.Title)
+            .HasMaxLength(255);
     }
 }
