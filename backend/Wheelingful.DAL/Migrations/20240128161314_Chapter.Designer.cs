@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wheelingful.DAL.DbContexts;
 
@@ -10,9 +11,11 @@ using Wheelingful.DAL.DbContexts;
 namespace Wheelingful.DAL.Migrations
 {
     [DbContext(typeof(WheelingfulDbContext))]
-    partial class WheelingfulDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240128161314_Chapter")]
+    partial class Chapter
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
