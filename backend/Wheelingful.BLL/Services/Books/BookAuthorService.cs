@@ -8,20 +8,20 @@ using Wheelingful.DAL.Entities;
 namespace Wheelingful.BLL.Services.Books;
 
 internal class BookAuthorService(
-    IBookCoverManager bookCover, 
+    IBookCoverService bookCover, 
     ICurrentUser currentUser, 
     WheelingfulDbContext dbContext) : IBookAuthorService
 {
-    public async Task CreateBook(CreateBookRequest model)
+    public async Task CreateBook(CreateBookRequest request)
     {
-        var coverId = await bookCover.UploadCover(model.CoverBase64, model.Title, currentUser.Id);
+        var coverId = await bookCover.UploadCover(request.CoverBase64, request.Title, currentUser.Id);
 
         var newBook = new Book
         {
-            Title = model.Title,
-            Description = model.Description,
-            Category = model.Category,
-            Status = model.Status,
+            Title = request.Title,
+            Description = request.Description,
+            Category = request.Category,
+            Status = request.Status,
             CoverId = coverId,
         };
 
@@ -36,20 +36,20 @@ internal class BookAuthorService(
 
     }
 
-    public async Task UpdateBook(UpdateBookModel model)
+    public async Task UpdateBook(UpdateBookRequest request)
     {
-        var book = await dbContext.Books.FirstAsync(b => b.Id == model.Id);
+        var book = await dbContext.Books.FirstAsync(b => b.Id == request.Id);
 
         string? coverId = book.CoverId;
-        if (model.CoverBase64 != null)
+        if (request.CoverBase64 != null)
         {
-            coverId = await bookCover.UpdateCover(book.CoverId, model.CoverBase64, model.Title, currentUser.Id);
+            coverId = await bookCover.UpdateCover(book.CoverId, request.CoverBase64, request.Title, currentUser.Id);
         }
 
-        book.Title = model.Title;
-        book.Description = model.Description;
-        book.Category = model.Category;
-        book.Status = model.Status;
+        book.Title = request.Title;
+        book.Description = request.Description;
+        book.Category = request.Category;
+        book.Status = request.Status;
         book.CoverId = coverId;
 
         dbContext.Update(book);
@@ -57,18 +57,18 @@ internal class BookAuthorService(
         await dbContext.SaveChangesAsync();
     }
 
-    public async Task DeleteBook(DeleteBookRequest model)
+    public async Task DeleteBook(DeleteBookRequest request)
     {
         var coverId = await dbContext
             .Books
-            .Where(b => b.Id == model.Id)
+            .Where(b => b.Id == request.Id)
             .Select(b => b.CoverId)
             .FirstAsync();
 
         await bookCover.DeleteCover(coverId);
 
         await dbContext.Books
-            .Where(b => b.Id == model.Id)
+            .Where(b => b.Id == request.Id)
             .ExecuteDeleteAsync();
     }
 }

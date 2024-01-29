@@ -1,6 +1,6 @@
 ﻿namespace Wheelingful.BLL.Contracts.Books;
 
-public interface IBookCoverManager
+public interface IBookCoverService
 {
     Task<string> UploadCover(string base64, string bookTitle, string authorId);
     Task<string> UpdateCover(string imageId, string base64, string bookTitle, string authorId);

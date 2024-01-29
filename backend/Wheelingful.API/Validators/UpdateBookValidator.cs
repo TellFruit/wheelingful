@@ -6,7 +6,7 @@ using Wheelingful.DAL.DbContexts;
 
 namespace Wheelingful.API.Validators;
 
-public class UpdateBookValidator : AbstractValidator<UpdateBookModel>
+public class UpdateBookValidator : AbstractValidator<UpdateBookRequest>
 {
     public UpdateBookValidator(ICurrentUser currentUser, WheelingfulDbContext dbContext)
     {

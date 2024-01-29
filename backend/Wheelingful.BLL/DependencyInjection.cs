@@ -25,7 +25,7 @@ public static class DependencyInjection
         services.AddScoped<ICurrentUser, CurrentUser>();
 
         services.AddScoped<IBookAuthorService, BookAuthorService>();
-        services.AddScoped<IBookCoverManager, BookCoverManager>();
+        services.AddScoped<IBookCoverService, BookCoverService>();
         services.AddScoped<IBookReaderService, BookReaderService>();
 
         services.AddScoped(provider =>
@@ -38,7 +38,7 @@ public static class DependencyInjection
 
             return new ImagekitClient(publicKey, privateKey, endpoint);
         });
-        services.AddScoped<IImageManager, ImageManager>();
+        services.AddScoped<IImageService, ImageService>();
 
         services.AddScoped(typeof(ICountPaginationPages<>), typeof(CountPaginationPages<>));
     }

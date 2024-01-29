@@ -5,7 +5,7 @@ using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.BLL.Services.Images;
 
-internal class ImageManager(ImagekitClient imagekitClient) : IImageManager
+internal class ImageService(ImagekitClient imagekitClient) : IImageService
 {
     public string GetImageUrl(string relativePath, TransformationOptions options)
     {
@@ -28,22 +28,22 @@ internal class ImageManager(ImagekitClient imagekitClient) : IImageManager
             .Generate();
     }
 
-    public async Task<string> UploadImage(UploadImageModel model)
+    public async Task<string> UploadImage(UploadImageRequest request)
     {
         var newImage = new FileCreateRequest
         {
-            file = model.Base64,
-            fileName = model.Name,
-            folder = model.Fodler,
+            file = request.Base64,
+            fileName = request.Name,
+            folder = request.Fodler,
         };
 
         return (await imagekitClient.UploadAsync(newImage)).fileId;
     }
 
-    public async Task<string> UpdateImage(string imageId, UploadImageModel model)
+    public async Task<string> UpdateImage(string imageId, UploadImageRequest request)
     {
         await DeleteImage(imageId);
-        return await UploadImage(model);
+        return await UploadImage(request);
     }
 
     public async Task DeleteImage(string imageId)
