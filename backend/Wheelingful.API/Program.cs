@@ -34,7 +34,6 @@ builder.Services
 builder.Services.AddOptions();
 builder.Services.AddCoreOptions(builder.Configuration);
 
-builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddApiValidators();
 
 builder.Services.AddCoreServices();
