@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using FluentValidation.Results;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Wheelingful.BLL.Contracts.Books;
@@ -17,7 +18,7 @@ public static class BookReaderExtension
         var bookReaderGroup = endpoints.MapGroup("/book-reader");
 
         bookReaderGroup.MapGet("/", async Task<Results<Ok<List<FetchBookResponse>>, ValidationProblem>>
-            ([FromQuery] int? pageNumber, 
+            ([FromQuery] int? pageNumber,
              [FromQuery] int? pageSize,
              [FromServices] IValidator<FetchPaginationRequest> validator,
              [FromServices] IBookReaderService handler) =>
@@ -73,5 +74,15 @@ public static class BookReaderExtension
 
             return TypedResults.Ok(result);
         });
+    }
+
+    private static IDictionary<string, string[]> ToDictionary(this ValidationResult validationResult)
+    {
+        return validationResult.Errors
+          .GroupBy(x => x.PropertyName)
+          .ToDictionary(
+            g => g.Key,
+            g => g.Select(x => x.ErrorMessage).ToArray()
+          );
     }
 }
