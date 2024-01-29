@@ -1,8 +1,8 @@
 ﻿using Wheelingful.DAL.Enums;
 
-namespace Wheelingful.BLL.Models.Books;
+namespace Wheelingful.BLL.Models.Requests;
 
-public class UpdateBookModel
+public class UpdateBookRequest
 {
     public int Id { get; set; }
     public required string Title { get; set; }

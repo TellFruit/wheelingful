@@ -17,7 +17,7 @@ public static class DependencyInjection
     public static void AddApiValidators(this IServiceCollection services)
     {
         services.AddScoped<IValidator<CreateBookRequest>, CreateBookValidator>();
-        services.AddScoped<IValidator<UpdateBookModel>, UpdateBookValidator>();
+        services.AddScoped<IValidator<UpdateBookRequest>, UpdateBookValidator>();
         services.AddScoped<IValidator<DeleteBookRequest>, DeleteBookValidator>();
         services.AddScoped<IValidator<FetchBookRequest>, FetchBookValidator>();
 

@@ -24,7 +24,7 @@ public static class BookAuthorExtension
         });
 
         bookAuthorGroup.MapPut("/", async Task<Results<Ok, ValidationProblem>>
-            ([FromBody] UpdateBookModel model, [FromServices] IBookAuthorService handler) =>
+            ([FromBody] UpdateBookRequest model, [FromServices] IBookAuthorService handler) =>
         {
             await handler.UpdateBook(model);
 

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Extensions.Options;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Contracts.Images;
-using Wheelingful.BLL.Models.Books;
-using Wheelingful.BLL.Models.Images;
+using Wheelingful.BLL.Models.Options;
+using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.BLL.Services.Books;
 
-internal class BookCoverManager(IImageManager imageManager, IOptions<BookCoverOptions> options) : IBookCoverManager
+internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOptions> options) : IBookCoverService
 {
     private readonly BookCoverOptions _coverOptions = options.Value;
 
@@ -25,7 +25,7 @@ internal class BookCoverManager(IImageManager imageManager, IOptions<BookCoverOp
 
     public async Task<string> UploadCover(string base64, string bookTitle, string authorId)
     {
-        return await imageManager.UploadImage(new UploadImageModel
+        return await imageManager.UploadImage(new UploadImageRequest
         {
             Base64 = base64,
             Name = GetBookCoverName(bookTitle, authorId),
@@ -35,7 +35,7 @@ internal class BookCoverManager(IImageManager imageManager, IOptions<BookCoverOp
 
     public async Task<string> UpdateCover(string imageId, string base64, string bookTitle, string authorId)
     {
-        return await imageManager.UpdateImage(imageId, new UploadImageModel
+        return await imageManager.UpdateImage(imageId, new UploadImageRequest
         {
             Base64 = base64,
             Name = GetBookCoverName(bookTitle, authorId),

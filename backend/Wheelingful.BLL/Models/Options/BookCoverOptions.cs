@@ -1,4 +1,4 @@
-﻿namespace Wheelingful.BLL.Models.Books;
+﻿namespace Wheelingful.BLL.Models.Options;
 
 public class BookCoverOptions
 {
