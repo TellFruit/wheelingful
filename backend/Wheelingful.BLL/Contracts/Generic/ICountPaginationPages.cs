@@ -1,6 +1,8 @@
-﻿namespace Wheelingful.BLL.Contracts.Generic;
+﻿using Wheelingful.BLL.Models.Requests.General;
+
+namespace Wheelingful.BLL.Contracts.Generic;
 
 public interface ICountPaginationPages<T> where T : class
 {
-    Task<int> CountByPageSize(int pageSize);
+    Task<int> CountByPageSize(CountPagesRequest request);
 }
