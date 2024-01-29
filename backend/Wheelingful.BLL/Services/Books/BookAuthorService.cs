@@ -26,6 +26,7 @@ internal class BookAuthorService(
         };
 
         var author = dbContext.Users
+            .AsTracking()
             .First(u => u.Id == currentUser.Id);
 
         newBook.Users.Add(author);
@@ -51,6 +52,7 @@ internal class BookAuthorService(
         book.Category = request.Category;
         book.Status = request.Status;
         book.CoverId = coverId;
+        book.UpdatedAt = DateTime.UtcNow;
 
         dbContext.Update(book);
 
