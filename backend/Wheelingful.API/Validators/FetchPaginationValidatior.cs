@@ -13,6 +13,8 @@ public class FetchPaginationValidatior : AbstractValidator<FetchPaginationReques
 
         RuleFor(p => p.PageSize)
             .GreaterThan(0)
-                .WithMessage("Page size must be greater than 0.");
+                .WithMessage("Page size must be greater than 0.")
+            .LessThanOrEqualTo(100)
+                .WithMessage("Page size must be less than 100.");
     }
 }
