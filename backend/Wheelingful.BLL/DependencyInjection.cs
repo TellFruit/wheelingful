@@ -3,11 +3,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
+using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Contracts.Generic;
 using Wheelingful.BLL.Contracts.Images;
 using Wheelingful.BLL.Models.Options;
 using Wheelingful.BLL.Services.Auth;
 using Wheelingful.BLL.Services.Books;
+using Wheelingful.BLL.Services.Chapters;
 using Wheelingful.BLL.Services.Generic;
 using Wheelingful.BLL.Services.Images;
 
@@ -27,6 +29,8 @@ public static class DependencyInjection
         services.AddScoped<IBookAuthorService, BookAuthorService>();
         services.AddScoped<IBookCoverService, BookCoverService>();
         services.AddScoped<IBookReaderService, BookReaderService>();
+
+        services.AddScoped<IChapterAuthorService, ChapterAuthorService>();
 
         services.AddScoped(provider =>
         {
