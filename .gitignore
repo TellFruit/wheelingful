@@ -367,3 +367,6 @@ FodyWeavers.xsd
 
 # Package-lock is an auto-generated file
 /frontend/package-lock.json
+
+# For now, all Web API assets should be excluded from the build
+/backend/Wheelingful.Assets/
