@@ -10,7 +10,7 @@ namespace Wheelingful.BLL.Services.Books;
 
 internal class BookAuthorService(
     IBookCoverService bookCover,
-    IChapterTextService chapterText,
+    IChapterTextService textService,
     ICurrentUser currentUser, 
     WheelingfulDbContext dbContext) : IBookAuthorService
 {
@@ -63,7 +63,7 @@ internal class BookAuthorService(
 
     public async Task DeleteBook(DeleteBookRequest request)
     {
-        chapterText.DeleteByBook(request.Id);
+        textService.DeleteByBook(request.Id);
 
         var coverId = await dbContext
             .Books
