@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
+using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Models.Requests;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.DAL.Entities;
@@ -8,7 +9,8 @@ using Wheelingful.DAL.Entities;
 namespace Wheelingful.BLL.Services.Books;
 
 internal class BookAuthorService(
-    IBookCoverService bookCover, 
+    IBookCoverService bookCover,
+    IChapterTextService chapterText,
     ICurrentUser currentUser, 
     WheelingfulDbContext dbContext) : IBookAuthorService
 {
@@ -61,6 +63,8 @@ internal class BookAuthorService(
 
     public async Task DeleteBook(DeleteBookRequest request)
     {
+        chapterText.DeleteByBook(request.Id);
+
         var coverId = await dbContext
             .Books
             .Where(b => b.Id == request.Id)
