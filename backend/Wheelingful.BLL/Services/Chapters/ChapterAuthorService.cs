@@ -7,7 +7,7 @@ using Wheelingful.DAL.Entities;
 namespace Wheelingful.BLL.Services.Chapters;
 
 public class ChapterAuthorService(
-    IChapterTextService chapterText, 
+    IChapterTextService textService, 
     WheelingfulDbContext dbContext) : IChapterAuthorService
 {
     public async Task CreateChapter(CreateChapterRequest request)
@@ -22,7 +22,7 @@ public class ChapterAuthorService(
 
         await dbContext.SaveChangesAsync();
 
-        await chapterText.WriteText(request.Text, newChapter.Id, request.BookId);
+        await textService.WriteText(request.Text, newChapter.Id, request.BookId);
     }
 
     public Task UpdateChapterProperties(UpdateChapterPropertiesRequest request)
@@ -36,13 +36,13 @@ public class ChapterAuthorService(
 
     public Task UpdateChapterText(UpdateChapterTextRequest request)
     {
-        return chapterText.WriteText(request.Text, request.Id, request.BookId);
+        return textService.WriteText(request.Text, request.Id, request.BookId);
     }
 
 
     public Task DeleteChapter(DeleteChapterRequest request)
     {
-        chapterText.DeleteByChapter(request.Id, request.BookId);
+        textService.DeleteByChapter(request.Id, request.BookId);
 
         return dbContext.Chapters
             .Where(c => c.Id == request.Id)

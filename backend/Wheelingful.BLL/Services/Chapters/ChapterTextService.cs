@@ -17,16 +17,16 @@ public class ChapterTextService(IOptions<ChapterTextOptions> options) : IChapter
             Directory.CreateDirectory(fileDirectory);
         }
 
-        var relatedpath = GetFileRelatedPath(bookId, chapterId);
+        var path = GetFilePath(bookId, chapterId);
 
-        return File.WriteAllTextAsync(relatedpath, text);
+        return File.WriteAllTextAsync(path, text);
     }
 
     public void DeleteByChapter(int chapterId, int bookId)
     {
-        var relatedpath = GetFileRelatedPath(bookId, chapterId);
+        var path = GetFilePath(bookId, chapterId);
 
-        File.Delete(relatedpath);
+        File.Delete(path);
     }
 
     public void DeleteByBook(int bookId)
@@ -39,13 +39,13 @@ public class ChapterTextService(IOptions<ChapterTextOptions> options) : IChapter
         }
     }
 
-    private string GetFileRelatedPath(int bookId, int chapterId)
+    private string GetFilePath(int bookId, int chapterId)
     {
-        return $"{GetFileDirectory(bookId)}\\{chapterId}.{_options.Extension}";
+        return Path.Combine(GetFileDirectory(bookId), $"{chapterId}.{_options.Extension}");
     }
-
+    
     private string GetFileDirectory(int bookId)
     {
-        return $"{_options.RootFolder}\\{bookId}";
+        return Path.Combine(Environment.CurrentDirectory, _options.RootFolderName, bookId.ToString());
     }
 }
