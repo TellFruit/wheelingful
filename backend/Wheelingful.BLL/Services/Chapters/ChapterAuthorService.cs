@@ -33,7 +33,7 @@ public class ChapterAuthorService(WheelingfulDbContext dbContext) : IChapterAuth
     public Task DeleteChapter(DeleteChapterRequest request)
     {
         return dbContext.Chapters
-            .Where(c => c.Id != request.Id)
+            .Where(c => c.Id == request.Id)
             .ExecuteDeleteAsync();
     }
 }
