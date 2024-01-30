@@ -9,7 +9,7 @@ namespace Wheelingful.API.Validators
     {
         public FetchBookValidator(WheelingfulDbContext dbContext)
         {
-            RuleFor(b => b.Id)
+            RuleFor(b => b.BookId)
                 .MustAsync((bookId, cancellation) => dbContext.Books.BeActualBook(bookId))
                     .WithMessage("There is no book with such ID");
         }

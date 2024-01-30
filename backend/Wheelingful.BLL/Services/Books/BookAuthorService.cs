@@ -61,14 +61,14 @@ internal class BookAuthorService(
     {
         var coverId = await dbContext
             .Books
-            .Where(b => b.Id == request.Id)
+            .Where(b => b.Id == request.BookId)
             .Select(b => b.CoverId)
             .FirstAsync();
 
         await bookCover.DeleteCover(coverId);
 
         await dbContext.Books
-            .Where(b => b.Id == request.Id)
+            .Where(b => b.Id == request.BookId)
             .ExecuteDeleteAsync();
     }
 }

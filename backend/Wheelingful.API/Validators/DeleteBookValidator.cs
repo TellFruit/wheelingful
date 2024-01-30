@@ -10,7 +10,7 @@ public class DeleteBookValidator : AbstractValidator<DeleteBookRequest>
 {
     public DeleteBookValidator(ICurrentUser currentUser, WheelingfulDbContext dbContext)
     {
-        RuleFor(b => b.Id)
+        RuleFor(b => b.BookId)
             .NotEmpty()
                 .WithMessage("There is no book with such ID.")
             .MustAsync((bookId, cancellation) => dbContext.Books.BeActualBookAndAuthor(bookId, currentUser.Id))

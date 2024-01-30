@@ -31,7 +31,7 @@ public static class BookAuthorExtension
             return TypedResults.Ok();
         });
 
-        bookAuthorGroup.MapDelete("/", async Task<Results<NoContent, ValidationProblem>>
+        bookAuthorGroup.MapDelete("/{bookId}", async Task<Results<NoContent, ValidationProblem>>
             ([AsParameters] DeleteBookRequest model, [FromServices] IBookAuthorService handler) =>
         {
             await handler.DeleteBook(model);

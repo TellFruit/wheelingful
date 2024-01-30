@@ -11,6 +11,6 @@ public class CountPaginationPages<T>(WheelingfulDbContext dbContext) : ICountPag
     {
         int totalCount = await dbContext.Set<T>().CountAsync();
 
-        return (int)Math.Ceiling((double)totalCount / request.PageSize);
+        return (int)Math.Ceiling((double)totalCount / request.PageSize.Value);
     }
 }

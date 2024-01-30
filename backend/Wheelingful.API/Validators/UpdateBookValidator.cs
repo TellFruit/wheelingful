@@ -36,9 +36,10 @@ public class UpdateBookValidator : AbstractValidator<UpdateBookRequest>
                 .WithMessage("Book category is out of defined options.");
 
         RuleFor(b => b.CoverBase64)
+            .Cascade(CascadeMode.Stop)
             .NotEmpty()
                 .WithMessage("Cover image is required.")
-            .Must((x) => x.BeValidBase64())
+            .Must((x) => x!.BeValidBase64())
                 .WithMessage("Cover image is corrupted.");
     }
 }
