@@ -20,6 +20,7 @@ public static class DependencyInjection
     public static void AddCoreOptions(this IServiceCollection services, IConfiguration config)
     {
         services.Configure<BookCoverOptions>(options => config.GetSection(nameof(BookCoverOptions)).Bind(options));
+        services.Configure<ChapterTextOptions>(options => config.GetSection(nameof(ChapterTextOptions)).Bind(options));
     }
 
     public static void AddCoreServices(this IServiceCollection services)
@@ -31,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<IBookReaderService, BookReaderService>();
 
         services.AddScoped<IChapterAuthorService, ChapterAuthorService>();
+        services.AddScoped<IChapterTextService, ChapterTextService>();
 
         services.AddScoped(provider =>
         {

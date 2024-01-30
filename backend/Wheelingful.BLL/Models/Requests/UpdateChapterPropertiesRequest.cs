@@ -1,6 +1,6 @@
 ﻿namespace Wheelingful.BLL.Models.Requests;
 
-public class UpdateChapterRequest
+public class UpdateChapterPropertiesRequest
 {
     public int Id { get; set; }
     public int BookId { get; set; }
