@@ -2,7 +2,7 @@
 
 public class UpdateChapterTextRequest
 {
-    public int Id { get; set; }
+    public int ChapterId { get; set; }
     public int BookId { get; set; }
     public required string Text { get; set; }
 }

@@ -21,6 +21,11 @@ public static class DependencyInjection
         services.AddScoped<IValidator<DeleteBookRequest>, DeleteBookValidator>();
         services.AddScoped<IValidator<FetchBookRequest>, FetchBookValidator>();
 
+        services.AddScoped<IValidator<CreateChapterRequest>,  CreateChapterValidator>();
+        services.AddScoped<IValidator<UpdateChapterPropertiesRequest>, UpdateChapterPropertiesValidator>();
+        services.AddScoped<IValidator<UpdateChapterTextRequest>, UpdateChapterTextValidator>();
+        services.AddScoped<IValidator<DeleteChapterRequest>, DeleteChapterValidator>();
+
         services.AddScoped<IValidator<CountPagesRequest>, CountPagesValidator>();
         services.AddScoped<IValidator<FetchPaginationRequest>, FetchPaginationValidatior>();
     }

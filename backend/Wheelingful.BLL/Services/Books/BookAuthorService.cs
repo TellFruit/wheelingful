@@ -63,7 +63,7 @@ internal class BookAuthorService(
 
     public async Task DeleteBook(DeleteBookRequest request)
     {
-        textService.DeleteByBook(request.Id);
+        textService.DeleteByBook(request.BookId);
 
         var coverId = await dbContext
             .Books

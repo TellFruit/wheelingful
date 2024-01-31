@@ -7,7 +7,6 @@ using Wheelingful.DAL.Enums;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
-using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -66,5 +65,6 @@ app.UseAuthorization();
 app.MapIdentityPartialApi<AppUser>();
 app.MapBookAuthorApi();
 app.MapBookReaderApi();
+app.MapChapterAuthorApi();
 
 app.Run();
