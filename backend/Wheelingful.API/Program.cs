@@ -66,5 +66,6 @@ app.MapIdentityPartialApi<AppUser>();
 app.MapBookAuthorApi();
 app.MapBookReaderApi();
 app.MapChapterAuthorApi();
+app.MapChapterReaderApi();
 
 app.Run();
