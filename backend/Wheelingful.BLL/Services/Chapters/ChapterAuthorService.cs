@@ -28,7 +28,7 @@ public class ChapterAuthorService(
     public Task UpdateChapterProperties(UpdateChapterPropertiesRequest request)
     {
         return dbContext.Chapters
-            .Where(c => c.Id == request.Id)
+            .Where(c => c.Id == request.ChapterId)
             .ExecuteUpdateAsync(setters => setters
                 .SetProperty(c => c.Title, request.Title)
                 .SetProperty(c => c.UpdatedAt, DateTime.UtcNow));
@@ -36,16 +36,16 @@ public class ChapterAuthorService(
 
     public Task UpdateChapterText(UpdateChapterTextRequest request)
     {
-        return textService.WriteText(request.Text, request.Id, request.BookId);
+        return textService.WriteText(request.Text, request.ChapterId, request.BookId);
     }
 
 
     public Task DeleteChapter(DeleteChapterRequest request)
     {
-        textService.DeleteByChapter(request.Id, request.BookId);
+        textService.DeleteByChapter(request.ChapterId, request.BookId);
 
         return dbContext.Chapters
-            .Where(c => c.Id == request.Id)
+            .Where(c => c.Id == request.ChapterId)
             .ExecuteDeleteAsync();
     }
 }

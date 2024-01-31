@@ -2,6 +2,6 @@
 
 public class DeleteChapterRequest
 {
-    public int Id { get; set; }
+    public int ChapterId { get; set; }
     public int BookId { get; set; }
 }
