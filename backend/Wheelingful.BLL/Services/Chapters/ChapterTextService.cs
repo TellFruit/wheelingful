@@ -22,6 +22,13 @@ public class ChapterTextService(IOptions<ChapterTextOptions> options) : IChapter
         return File.WriteAllTextAsync(path, text);
     }
 
+    public Task<string> ReadText(int chapterId, int bookId)
+    {
+        var path = GetFilePath(bookId, chapterId);
+
+        return File.ReadAllTextAsync(path);
+    }
+
     public void DeleteByChapter(int chapterId, int bookId)
     {
         var path = GetFilePath(bookId, chapterId);
