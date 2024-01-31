@@ -24,7 +24,7 @@ public class BookReaderService(WheelingfulDbContext dbContext) : IBookReaderServ
                 Category = b.Category,
                 CoverId = b.CoverId,
             })
-            .Paginate(request.PageNumber, request.PageSize)
+            .Paginate(request.PageNumber.Value, request.PageSize.Value)
             .ToListAsync();
     }
 
@@ -42,6 +42,6 @@ public class BookReaderService(WheelingfulDbContext dbContext) : IBookReaderServ
                 Category = b.Category,
                 CoverId = b.CoverId,
             })
-            .FirstAsync(b => b.Id == request.Id);
+            .FirstAsync(b => b.Id == request.BookId);
     }
 }
