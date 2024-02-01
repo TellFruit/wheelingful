@@ -19,10 +19,10 @@ public class CreateChapterValidator : AbstractValidator<CreateChapterRequest>
 
         RuleFor(c => c.Title)
             .NotEmpty()
-                .WithMessage("Title is required");
+                .WithMessage("Title is required.");
 
         RuleFor(c => c.Text)
             .NotEmpty()
-                .WithMessage("Text is required");
+                .WithMessage("Text is required.");
     }
 }

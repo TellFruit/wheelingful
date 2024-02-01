@@ -11,7 +11,7 @@ public class CountChapterPagionationPagesValidator : AbstractValidator<CountChap
     {
         RuleFor(b => b.BookId)
             .MustAsync((bookId, cancellation) => dbContext.Books.BeActualBook(bookId))
-                .WithMessage("There is no book with such ID");
+                .WithMessage("There is no book with such ID.");
 
         RuleFor(p => p.PageSize)
             .GreaterThan(0)
