@@ -33,6 +33,7 @@ public static class DependencyInjection
 
         services.AddScoped<IChapterAuthorService, ChapterAuthorService>();
         services.AddScoped<IChapterTextService, ChapterTextService>();
+        services.AddScoped<IChapterReaderService,  ChapterReaderService>();
 
         services.AddScoped(provider =>
         {
