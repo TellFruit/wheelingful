@@ -26,6 +26,6 @@ public class UpdateChapterPropertiesValidator : AbstractValidator<UpdateChapterP
 
         RuleFor(c => c.Title)
             .NotEmpty()
-                .WithMessage("Title is required");
+                .WithMessage("Title is required.");
     }
 }

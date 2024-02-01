@@ -23,7 +23,7 @@ public static class ChapterReaderExtension
             return TypedResults.Ok(result);
         });
 
-        chapterReaderGroup.MapGet("/pages/{bookId}", async Task<Results<Ok<int>, ValidationProblem>> (
+        chapterReaderGroup.MapGet("/pages/book/{bookId}", async Task<Results<Ok<int>, ValidationProblem>> (
             [AsParameters] CountChapterPaginationPagesRequest request, [FromServices] IChapterReaderService handler) =>
         {
             var result = await handler.CountPaginationPages(request);
