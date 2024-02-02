@@ -9,7 +9,6 @@ import {
   Alert,
 } from '@mui/material';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { getSearchParam } from '../../../app';
 
 export default function AuthComponent({
   onSubmit,
@@ -24,13 +23,12 @@ export default function AuthComponent({
 }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
     if (isSuccess) {
-      const from = getSearchParam(location.search, 'from') || '/';
+      const from = location.state?.from?.pathname || "/";
       navigate(from);
     }
   }, [isSuccess, navigate]);
