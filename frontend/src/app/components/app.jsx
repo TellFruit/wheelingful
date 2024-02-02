@@ -3,9 +3,8 @@ import { ThemeProvider } from '@mui/material';
 import { theme } from '../material-ui/theme';
 import { Provider } from 'react-redux';
 import { persistor, store } from '../store';
-import { RouterProvider } from 'react-router-dom';
-import { router } from '../router/browser-router';
 import { PersistGate } from 'redux-persist/integration/react';
+import AppRouter from '../router/app-router';
 
 export default function App() {
   return (
@@ -13,10 +12,7 @@ export default function App() {
       <ThemeProvider theme={theme}>
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
-            <RouterProvider
-              router={router}
-              fallbackElement={<p>Initial Load...</p>}
-            />
+            <AppRouter />
           </PersistGate>
         </Provider>
       </ThemeProvider>

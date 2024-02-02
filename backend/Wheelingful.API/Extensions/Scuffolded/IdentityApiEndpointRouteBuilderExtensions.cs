@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Wheelingful.DAL.Enums;
 
@@ -118,12 +119,12 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             return TypedResults.Empty;
         });
 
-        authGroup.MapPost("/refresh", async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult, SignInHttpResult, ChallengeHttpResult>>
-            ([FromBody] RefreshRequest refreshRequest, [FromServices] IServiceProvider sp) =>
+        authGroup.MapGet("/refresh", async Task<Results<Ok<AccessTokenResponse>, UnauthorizedHttpResult, SignInHttpResult, ChallengeHttpResult>>
+            ([FromHeader(Name = "Refreshing")] string refreshToken, [FromServices] IServiceProvider sp) =>
         {
             var signInManager = sp.GetRequiredService<SignInManager<TUser>>();
             var refreshTokenProtector = bearerTokenOptions.Get(IdentityConstants.BearerScheme).RefreshTokenProtector;
-            var refreshTicket = refreshTokenProtector.Unprotect(refreshRequest.RefreshToken);
+            var refreshTicket = refreshTokenProtector.Unprotect(refreshToken);
 
             // Reject the /refresh attempt with a 401 if the token expired or the security stamp validation fails
             if (refreshTicket?.Properties?.ExpiresUtc is not { } expiresUtc ||

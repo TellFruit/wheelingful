@@ -1,14 +1,13 @@
-import LoginPage from '../components/login.page'
-import RegisterPage from '../components/register.page';
+import { Routes, Route } from 'react-router-dom';
 import { AUTH_CONFIG } from '../configuration/auth-config';
+import LoginPage from '../components/login.page';
+import RegisterPage from '../components/register.page';
 
-export const authRootRoutes = [
-  {
-    path: AUTH_CONFIG.routes.router.register,
-    Component: RegisterPage,
-  },
-  {
-    path: AUTH_CONFIG.routes.router.login,
-    Component: LoginPage
-  }
-];
+export default function AuthRouter() {
+  return (
+    <Routes>
+      <Route path={AUTH_CONFIG.routes.router.login} element={<LoginPage />} />
+      <Route path={AUTH_CONFIG.routes.router.register} element={<RegisterPage/>} />
+    </Routes>
+  );
+}
