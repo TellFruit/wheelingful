@@ -26,6 +26,6 @@ public class UpdateChapterTextValidator : AbstractValidator<UpdateChapterTextReq
 
         RuleFor(c => c.Text)
             .NotEmpty()
-                .WithMessage("Text is required");
+                .WithMessage("Text is required.");
     }
 }
