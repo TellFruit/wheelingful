@@ -18,7 +18,7 @@ public static class BookReaderExtension
             .AddFluentValidationAutoValidation();
 
         bookReaderGroup.MapGet("/", async Task<Results<Ok<List<FetchBookResponse>>, ValidationProblem>>
-            ([AsParameters] FetchPaginationRequest request, [FromServices] IBookReaderService handler) =>
+            ([AsParameters] FetchBookPaginationRequest request, [FromServices] IBookReaderService handler) =>
         {
             var result = await handler.GetBooks(request);
 
