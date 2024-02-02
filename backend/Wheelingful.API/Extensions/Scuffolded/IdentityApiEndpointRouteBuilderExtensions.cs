@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Http.Metadata;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.Extensions.Options;
+using Wheelingful.DAL.Enums;
 
 namespace Microsoft.AspNetCore.Routing;
 
@@ -72,6 +73,19 @@ public static class IdentityApiEndpointRouteBuilderExtensions
             if (!result.Succeeded)
             {
                 return CreateValidationProblem(result);
+            }
+
+            var roles = new List<string> 
+            { 
+                nameof(UserRoleEnum.Reader), 
+                nameof(UserRoleEnum.Author) 
+            };
+
+            var roleResult = await userManager.AddToRolesAsync(user, roles);
+
+            if (!roleResult.Succeeded)
+            {
+                return CreateValidationProblem(roleResult);
             }
 
             var login = new LoginRequest() { 

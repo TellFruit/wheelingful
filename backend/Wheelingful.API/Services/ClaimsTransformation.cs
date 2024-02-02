@@ -6,32 +6,29 @@ using Wheelingful.DAL.Entities;
 
 namespace Wheelingful.API.Services;
 
-internal class ClaimsTransformation : IClaimsTransformation
+internal class ClaimsTransformation(ICurrentUser currentUser, UserManager<AppUser> userManager) : IClaimsTransformation
 {
-    private readonly ICurrentUser _currentUser;
-    private readonly UserManager<AppUser> _userManager;
-
-    public ClaimsTransformation(ICurrentUser currentUser, UserManager<AppUser> userManager)
-    {
-        _currentUser = currentUser;
-        _userManager = userManager;
-    }
-
     public async Task<ClaimsPrincipal> TransformAsync(ClaimsPrincipal principal)
     {
-        var found = await _userManager.GetUserAsync(principal);
+        var found = await userManager.GetUserAsync(principal);
 
-        ArgumentNullException.ThrowIfNull(found);
+        if (found == null)
+        {
+            return principal;
+        }
 
-        _currentUser.Id = found.Id;
+        currentUser.Id = found.Id;
 
         var newPrincipal = principal.Clone();
 
         var claimsIdentity = principal.Identity as ClaimsIdentity;
 
-        ArgumentNullException.ThrowIfNull(claimsIdentity);
+        if (claimsIdentity == null)
+        {
+            return principal;
+        }
 
-        var roles = await _userManager.GetRolesAsync(found);
+        var roles = await userManager.GetRolesAsync(found);
 
         foreach (var role in roles) 
         {
