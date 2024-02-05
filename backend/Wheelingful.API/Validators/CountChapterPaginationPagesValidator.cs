@@ -5,9 +5,9 @@ using Wheelingful.DAL.DbContexts;
 
 namespace Wheelingful.API.Validators;
 
-public class CountChapterPagionationPagesValidator : AbstractValidator<CountChapterPaginationPagesRequest>
+public class CountChapterPaginationPagesValidator : AbstractValidator<CountChapterPaginationPagesRequest>
 {
-    public CountChapterPagionationPagesValidator(WheelingfulDbContext dbContext)
+    public CountChapterPaginationPagesValidator(WheelingfulDbContext dbContext)
     {
         RuleFor(b => b.BookId)
             .MustAsync((bookId, cancellation) => dbContext.Books.BeActualBook(bookId))

@@ -18,7 +18,7 @@ export default function RegisterPage() {
       title="Please, register your credentials."
       authTitle="Sign Up"
       redirectTitle="Sign In"
-      redirectTo={`/${AUTH_CONFIG.routes.router.login}`}
+      redirectTo={`/${AUTH_CONFIG.routes.router.group}/${AUTH_CONFIG.routes.router.login}`}
       error={error}
       isLoading={results.isLoading}
       isSuccess={results.isSuccess}

@@ -31,7 +31,7 @@ public static class ChapterReaderExtension
             return TypedResults.Ok(result);
         });
 
-        chapterReaderGroup.MapGet("/book/{bookId}/chapter/{chapterId}", 
+        chapterReaderGroup.MapGet("/{chapterId}", 
             async Task<Results<Ok<FetchChapterResponse>, ValidationProblem>> (
                 [AsParameters] FetchChapterRequest request, [FromServices] IChapterReaderService handler) =>
        {
