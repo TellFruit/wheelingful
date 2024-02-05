@@ -3,11 +3,7 @@ import { useSelector } from 'react-redux';
 import { AUTH_CONFIG } from '../configuration/auth-config';
 
 export default function ProtectedWrapper({ children }) {
-  const { isSignedIn } = useSelector((state) => {
-    return {
-      isSignedIn: state.authSlice.isSignedIn,
-    };
-  });
+  const { isSignedIn } = useSelector((state) => state.authSlice);
   
   const location = useLocation();
 
@@ -15,7 +11,7 @@ export default function ProtectedWrapper({ children }) {
     children
   ) : (
     <Navigate
-      to={`/${AUTH_CONFIG.routes.router.login}`}
+      to={`/${AUTH_CONFIG.routes.router.group}/${AUTH_CONFIG.routes.router.login}`}
       state={{ from: location }}
       replace
     />

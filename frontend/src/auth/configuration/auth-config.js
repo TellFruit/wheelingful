@@ -1,6 +1,7 @@
 export const AUTH_CONFIG = {
   routes: {
     router: {
+      group: 'auth',
       register: 'register',
       login: 'login',
     },
