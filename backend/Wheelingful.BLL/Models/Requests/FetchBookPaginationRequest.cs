@@ -4,10 +4,11 @@ namespace Wheelingful.BLL.Models.Requests;
 
 public class FetchBookPaginationRequest : FetchPaginationRequest
 {
-    public string? AuthorId { get; set; }
+    public bool? DoFetchByCurrentUser { get; set; }
 
-    public FetchBookPaginationRequest(string? authorId, int? pageNumber, int? pageSize) : base(pageNumber, pageSize)
+    public FetchBookPaginationRequest(bool? doFetchByCurrentUser, int? pageNumber, int? pageSize) 
+        : base(pageNumber, pageSize)
     {
-        AuthorId = authorId;
+        DoFetchByCurrentUser = doFetchByCurrentUser;
     }
 }
