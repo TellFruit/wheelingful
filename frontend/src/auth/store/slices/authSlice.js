@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice, createSelector } from '@reduxjs/toolkit';
 import { AUTH_CONFIG } from '../../configuration/auth-config';
 
 const authSlice = createSlice({
@@ -7,30 +7,43 @@ const authSlice = createSlice({
     accessToken: '',
     refreshToken: '',
     tokenType: '',
+    expiresInMilliseconds: 0,
+    lastSignIn: 0,
     isSignedIn: false,
-    isExpired: true,
   },
   reducers: {
     setTokens(state, action) {
       state.accessToken = action.payload.accessToken;
       state.refreshToken = action.payload.refreshToken;
       state.tokenType = action.payload.tokenType;
+      state.expiresInMilliseconds = action.payload.expiresIn * 1000;
+      state.lastSignIn = new Date().getTime();
       state.isSignedIn = true;
-      state.isExpired = false;
     },
     signOut(state) {
       state.accessToken = '';
       state.refreshToken = '';
       state.tokenType = '';
+      state.expiresInMilliseconds = 0;
+      state.lastSignIn = 0;
       state.isSignedIn = false;
-      state.isExpired = true;
       window.location.href = AUTH_CONFIG.routes.api.login;
     },
-    switchExpired(state) {
-      state.isExpired = !state.isExpired;
-    }
   },
 });
 
-export const { setTokens, signOut, switchExpired } = authSlice.actions;
+export const { setTokens, signOut } = authSlice.actions;
 export const authReducer = authSlice.reducer;
+
+const selectAuthSlice = (state) => state.authSlice;
+
+export const selectIsExpired = createSelector(
+  [selectAuthSlice],
+  (authSlice) => {
+    const { lastSignIn, expiresInMilliseconds } = authSlice;
+    const currentTime = new Date().getTime();
+    const elapsedTimeSinceSignIn = currentTime - lastSignIn;
+
+    return elapsedTimeSinceSignIn >= expiresInMilliseconds;
+  }
+);

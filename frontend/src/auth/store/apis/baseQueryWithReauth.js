@@ -1,15 +1,18 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
 import { AUTH_CONFIG } from '../../configuration/auth-config';
 import { SHARED_CONFIG } from '../../../app';
-import { setTokens, signOut, switchExpired } from '../slices/authSlice';
+import { selectIsExpired, setTokens, signOut } from '../slices/authSlice';
 
 const baseAuthorizedQuery = fetchBaseQuery({
   baseUrl: SHARED_CONFIG.serverApiUrl,
   prepareHeaders: (headers, { getState }) => {
-    const { accessToken, refreshToken, tokenType, isExpired } =
-      getState().authSlice;
+    const state = getState();
+
+    const { accessToken, refreshToken, tokenType } = state.authSlice;
 
     if (accessToken) {
+      const isExpired = selectIsExpired(state);
+
       if (isExpired) {
         headers.set('Refreshing', refreshToken);
       } else {
@@ -23,22 +26,25 @@ const baseAuthorizedQuery = fetchBaseQuery({
 
 // TODO: Fix possible multiple calls of refresh backend API endpoint (use mutex)
 export const baseQueryWithReauth = async (args, api, extraOptions) => {
-  let result = await baseAuthorizedQuery(args, api, extraOptions);
+  let result;
 
-  if (result.error && result.error.status === 401) {
-    api.dispatch(switchExpired());
-    const refreshResult = await baseAuthorizedQuery(
+  const isExpired = selectIsExpired(api.getState());
+
+  if (isExpired) {
+    result = await baseAuthorizedQuery(
       AUTH_CONFIG.routes.api.refresh,
       api,
       extraOptions
     );
-    if (refreshResult.error.status === 401) {
+    if (result.error?.status === 401) {
       api.dispatch(signOut());
     } else {
-      api.dispatch(setTokens(refreshResult.data));
+      api.dispatch(setTokens(result.data));
 
       result = await baseAuthorizedQuery(args, api, extraOptions);
     }
+  } else {
+    result = await baseAuthorizedQuery(args, api, extraOptions);
   }
 
   return result;
