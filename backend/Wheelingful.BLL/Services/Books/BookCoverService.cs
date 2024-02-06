@@ -10,11 +10,11 @@ internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOp
 {
     private readonly BookCoverOptions _coverOptions = options.Value;
 
-    public string GetCoverUrl(string bookTitle, string authorId)
+    public string GetCoverUrl(int bookId, string authorId)
     {
-        var coverName = GetBookCoverName(bookTitle, authorId);
+        var coverName = GetBookCoverName(bookId, authorId);
 
-        var relativePath = $"{_coverOptions.Folder}/{coverName}.{_coverOptions.Extension}";
+        var relativePath = $"{_coverOptions.Folder}/{coverName}";
 
         return imageManager.GetImageUrl(relativePath, new TransformationOptions
         {
@@ -23,22 +23,22 @@ internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOp
         });
     }
 
-    public async Task<string> UploadCover(string base64, string bookTitle, string authorId)
+    public async Task<string> UploadCover(string base64, int bookId, string authorId)
     {
         return await imageManager.UploadImage(new UploadImageRequest
         {
             Base64 = base64,
-            Name = GetBookCoverName(bookTitle, authorId),
+            Name = GetBookCoverName(bookId, authorId),
             Fodler = _coverOptions.Folder
         });
     }
 
-    public async Task<string> UpdateCover(string imageId, string base64, string bookTitle, string authorId)
+    public async Task<string> UpdateCover(string imageId, string base64, int bookId, string authorId)
     {
         return await imageManager.UpdateImage(imageId, new UploadImageRequest
         {
             Base64 = base64,
-            Name = GetBookCoverName(bookTitle, authorId),
+            Name = GetBookCoverName(bookId, authorId),
             Fodler = _coverOptions.Folder
         });
     }
@@ -48,10 +48,8 @@ internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOp
         await imageManager.DeleteImage(imageId);
     }
 
-    private string GetBookCoverName(string bookTitle, string authorId)
+    private string GetBookCoverName(int bookId, string authorId)
     {
-        var bookTitleRefined = string.Join("-", bookTitle.Split(" "));
-
-        return $"{bookTitleRefined}_{authorId}";
+        return $"{bookId}-{authorId}";
     }
 }

@@ -11,20 +11,17 @@ namespace Wheelingful.BLL.Services.Books;
 internal class BookAuthorService(
     IBookCoverService bookCover,
     IChapterTextService textService,
-    ICurrentUser currentUser, 
+    ICurrentUser currentUser,
     WheelingfulDbContext dbContext) : IBookAuthorService
 {
     public async Task CreateBook(CreateBookRequest request)
     {
-        var coverId = await bookCover.UploadCover(request.CoverBase64, request.Title, currentUser.Id);
-
         var newBook = new Book
         {
             Title = request.Title,
             Description = request.Description,
             Category = request.Category,
             Status = request.Status,
-            CoverId = coverId,
         };
 
         var author = dbContext.Users
@@ -37,6 +34,11 @@ internal class BookAuthorService(
 
         await dbContext.SaveChangesAsync();
 
+        var coverId = await bookCover.UploadCover(request.CoverBase64, newBook.Id, currentUser.Id);
+
+        newBook.CoverId = coverId;
+
+        await dbContext.SaveChangesAsync();
     }
 
     public async Task UpdateBook(UpdateBookRequest request)
@@ -46,7 +48,7 @@ internal class BookAuthorService(
         string? coverId = book.CoverId;
         if (request.CoverBase64 != null)
         {
-            coverId = await bookCover.UpdateCover(book.CoverId, request.CoverBase64, request.Title, currentUser.Id);
+            coverId = await bookCover.UpdateCover(book.CoverId, request.CoverBase64, book.Id, currentUser.Id);
         }
 
         book.Title = request.Title;

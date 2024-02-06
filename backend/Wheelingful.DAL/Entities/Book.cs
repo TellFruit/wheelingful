@@ -9,7 +9,7 @@ public sealed class Book : BaseEntity
     public required string Description { get; set; }
     public BookCategoryEnum Category { get; set; }
     public BookStatusEnum Status { get; set; }
-    public required string CoverId { get; set; }
+    public string CoverId { get; set; } = string.Empty;
 
     public List<AppUser> Users { get; set; } = [];
 }
