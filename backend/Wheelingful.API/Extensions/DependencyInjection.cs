@@ -3,7 +3,6 @@ using Wheelingful.API.Services;
 using FluentValidation;
 using Wheelingful.API.Validators;
 using Wheelingful.BLL.Models.Requests;
-using Wheelingful.BLL.Models.Requests.General;
 
 namespace Wheelingful.API.Extensions;
 
@@ -28,8 +27,8 @@ public static class DependencyInjection
         services.AddScoped<IValidator<DeleteChapterRequest>, DeleteChapterValidator>();
         services.AddScoped<IValidator<FetchChapterRequest>, FetchChapterValidator>();
         services.AddScoped<IValidator<FetchChapterPaginationRequest>, FetchChapterPaginationValidator>();
-        services.AddScoped<IValidator<CountChapterPaginationPagesRequest>, CountChapterPagionationPagesValidator>();
+        services.AddScoped<IValidator<CountChapterPaginationPagesRequest>, CountChapterPaginationPagesValidator>();
 
-        services.AddScoped<IValidator<CountPagesRequest>, CountPagesValidator>();
+        services.AddScoped<IValidator<CountBookPaginationPagesRequest>, CountBookPaginationPagesValidator>();
     }
 }

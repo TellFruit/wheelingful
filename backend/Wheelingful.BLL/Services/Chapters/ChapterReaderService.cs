@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Contracts.Generic;
 using Wheelingful.BLL.Extensions.Generic;
@@ -30,7 +31,12 @@ public class ChapterReaderService(
 
     public Task<int> CountPaginationPages(CountChapterPaginationPagesRequest request)
     {
-        return countPaginationPages.CountByPageSize(request, c => c.BookId == request.BookId);
+        var filters = new List<Expression<Func<Chapter, bool>>>
+        {
+            c => c.BookId == request.BookId
+        };
+
+        return countPaginationPages.CountByPageSize(request, filters);
     }
 
     public async Task<FetchChapterResponse> GetChapter(FetchChapterRequest request)

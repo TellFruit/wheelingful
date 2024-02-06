@@ -1,11 +1,11 @@
 ﻿using FluentValidation;
-using Wheelingful.BLL.Models.Requests.General;
+using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.API.Validators;
 
-public class CountPagesValidator : AbstractValidator<CountPagesRequest>
+public class CountBookPaginationPagesValidator : AbstractValidator<CountBookPaginationPagesRequest>
 {
-	public CountPagesValidator()
+	public CountBookPaginationPagesValidator()
 	{
 		RuleFor(c => c.PageSize)
 			.GreaterThan(0)

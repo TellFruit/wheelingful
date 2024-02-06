@@ -12,17 +12,19 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import { authApi, authReducer } from '../../auth';
+import { publishApi } from '../../book-publish/store/apis/publush-api';
 
 const rootReducer = combineReducers({
   authSlice: authReducer,
   [authApi.reducerPath]: authApi.reducer,
+  [publishApi.reducerPath]: publishApi.reducer
 });
 
 const persistedReducer = persistReducer({
   key: 'root',
   version: 1,
   storage,
-  blacklist: [authApi.reducerPath]
+  blacklist: [authApi.reducerPath, publishApi.reducerPath]
 }, rootReducer);
 
 export const store = configureStore({
@@ -32,7 +34,9 @@ export const store = configureStore({
       serializableCheck: {
         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
       },
-    }).concat(authApi.middleware);
+    })
+    .concat(authApi.middleware)
+    .concat(publishApi.middleware);
   },
 });
 

@@ -5,5 +5,5 @@ namespace Wheelingful.BLL.Contracts.Generic;
 
 public interface ICountPaginationPages<T> where T : class
 {
-    Task<int> CountByPageSize(CountPagesRequest request, Expression<Func<T, bool>>? filter = null);
+    Task<int> CountByPageSize(CountPagesRequest request, IEnumerable<Expression<Func<T, bool>>>? filters = null);
 }
