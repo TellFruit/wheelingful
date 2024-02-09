@@ -12,11 +12,11 @@ export default function AppRouter() {
         <Route element={<Layout />}>
           <Route path="/" />
           <Route
-            path={`/${AUTH_CONFIG.routes.router.group}/*`}
+            path={`/${AUTH_CONFIG.routes.group}/*`}
             element={<AuthRouter />}
           />
           <Route
-            path={`/${PUBLISH_CONFIG.routes.router.group}/*`}
+            path={`/${PUBLISH_CONFIG.routes.group}/*`}
             element={<PublishRouter />}
           />
         </Route>

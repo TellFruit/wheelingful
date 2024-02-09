@@ -10,12 +10,9 @@ import {
   Pagination,
 } from '@mui/material';
 import { styled } from '@mui/material/styles';
-import {
-  useCountBooksPaginationPagesQuery,
-  useFetchBooksByCurrentUserQuery,
-} from '../store/apis/publush-api';
+import { useFetchBooksByCurrentUserQuery } from '../store/apis/publush-api';
 import { useState } from 'react';
-import { PUBLISH_CONFIG } from '../configuration/publish-config';
+import { SHARED_CONFIG } from '../../shared';
 
 const CardContentNoPadding = styled(CardContent)(`
   padding: 8px;
@@ -27,18 +24,14 @@ const CardContentNoPadding = styled(CardContent)(`
 export default function BooksByCurrentUser() {
   const [pageNumber, setPageNumber] = useState(1);
 
-  const pageSize = PUBLISH_CONFIG.pagination.pageSizeDefault;
+  const pageSize = SHARED_CONFIG.pagination.defaultPageSize;
 
   const {
-    data: books,
+    data: paginated,
     error,
     isFetching,
   } = useFetchBooksByCurrentUserQuery({
     pageNumber,
-    pageSize,
-  });
-
-  const { data: pageCount } = useCountBooksPaginationPagesQuery({
     pageSize,
   });
 
@@ -63,7 +56,7 @@ export default function BooksByCurrentUser() {
   return (
     <div>
       <Grid container spacing={3} sx={{ marginTop: 1 }}>
-        {books.map((book) => (
+        {paginated.books.map((book) => (
           <Grid item key={book.id} xs={12} sm={6} md={4} lg={3}>
             <Card sx={{ maxWidth: 250 }}>
               <CardMedia
@@ -90,7 +83,7 @@ export default function BooksByCurrentUser() {
       </Grid>
       <Box display="flex" justifyContent="center" alignItems="center">
         <Pagination
-          count={pageCount}
+          count={paginated.pageCount}
           page={pageNumber}
           onChange={handlePageChange}
           showFirstButton

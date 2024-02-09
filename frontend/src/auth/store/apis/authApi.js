@@ -1,7 +1,6 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQuery } from '../../../app';
+import { baseQuery } from '../../../shared';
 import { setTokens } from '../slices/authSlice';
-import { AUTH_CONFIG } from '../../configuration/auth-config';
 
 const onAuthQueryStarted = async (arg, { dispatch, queryFulfilled }) => {
   try {
@@ -21,7 +20,7 @@ export const authApi = createApi({
       signUp: builder.mutation({
         query: (credentials) => {
           return {
-            url: AUTH_CONFIG.routes.api.register,
+            url: '/auth/register',
             body: {
               email: credentials.email,
               password: credentials.password,
@@ -34,7 +33,7 @@ export const authApi = createApi({
       signIn: builder.mutation({
         query: (credentials) => {
           return {
-            url: AUTH_CONFIG.routes.api.login,
+            url: '/auth/login',
             body: {
               email: credentials.email,
               password: credentials.password,

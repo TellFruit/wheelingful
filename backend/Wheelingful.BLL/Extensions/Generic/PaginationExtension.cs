@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Wheelingful.BLL.Models.Responses.Generic;
 
 namespace Wheelingful.BLL.Extensions.Generic;
 
@@ -11,5 +12,28 @@ public static class PaginationExtension
         return values
             .Skip(itemsToSkip)
             .Take(pageSize);
+    }
+
+    public static async Task<int> CountPages<T>(this IQueryable<T> values, int pageSize)
+    {
+        var totalEntries = await values.CountAsync();
+
+        return (int)Math.Ceiling((double)totalEntries / pageSize);
+    }
+
+    public static async Task<FetchPaginationResponse<T>> ToPagedListAsync<T>(this IQueryable<T> values, int pageNumber, int pageSize)
+        where T : class
+    {
+        var pageCount = await values.CountPages(pageSize);
+
+        var items = await values
+            .Paginate(pageNumber, pageCount)
+            .ToListAsync();
+
+        return new FetchPaginationResponse<T>
+        {
+            PageCount = pageCount,
+            Items = items
+        };
     }
 }

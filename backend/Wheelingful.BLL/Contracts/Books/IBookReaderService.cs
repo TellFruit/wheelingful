@@ -1,11 +1,11 @@
 ﻿using Wheelingful.BLL.Models.Requests;
 using Wheelingful.BLL.Models.Responses;
+using Wheelingful.BLL.Models.Responses.Generic;
 
 namespace Wheelingful.BLL.Contracts.Books;
 
 public interface IBookReaderService
 {
-    Task<List<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request);
-    Task<int> CountPaginationPages(CountBookPaginationPagesRequest request);
+    Task<FetchPaginationResponse<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request);
     Task<FetchBookResponse> GetBook(FetchBookRequest request);
 }

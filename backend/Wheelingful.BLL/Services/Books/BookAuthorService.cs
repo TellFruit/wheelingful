@@ -43,7 +43,7 @@ internal class BookAuthorService(
 
     public async Task UpdateBook(UpdateBookRequest request)
     {
-        var book = await dbContext.Books.FirstAsync(b => b.Id == request.Id);
+        var book = await dbContext.Books.FirstAsync(b => b.Id == request.BookId);
 
         string? coverId = book.CoverId;
         if (request.CoverBase64 != null)
