@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Wheelingful.API.Constants;
+using Wheelingful.API.Models.Bindings;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Models.Requests;
 
@@ -11,11 +12,11 @@ public static class ChapterAuthorExtension
 {
     public static void MapChapterAuthorApi(this IEndpointRouteBuilder endpoints)
     {
-        var chapterAuthorGroup = endpoints.MapGroup("/chapter-author")
+        var booksGroup = endpoints.MapGroup("/books")
             .RequireAuthorization(PolicyContants.AuthorizeAuthor)
             .AddFluentValidationAutoValidation();
 
-        chapterAuthorGroup.MapPost("/", async Task<Results<Created, ValidationProblem>> (
+        booksGroup.MapPost("/chapters", async Task<Results<Created, ValidationProblem>> (
              [FromBody] CreateChapterRequest request, [FromServices] IChapterAuthorService handler) =>
         {
             await handler.CreateChapter(request);
@@ -23,23 +24,15 @@ public static class ChapterAuthorExtension
             return TypedResults.Created();
         });
 
-        chapterAuthorGroup.MapPut("/props", async Task<Results<Ok, ValidationProblem>> (
-             [FromBody] UpdateChapterPropertiesRequest request, [FromServices] IChapterAuthorService handler) =>
+        booksGroup.MapPut("/{bookId}/chapters/{chapterId}", async Task<Results<Ok, ValidationProblem>> (
+             [AsParameters] UpdateChapterBinding request, [FromServices] IChapterAuthorService handler) =>
         {
-            await handler.UpdateChapterProperties(request);
+            await handler.UpdateChapter(request.To());
 
             return TypedResults.Ok();
         });
 
-        chapterAuthorGroup.MapPut("/text", async Task<Results<Ok, ValidationProblem>> (
-             [FromBody] UpdateChapterTextRequest request, [FromServices] IChapterAuthorService handler) =>
-        {
-            await handler.UpdateChapterText(request);
-
-            return TypedResults.Ok();
-        });
-
-        chapterAuthorGroup.MapDelete("/book/{bookId}/chapter/{chapterId}", async Task<Results<NoContent, ValidationProblem>> (
+        booksGroup.MapDelete("/{bookId}/chapters/{chapterId}", async Task<Results<NoContent, ValidationProblem>> (
              [AsParameters] DeleteChapterRequest request, [FromServices] IChapterAuthorService handler) =>
         {
             await handler.DeleteChapter(request);

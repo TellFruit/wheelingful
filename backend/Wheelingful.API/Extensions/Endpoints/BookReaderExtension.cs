@@ -11,10 +11,10 @@ public static class BookReaderExtension
 {
     public static void MapBookReaderApi(this IEndpointRouteBuilder endpoints)
     {
-        var bookReaderGroup = endpoints.MapGroup("/book-reader")
+        var booksGroup = endpoints.MapGroup("/books")
             .AddFluentValidationAutoValidation();
 
-        bookReaderGroup.MapGet("/", async Task<Results<Ok<List<FetchBookResponse>>, ValidationProblem>>
+        booksGroup.MapGet("/", async Task<Results<Ok<FetchBookPaginationResponse>, ValidationProblem>>
             ([AsParameters] FetchBookPaginationRequest request, [FromServices] IBookReaderService handler) =>
         {
             var result = await handler.GetBooks(request);
@@ -22,15 +22,7 @@ public static class BookReaderExtension
             return TypedResults.Ok(result);
         });
 
-        bookReaderGroup.MapGet("/pages", async Task<Results<Ok<int>, ValidationProblem>>
-            ([AsParameters] CountBookPaginationPagesRequest request, [FromServices] IBookReaderService handler) =>
-        {
-            var result = await handler.CountPaginationPages(request);
-
-            return TypedResults.Ok(result);
-        });
-
-        bookReaderGroup.MapGet("/{bookId}", async Task<Results<Ok<FetchBookResponse>, ValidationProblem>>
+        booksGroup.MapGet("/{bookId}", async Task<Results<Ok<FetchBookResponse>, ValidationProblem>>
             ([AsParameters] FetchBookRequest request, [FromServices] IBookReaderService handler) =>
         {
             var result = await handler.GetBook(request);
