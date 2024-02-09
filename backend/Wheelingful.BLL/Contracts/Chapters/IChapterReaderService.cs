@@ -6,7 +6,6 @@ namespace Wheelingful.BLL.Contracts.Chapters;
 
 public interface IChapterReaderService
 {
-    Task<List<FetchChapterPaginatedResponse>> GetChapters(FetchChapterPaginationRequest request);
-    Task<int> CountPaginationPages(CountChapterPaginationPagesRequest request);
+    Task<FetchChapterPaginationResponse> GetChapters(FetchChapterPaginationRequest request);
     Task<FetchChapterResponse> GetChapter(FetchChapterRequest request);
 }

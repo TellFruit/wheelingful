@@ -5,7 +5,6 @@ namespace Wheelingful.BLL.Contracts.Books;
 
 public interface IBookReaderService
 {
-    Task<List<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request);
-    Task<int> CountPaginationPages(CountBookPaginationPagesRequest request);
+    Task<FetchBookPaginationResponse> GetBooks(FetchBookPaginationRequest request);
     Task<FetchBookResponse> GetBook(FetchBookRequest request);
 }

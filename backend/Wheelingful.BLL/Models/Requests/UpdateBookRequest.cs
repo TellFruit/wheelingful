@@ -4,7 +4,7 @@ namespace Wheelingful.BLL.Models.Requests;
 
 public class UpdateBookRequest
 {
-    public int Id { get; set; }
+    public int BookId { get; set; }
     public required string Title { get; set; }
     public string? CoverBase64 { get; set; }
     public string Description { get; set; } = null!;

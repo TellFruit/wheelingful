@@ -12,4 +12,11 @@ public static class PaginationExtension
             .Skip(itemsToSkip)
             .Take(pageSize);
     }
+
+    public static async Task<int> CountPages<T>(this IQueryable<T> values, int pageSize)
+    {
+        var totalEntries = await values.CountAsync();
+
+        return (int)Math.Ceiling((double)totalEntries / pageSize);
+    }
 }

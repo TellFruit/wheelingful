@@ -1,26 +1,21 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System.Linq.Expressions;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
-using Wheelingful.BLL.Contracts.Generic;
 using Wheelingful.BLL.Extensions.Generic;
 using Wheelingful.BLL.Models.Requests;
 using Wheelingful.BLL.Models.Responses;
 using Wheelingful.DAL.DbContexts;
-using Wheelingful.DAL.Entities;
 
 namespace Wheelingful.BLL.Services.Books;
 
 public class BookReaderService(
     ICurrentUser currentUser, 
     IBookCoverService bookCover,
-    ICountPaginationPages<Book> countPaginationPages,
     WheelingfulDbContext dbContext) : IBookReaderService
 {
-    public Task<List<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request)
+    public async Task<FetchBookPaginationResponse> GetBooks(FetchBookPaginationRequest request)
     {
-        var query = dbContext
-            .Books
+        var query = dbContext.Books
             .Include(b => b.Users)
             .AsQueryable();
 
@@ -32,7 +27,7 @@ public class BookReaderService(
             }
         }
 
-        return query
+        var books = await query
             .Select(b => new FetchBookResponse
             {
                 Id = b.Id,
@@ -44,27 +39,19 @@ public class BookReaderService(
             })
             .Paginate(request.PageNumber.Value, request.PageSize.Value)
             .ToListAsync();
-    }
 
-    public Task<int> CountPaginationPages(CountBookPaginationPagesRequest request)
-    {
-        var filters = new List<Expression<Func<Book, bool>>>();
+        var pageCount = await query.CountPages(request.PageSize.Value);
 
-        if (request.DoFetchByCurrentUser != null)
+        return new FetchBookPaginationResponse
         {
-            if (request.DoFetchByCurrentUser.Value)
-            {
-                filters.Add(b => b.Users.First().Id == currentUser.Id);
-            }
-        }
-
-        return countPaginationPages.CountByPageSize(request, filters);
+            PageCount = pageCount,
+            Books = books
+        };
     }
 
     public Task<FetchBookResponse> GetBook(FetchBookRequest request)
     {
-        return dbContext
-            .Books
+        return dbContext.Books
             .Include(b => b.Users)
             .Select(b => new FetchBookResponse
             {
