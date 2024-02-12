@@ -7,37 +7,13 @@ using Wheelingful.DAL.Enums;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
-using Microsoft.OpenApi.Models;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-    {
-        Description = "Authorization header using the Bearer scheme",
-        Type = SecuritySchemeType.Http,
-        Scheme = "bearer",
-        BearerFormat = "Access Token"
-    });
-
-    c.AddSecurityRequirement(new OpenApiSecurityRequirement
-    {
-        {
-            new OpenApiSecurityScheme
-            {
-                Reference = new OpenApiReference
-                {
-                    Type = ReferenceType.SecurityScheme,
-                    Id = "Bearer"
-                }
-            },
-            new string[] {}
-        }
-    });
-});
+builder.Services.AddSwagger();
 
 builder.Services.AddCors(options =>
 {
@@ -88,9 +64,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapIdentityPartialApi<AppUser>();
-app.MapBookAuthorApi();
-app.MapBookReaderApi();
-app.MapChapterAuthorApi();
-app.MapChapterReaderApi();
+
+var bookGroup = app.MapGroup("/books")
+    .AddFluentValidationAutoValidation();
+
+bookGroup.MapBookApi();
+bookGroup.MapChapterApi();
 
 app.Run();

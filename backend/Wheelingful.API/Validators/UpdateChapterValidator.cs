@@ -24,13 +24,7 @@ public class UpdateChapterValidator : AbstractValidator<UpdateChapterBinding>
             .MustAsync((id, cancelletion) => dbContext.Books.BeActualBookAndAuthor(id, currentUser.Id))
                 .WithMessage("Either you are not the author or there is no book with such ID.");
 
-        RuleFor(c => c.Body.Title)
-            .NotEmpty()
-                .WithMessage("Title is required.");
-
-        RuleFor(c => c.Body.Text)
-            .NotEmpty()
-                .WithMessage("Text is required.")
-            .When(c => c.Body.Text != null);
+        RuleFor(c => c.Body)
+            .SetValidator(new UpdateChapterBodyValidator());
     }
 }
