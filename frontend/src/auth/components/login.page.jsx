@@ -1,6 +1,6 @@
 import AuthComponent from './shared/auth.component';
 import { useSignInMutation } from '../store/apis/authApi';
-import { AUTH_CONFIG } from '../configuration/auth-config';
+import { AUTH_CONFIG } from '../configuration/auth.config';
 
 export default function LoginPage() {
   const [signIn, results] = useSignInMutation();
@@ -16,7 +16,7 @@ export default function LoginPage() {
       title="Please, enter your credentials."
       authTitle="Sign In"
       redirectTitle="Sign Up"
-      redirectTo={`/${AUTH_CONFIG.routes.router.group}/${AUTH_CONFIG.routes.router.register}`}
+      redirectTo={`/${AUTH_CONFIG.routes.group}/${AUTH_CONFIG.routes.register}`}
       error={error}
       isLoading={results.isLoading}
       isSuccess={results.isSuccess}

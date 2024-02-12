@@ -27,7 +27,7 @@ export default function Layout() {
           <Button
             color="inherit"
             component={Link}
-            to={`/${PUBLISH_CONFIG.routes.router.group}/${PUBLISH_CONFIG.routes.router.booksByCurrentUser}`}
+            to={`/${PUBLISH_CONFIG.routes.group}/${PUBLISH_CONFIG.routes.booksByCurrentUser}`}
           >
             Write
           </Button>

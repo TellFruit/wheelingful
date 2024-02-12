@@ -1,5 +1,5 @@
 import { createSlice, createSelector } from '@reduxjs/toolkit';
-import { AUTH_CONFIG } from '../../configuration/auth-config';
+import { AUTH_CONFIG } from '../../configuration/auth.config';
 
 const authSlice = createSlice({
   name: 'authSlice',
@@ -27,7 +27,7 @@ const authSlice = createSlice({
       state.expiresInMilliseconds = 0;
       state.lastSignIn = 0;
       state.isSignedIn = false;
-      window.location.href = AUTH_CONFIG.routes.api.login;
+      window.location.href = `/${AUTH_CONFIG.routes.group}/${AUTH_CONFIG.routes.login}`;
     },
   },
 });
