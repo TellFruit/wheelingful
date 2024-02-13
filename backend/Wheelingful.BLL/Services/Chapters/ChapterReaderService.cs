@@ -12,27 +12,19 @@ public class ChapterReaderService(
     IChapterTextService textService,
     WheelingfulDbContext dbContext) : IChapterReaderService
 {
-    public async Task<FetchPaginationResponse<FetchChapterPropsResponse>> GetChapters(FetchChapterPaginationRequest request)
+    public Task<FetchPaginationResponse<FetchChapterPropsResponse>> GetChapters(FetchChapterPaginationRequest request)
     {
         var query = dbContext.Chapters
             .Where(c => c.BookId == request.BookId)
             .AsQueryable();
 
-        var chapters = await query
+        return query
             .Select(c => new FetchChapterPropsResponse
             {
                 Id = c.Id,
                 Title = c.Title
             })
             .ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
-
-        var pageCount = await query.CountPages(request.PageSize.Value);
-
-        return new FetchPaginationResponse<FetchChapterPropsResponse>
-        {
-            PageCount = pageCount,
-            Items = chapters
-        };
     }
 
     public async Task<FetchChapterResponse> GetChapter(FetchChapterRequest request)

@@ -14,7 +14,7 @@ public class BookReaderService(
     IBookCoverService bookCover,
     WheelingfulDbContext dbContext) : IBookReaderService
 {
-    public async Task<FetchPaginationResponse<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request)
+    public Task<FetchPaginationResponse<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request)
     {
         var query = dbContext.Books
             .Include(b => b.Users)
@@ -28,7 +28,7 @@ public class BookReaderService(
             }
         }
 
-        var books = await query
+        return query
             .Select(b => new FetchBookResponse
             {
                 Id = b.Id,
@@ -39,14 +39,6 @@ public class BookReaderService(
                 CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id)
             })
             .ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
-
-        var pageCount = await query.CountPages(request.PageSize.Value);
-
-        return new FetchPaginationResponse<FetchBookResponse>
-        {
-            PageCount = pageCount,
-            Items = books
-        };
     }
 
     public Task<FetchBookResponse> GetBook(FetchBookRequest request)
