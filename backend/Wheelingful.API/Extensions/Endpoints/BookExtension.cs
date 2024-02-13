@@ -5,6 +5,7 @@ using Wheelingful.API.Models.Bindings;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Models.Requests;
 using Wheelingful.BLL.Models.Responses;
+using Wheelingful.BLL.Models.Responses.Generic;
 
 namespace Wheelingful.API.Extensions.Endpoints;
 
@@ -39,7 +40,7 @@ public static class BookExtension
         })
             .RequireAuthorization(PolicyContants.AuthorizeAuthor);
 
-        endpoints.MapGet("/", async Task<Results<Ok<FetchBookPaginationResponse>, ValidationProblem>>
+        endpoints.MapGet("/", async Task<Results<Ok<FetchPaginationResponse<FetchBookResponse>>, ValidationProblem>>
             ([AsParameters] FetchBookPaginationRequest request, [FromServices] IBookReaderService handler) =>
         {
             var result = await handler.GetBooks(request);

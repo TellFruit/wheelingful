@@ -5,6 +5,7 @@ using Wheelingful.API.Models.Bindings;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Models.Requests;
 using Wheelingful.BLL.Models.Responses;
+using Wheelingful.BLL.Models.Responses.Generic;
 
 namespace Wheelingful.API.Extensions.Endpoints;
 
@@ -40,7 +41,7 @@ public static class ChapterExtension
             .RequireAuthorization(PolicyContants.AuthorizeAuthor);
 
         endpoints.MapGet("/{bookId}/chapters",
-            async Task<Results<Ok<FetchChapterPaginationResponse>, ValidationProblem>> (
+            async Task<Results<Ok<FetchPaginationResponse<FetchChapterPropsResponse>>, ValidationProblem>> (
                 [AsParameters] FetchChapterPaginationRequest request, [FromServices] IChapterReaderService handler) =>
             {
                 var result = await handler.GetChapters(request);

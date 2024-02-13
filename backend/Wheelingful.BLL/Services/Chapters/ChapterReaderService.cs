@@ -3,6 +3,7 @@ using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Extensions.Generic;
 using Wheelingful.BLL.Models.Requests;
 using Wheelingful.BLL.Models.Responses;
+using Wheelingful.BLL.Models.Responses.Generic;
 using Wheelingful.DAL.DbContexts;
 
 namespace Wheelingful.BLL.Services.Chapters;
@@ -11,7 +12,7 @@ public class ChapterReaderService(
     IChapterTextService textService,
     WheelingfulDbContext dbContext) : IChapterReaderService
 {
-    public async Task<FetchChapterPaginationResponse> GetChapters(FetchChapterPaginationRequest request)
+    public async Task<FetchPaginationResponse<FetchChapterPropsResponse>> GetChapters(FetchChapterPaginationRequest request)
     {
         var query = dbContext.Chapters
             .Where(c => c.BookId == request.BookId)
@@ -19,19 +20,18 @@ public class ChapterReaderService(
 
         var chapters = await query
             .Select(c => new FetchChapterPropsResponse
-            { 
+            {
                 Id = c.Id,
                 Title = c.Title
             })
-            .Paginate(request.PageNumber.Value, request.PageSize.Value)
-            .ToListAsync();
+            .ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
 
         var pageCount = await query.CountPages(request.PageSize.Value);
 
-        return new FetchChapterPaginationResponse 
+        return new FetchPaginationResponse<FetchChapterPropsResponse>
         {
             PageCount = pageCount,
-            Chapters = chapters
+            Items = chapters
         };
     }
 
