@@ -25,20 +25,19 @@ public class ChapterAuthorService(
         await textService.WriteText(request.Text, newChapter.Id, request.BookId);
     }
 
-    public Task UpdateChapterProperties(UpdateChapterPropertiesRequest request)
+    public async Task UpdateChapter(UpdateChapterRequest request)
     {
-        return dbContext.Chapters
+        await dbContext.Chapters
             .Where(c => c.Id == request.ChapterId)
             .ExecuteUpdateAsync(setters => setters
                 .SetProperty(c => c.Title, request.Title)
                 .SetProperty(c => c.UpdatedAt, DateTime.UtcNow));
-    }
 
-    public Task UpdateChapterText(UpdateChapterTextRequest request)
-    {
-        return textService.WriteText(request.Text, request.ChapterId, request.BookId);
+        if (request.Text != null)
+        {
+            await textService.WriteText(request.Text, request.ChapterId, request.BookId);
+        }
     }
-
 
     public Task DeleteChapter(DeleteChapterRequest request)
     {

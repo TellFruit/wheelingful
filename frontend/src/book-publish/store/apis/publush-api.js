@@ -1,6 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../../auth';
-import { PUBLISH_CONFIG } from '../../configuration/publish-config';
 
 export const publishApi = createApi({
   reducerPath: 'publishApi',
@@ -11,21 +10,9 @@ export const publishApi = createApi({
         providesTags: ['Books'],
         query: (pagination) => {
           return {
-            url: PUBLISH_CONFIG.routes.api.fetchBooks,
+            url: '/books',
             params: {
               pageNumber: pagination.pageNumber,
-              pageSize: pagination.pageSize,
-              doFetchByCurrentUser: true,
-            },
-            method: 'GET',
-          };
-        },
-      }),
-      countBooksPaginationPages: builder.query({
-        query: (pagination) => {
-          return {
-            url: PUBLISH_CONFIG.routes.api.countPaginationPages,
-            params: {
               pageSize: pagination.pageSize,
               doFetchByCurrentUser: true,
             },
@@ -37,7 +24,4 @@ export const publishApi = createApi({
   },
 });
 
-export const {
-  useFetchBooksByCurrentUserQuery,
-  useCountBooksPaginationPagesQuery,
-} = publishApi;
+export const { useFetchBooksByCurrentUserQuery } = publishApi;

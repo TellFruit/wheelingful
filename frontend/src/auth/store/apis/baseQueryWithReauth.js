@@ -1,10 +1,9 @@
 import { fetchBaseQuery } from '@reduxjs/toolkit/query';
-import { AUTH_CONFIG } from '../../configuration/auth-config';
-import { SHARED_CONFIG } from '../../../app';
 import { selectIsExpired, setTokens, signOut } from '../slices/authSlice';
+import { SHARED_CONFIG } from '../../../shared';
 
 const baseAuthorizedQuery = fetchBaseQuery({
-  baseUrl: SHARED_CONFIG.serverApiUrl,
+  baseUrl: SHARED_CONFIG.api.url,
   prepareHeaders: (headers, { getState }) => {
     const state = getState();
 
@@ -31,11 +30,7 @@ export const baseQueryWithReauth = async (args, api, extraOptions) => {
   const isExpired = selectIsExpired(api.getState());
 
   if (isExpired) {
-    result = await baseAuthorizedQuery(
-      AUTH_CONFIG.routes.api.refresh,
-      api,
-      extraOptions
-    );
+    result = await baseAuthorizedQuery('/auth/refresh', api, extraOptions);
     if (result.error?.status === 401) {
       api.dispatch(signOut());
     } else {

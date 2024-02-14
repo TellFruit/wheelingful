@@ -7,12 +7,13 @@ using Wheelingful.DAL.Enums;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
+using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwagger();
 
 builder.Services.AddCors(options =>
 {
@@ -63,9 +64,11 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapIdentityPartialApi<AppUser>();
-app.MapBookAuthorApi();
-app.MapBookReaderApi();
-app.MapChapterAuthorApi();
-app.MapChapterReaderApi();
+
+var bookGroup = app.MapGroup("/books")
+    .AddFluentValidationAutoValidation();
+
+bookGroup.MapBookApi();
+bookGroup.MapChapterApi();
 
 app.Run();
