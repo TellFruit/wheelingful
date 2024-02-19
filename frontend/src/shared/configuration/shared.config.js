@@ -5,4 +5,10 @@ export const SHARED_CONFIG = {
   pagination: {
     defaultPageSize: 8,
   },
+  select: {
+    book: {
+      category: ['Original', 'Fanfiction'],
+      status: ['Ongoing', 'Finished', 'Hiatus', 'Suspended'],
+    },
+  },
 };
