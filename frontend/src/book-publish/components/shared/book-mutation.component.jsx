@@ -85,7 +85,7 @@ export default function BookMutationComponent({
 
   return (
     <Container maxWidth="sm">
-      <Box sx={{ marginTop: 10 }}>
+      <Box>
         <Typography variant="h3" sx={{ textAlign: 'left', marginBottom: 2 }}>
           {headerTitle}
         </Typography>

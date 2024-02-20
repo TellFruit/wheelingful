@@ -14,7 +14,10 @@ export default function Header() {
   };
 
   return (
-    <AppBar position="fixed">
+    <AppBar
+      position="fixed"
+      sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+    >
       <Toolbar>
         <Typography
           variant="h5"
@@ -25,9 +28,12 @@ export default function Header() {
         >
           Wheelingful
         </Typography>
-        <Button color="inherit">Read</Button>
+        <Button color="inherit" size="large">
+          Read
+        </Button>
         <Button
           color="inherit"
+          size="large"
           component={Link}
           to={`/${PUBLISH_CONFIG.routes.group}/${PUBLISH_CONFIG.routes.booksByCurrentUser}`}
         >
@@ -40,12 +46,13 @@ export default function Header() {
           sx={{ marginLeft: 2, marginRight: 2, border: '1px solid' }}
         />
         {isSignedIn ? (
-          <Button color="inherit" onClick={handleLogOut}>
+          <Button color="inherit" size="large" onClick={handleLogOut}>
             Log Out
           </Button>
         ) : (
           <Button
             color="inherit"
+            size="large"
             component={Link}
             to={`/${AUTH_CONFIG.routes.group}/${AUTH_CONFIG.routes.login}`}
           >

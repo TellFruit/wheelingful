@@ -1,5 +1,4 @@
 import {
-  Container,
   Box,
   Grid,
   Card,
@@ -37,8 +36,8 @@ export function BookPaginatedList({
   }
 
   return (
-    <Container maxWidth="lg">
-      <Grid container spacing={3} sx={{ marginTop: 1 }}>
+    <Box>
+      <Grid container spacing={3}>
         {serverPaginated.items.map((book) => (
           <Grid item key={book.id} xs={12} sm={12} md={6} lg={6}>
             <Card>
@@ -94,6 +93,6 @@ export function BookPaginatedList({
           sx={{ marginTop: '20px' }}
         />
       </Box>
-    </Container>
+    </Box>
   );
 }
