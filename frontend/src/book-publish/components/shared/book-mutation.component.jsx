@@ -42,9 +42,7 @@ export default function BookMutationComponent({
   }, [book]);
 
   useEffect(() => {
-    console.log(isSuccess + " In effect")
     if (isSuccess) {
-      console.log(isSuccess + " In effect if")
       navigate(
         `/${PUBLISH_CONFIG.routes.group}/${PUBLISH_CONFIG.routes.booksByCurrentUser}`
       );
@@ -140,7 +138,6 @@ export default function BookMutationComponent({
               items={SHARED_CONFIG.select.book.category}
               value={category}
               onChange={(e) => {
-                console.log(e.target.value);
                 setCategory(e.target.value);
               }}
             />
@@ -151,7 +148,6 @@ export default function BookMutationComponent({
               items={SHARED_CONFIG.select.book.status}
               value={status}
               onChange={(e) => {
-                console.log(e.target.value);
                 setStatus(e.target.value);
               }}
             />

@@ -1,15 +1,14 @@
 import AuthComponent from './shared/auth.component';
 import { useSignUpMutation } from '../store/apis/authApi';
 import { AUTH_CONFIG } from '../configuration/auth.config';
+import { renderValidationErrorsObject } from '../../shared';
 
 export default function RegisterPage() {
   const [signUp, results] = useSignUpMutation();
 
   let error;
   if (results.isError) {
-    error = Object.values(results.error.data.errors).map((error, index) => (
-      <div key={index}>{error}</div>
-    ));
+    error = renderValidationErrorsObject(results.error.data.errors);
   }
 
   return (

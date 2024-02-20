@@ -24,7 +24,7 @@ export default function BookUpdatePage() {
   const isSuccess = updateResults.isSuccess || deleteResults.isSuccess;
   const isLoading = updateResults.isLoading || deleteResults.isLoading;
   const isError = updateResults.isError || deleteResults.isError;
-  console.log(isSuccess + " " + updateResults.isSuccess + " " + deleteResults.isSuccess)
+
   const handleSubmit = (updatedBook) => {
     updateBook(updatedBook);
   };
