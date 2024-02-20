@@ -7,7 +7,7 @@ export default function LoginPage() {
 
   let error;
   if (results.isError) {
-    error = <div>{results.error.data.detail}</div>
+    error = <div>{results.error.data.detail}</div>;
   }
 
   return (

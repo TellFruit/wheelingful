@@ -34,8 +34,8 @@ public class BookReaderService(
                 Id = b.Id,
                 Title = b.Title,
                 Description = b.Description,
-                Category = b.Category.ToString(),
-                Status = b.Status.ToString(),
+                Category = b.Category,
+                Status = b.Status,
                 CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id)
             })
             .ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
@@ -50,8 +50,8 @@ public class BookReaderService(
                 Id = b.Id,
                 Title = b.Title,
                 Description = b.Description,
-                Category = b.Category.ToString(),
-                Status = b.Status.ToString(),
+                Category = b.Category,
+                Status = b.Status,
                 CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id)
             })
             .FirstAsync(b => b.Id == request.BookId);

@@ -43,7 +43,7 @@ export default function AuthComponent({
 
   return (
     <Container maxWidth="xs">
-      <Box sx={{ marginTop: 10 }}>
+      <Box>
         <Typography variant="h3" sx={{ textAlign: 'left', marginBottom: 2 }}>
           {title}
         </Typography>

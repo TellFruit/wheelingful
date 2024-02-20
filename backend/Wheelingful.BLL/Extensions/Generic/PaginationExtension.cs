@@ -27,7 +27,7 @@ public static class PaginationExtension
         var pageCount = await values.CountPages(pageSize);
 
         var items = await values
-            .Paginate(pageNumber, pageCount)
+            .Paginate(pageNumber, pageSize)
             .ToListAsync();
 
         return new FetchPaginationResponse<T>

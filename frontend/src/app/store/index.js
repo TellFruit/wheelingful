@@ -12,7 +12,7 @@ import {
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage'
 import { authApi, authReducer } from '../../auth';
-import { publishApi } from '../../book-publish/store/apis/publush-api';
+import { publishApi } from '../../book-publish';
 
 const rootReducer = combineReducers({
   authSlice: authReducer,
