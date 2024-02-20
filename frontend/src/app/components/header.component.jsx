@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { signOut } from '../../auth';
 import { PUBLISH_CONFIG } from '../../book-publish';
 import { AUTH_CONFIG } from '../../auth';
+import { READ_CONFIG } from '../../book-read';
 
 export default function Header() {
   const dispatch = useDispatch();
@@ -28,7 +29,12 @@ export default function Header() {
         >
           Wheelingful
         </Typography>
-        <Button color="inherit" size="large">
+        <Button
+          color="inherit"
+          size="large"
+          component={Link}
+          to={`/${READ_CONFIG.routes.group}/${READ_CONFIG.routes.browseBooks}`}
+        >
           Read
         </Button>
         <Button
