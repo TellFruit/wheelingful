@@ -10,7 +10,7 @@ export default function Layout() {
       <Header />
       <Container
         component="main"
-        maxWidth="lg"
+        maxWidth="xl"
         sx={{ minHeight: '100vh', marginTop: 4 }}
       >
         <Toolbar />
