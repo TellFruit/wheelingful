@@ -5,9 +5,15 @@ name: Build and deploy ASP.Net Core app to Azure Web App - wheelingfulapi
 
 on:
   push:
-    branches:
-      - master
-  workflow_dispatch:
+    branches: [ master ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/master_wheelingfulapi.yml'
+  pull_request:
+    branches: [ master ]
+    paths:
+      - 'backend/**'
+      - '.github/workflows/master_wheelingfulapi.yml'
 
 jobs:
   build:
@@ -23,16 +29,16 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build backend/Wheelingful.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish backend/Wheelingful.sln -o ${{env.DOTNET_ROOT}}/api
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: ${{env.DOTNET_ROOT}}/myapp
+          path: ${{env.DOTNET_ROOT}}/api
 
   deploy:
     runs-on: windows-latest
@@ -46,6 +52,16 @@ jobs:
         uses: actions/download-artifact@v3
         with:
           name: .net-app
+
+      - uses: cschleiden/replace-tokens@v1
+        env:
+          CLIENT_ORIGIN: ${{ secrets.CLIENT_ORIGIN }}
+          IMAGEKIT_PUBLIC_KEY: ${{ secrets.IMAGEKIT_PUBLIC_KEY }}
+          IMAGEKIT_PRIVATE_KEY: ${{ secrets.IMAGEKIT_PRIVATE_KEY }}
+        with:
+          tokenPrefix: '#{'
+          tokenSuffix: '}#'
+          files: '["**/appsettings.json"]'
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp

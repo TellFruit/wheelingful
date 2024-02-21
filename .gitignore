@@ -368,5 +368,5 @@ FodyWeavers.xsd
 # Package-lock is an auto-generated file
 /frontend/package-lock.json
 
-# Default book asset folder should be excluded from the solution
-*Wheelingful.Books/
+# App data persistent folder should be excluded from solution
+*App_Data/

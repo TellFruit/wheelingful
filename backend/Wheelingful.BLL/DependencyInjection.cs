@@ -17,8 +17,8 @@ public static class DependencyInjection
 {
     public static void AddCoreOptions(this IServiceCollection services, IConfiguration config)
     {
-        services.Configure<BookCoverOptions>(options => config.GetSection(nameof(BookCoverOptions)).Bind(options));
-        services.Configure<ChapterTextOptions>(options => config.GetSection(nameof(ChapterTextOptions)).Bind(options));
+        services.Configure<BookCoverOptions>(options => 
+            config.GetSection(nameof(BookCoverOptions)).Bind(options));
     }
 
     public static void AddCoreServices(this IServiceCollection services)

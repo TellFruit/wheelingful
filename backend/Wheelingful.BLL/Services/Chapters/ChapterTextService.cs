@@ -1,13 +1,10 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Chapters;
-using Wheelingful.BLL.Models.Options;
 
 namespace Wheelingful.BLL.Services.Chapters;
 
-public class ChapterTextService(IOptions<ChapterTextOptions> options) : IChapterTextService
+public class ChapterTextService() : IChapterTextService
 {
-    private readonly ChapterTextOptions _options = options.Value;
-
     public Task WriteText(string text, int chapterId, int bookId)
     {
         var fileDirectory = GetFileDirectory(bookId);
@@ -48,11 +45,15 @@ public class ChapterTextService(IOptions<ChapterTextOptions> options) : IChapter
 
     private string GetFilePath(int bookId, int chapterId)
     {
-        return Path.Combine(GetFileDirectory(bookId), $"{chapterId}.{_options.Extension}");
+        return Path.Combine(GetFileDirectory(bookId), $"{chapterId}.{FileConstants.ChapterFileExtension}");
     }
     
     private string GetFileDirectory(int bookId)
     {
-        return Path.Combine(Environment.CurrentDirectory, _options.RootFolderName, bookId.ToString());
+        return Path.Combine(
+            Environment.CurrentDirectory, 
+            FileConstants.AppDataFolderName, 
+            FileConstants.ChapterFolderName, 
+            bookId.ToString());
     }
 }
