@@ -2,12 +2,15 @@ name: Azure Static Web Apps CI/CD
 
 on:
   push:
-    branches:
-      - master
+    branches: [ master ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/azure-static-web-apps-lively-rock-09bb3c303.yml'
   pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - master
+    branches: [ master ]
+    paths:
+      - 'frontend/**'
+      - '.github/workflows/azure-static-web-apps-lively-rock-09bb3c303.yml'
 
 jobs:
   build_and_deploy_job:
@@ -19,6 +22,15 @@ jobs:
         with:
           submodules: true
           lfs: false
+          
+      - uses: cschleiden/replace-tokens@v1
+        env:
+          SERVER_API_URL: ${{ secrets.SERVER_API_URL }}
+        with:
+          tokenPrefix: '#{'
+          tokenSuffix: '}#'
+          files: '["**/shared.config.js"]'
+
       - name: Build And Deploy
         id: builddeploy
         uses: Azure/static-web-apps-deploy@v1

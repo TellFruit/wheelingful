@@ -8,6 +8,7 @@ using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -70,5 +71,11 @@ var bookGroup = app.MapGroup("/books")
 
 bookGroup.MapBookApi();
 bookGroup.MapChapterApi();
+
+Directory.CreateDirectory("App_Data");
+
+using var scope = app.Services.CreateScope();
+var dbContext = scope.ServiceProvider.GetRequiredService<WheelingfulDbContext>();
+dbContext.Database.Migrate();
 
 app.Run();

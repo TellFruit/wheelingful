@@ -1,6 +1,6 @@
 export const SHARED_CONFIG = {
   api: {
-    url: 'https://localhost:7277',
+    url: '#{SERVER_API_URL}#',
   },
   pagination: {
     defaultPageSize: 8,
