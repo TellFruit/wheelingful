@@ -4,6 +4,7 @@ import Grid from '@mui/material/Unstable_Grid2';
 import { useParams } from 'react-router';
 import { renderValidationErrorsObject } from '../../shared';
 import { useFetchBooksByIdQuery } from '../store/apis/read.api';
+import Markdown from 'react-markdown';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import FavoriteIcon from '@mui/icons-material/Favorite';
@@ -66,9 +67,11 @@ export default function ViewBook() {
                     {book.status}
                   </Typography>
                 </Stack>
-                <Box marginTop={1}>
-                  <Typography variant="body2" color="textPrimary">
-                    {book.description}
+                <Box>
+                  <Typography variant="body2">
+                    <Markdown components={{ h1: 'h3', h2: 'h3' }}>
+                      {book.description}
+                    </Markdown>
                   </Typography>
                 </Box>
               </Stack>

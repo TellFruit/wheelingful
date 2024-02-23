@@ -10,7 +10,9 @@ import {
   TextField,
   Alert,
   Divider,
+  Paper,
 } from '@mui/material';
+import Markdown from 'react-markdown';
 import { BasicSelect, FileUpload, SHARED_CONFIG } from '../../../shared';
 
 export default function BookMutationComponent({
@@ -26,10 +28,13 @@ export default function BookMutationComponent({
 }) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [category, setCategory] = useState(SHARED_CONFIG.select.book.category[0]);
+  const [category, setCategory] = useState(
+    SHARED_CONFIG.select.book.category[0]
+  );
   const [status, setStatus] = useState(SHARED_CONFIG.select.book.status[0]);
   const [coverBase64, setCoverBase64] = useState(null);
   const [coverDataUrl, setCoverDataUrl] = useState(null);
+  const [showMarkdown, setShowMarkdown] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -48,6 +53,10 @@ export default function BookMutationComponent({
       );
     }
   }, [isSuccess, navigate]);
+
+  const handleShowMarkdown = () => {
+    setShowMarkdown(!showMarkdown);
+  };
 
   const handleSubmit = () => {
     onSubmit({
@@ -115,16 +124,33 @@ export default function BookMutationComponent({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <TextField
-            label="Description"
-            variant="outlined"
-            type="password"
-            fullWidth
-            multiline
-            minRows={2}
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-          />
+          <Button variant="outlined" size="small" onClick={handleShowMarkdown}>
+            {' '}
+            Switch markdown
+          </Button>
+          {showMarkdown ? (
+            <Paper
+              elevation={0}
+              sx={{ border: '1px grey solid', paddingLeft: 2, paddingRight: 2 }}
+            >
+              <Typography variant="body2">
+                <Markdown components={{ h1: 'h3', h2: 'h3' }}>
+                  {description}
+                </Markdown>
+              </Typography>
+            </Paper>
+          ) : (
+            <TextField
+              label="Description"
+              variant="outlined"
+              type="password"
+              fullWidth
+              multiline
+              minRows={2}
+              value={description}
+              onChange={(e) => setDescription(e.target.value)}
+            />
+          )}
         </Stack>
         <Stack
           direction={'row'}
