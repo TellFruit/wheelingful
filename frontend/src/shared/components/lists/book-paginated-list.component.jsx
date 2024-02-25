@@ -11,6 +11,7 @@ import {
   Pagination,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
+import Markdown from 'react-markdown';
 
 export function BookPaginatedList({
   isFetching,
@@ -54,9 +55,7 @@ export function BookPaginatedList({
                   />
                   <Stack direction={'column'} spacing={1}>
                     <CardContent sx={{ flex: '1 0 auto' }}>
-                      <Typography variant="h6" color="textSecondary">
-                        {book.title}
-                      </Typography>
+                      <Typography variant="h6">{book.title}</Typography>
                       <Stack direction={'row'} spacing={1}>
                         <Typography variant="body2" color="textSecondary">
                           {book.category}
@@ -69,8 +68,10 @@ export function BookPaginatedList({
                         marginTop={1}
                         sx={{ height: 200, overflow: 'hidden' }}
                       >
-                        <Typography variant="body2" color="textPrimary">
-                          {book.description}
+                        <Typography variant="body2">
+                          <Markdown components={{ h1: 'h3', h2: 'h3' }}>
+                            {book.description}
+                          </Markdown>
                         </Typography>
                       </Box>
                     </CardContent>
