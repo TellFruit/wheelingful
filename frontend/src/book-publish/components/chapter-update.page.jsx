@@ -1,36 +1,39 @@
-import {
-  useDeleteBookMutation,
-  useFetchBooksByIdQuery,
-  useUpdateBookMutation,
-} from '../store/apis/publish-book.api';
-import { Typography, Alert, Stack } from '@mui/material';
-import BookMutationComponent from './shared/book-mutation.component';
-import { renderValidationErrorsObject } from '../../shared';
 import { useParams } from 'react-router-dom';
+import {
+  useDeleteChapterMutation,
+  useFetchChapterByIdQuery,
+  useUpdateChapterMutation,
+} from '../store/apis/publish-chapter.api';
+import { Typography, Alert, Stack } from '@mui/material';
+import { renderValidationErrorsObject } from '../../shared';
+import ChapterMutationComponent from './shared/chapter-mutation.component';
 
-export default function BookUpdatePage() {
-  const { bookId } = useParams();
+export default function ChapterUpdatePage() {
+  const { bookId, chapterId } = useParams();
 
   const {
-    data: book,
+    data: chapter,
     error: fetchingError,
     isFetching,
     isError: isFailedFetching,
-  } = useFetchBooksByIdQuery(bookId);
+  } = useFetchChapterByIdQuery(chapterId);
 
-  const [updateBook, updateResults] = useUpdateBookMutation();
-  const [deleteBook, deleteResults] = useDeleteBookMutation();
+  const [updateChapter, updateResults] = useUpdateChapterMutation();
+  const [deleteChapter, deleteResults] = useDeleteChapterMutation();
 
   const isSuccess = updateResults.isSuccess || deleteResults.isSuccess;
   const isLoading = updateResults.isLoading || deleteResults.isLoading;
   const isError = updateResults.isError || deleteResults.isError;
 
-  const handleSubmit = (updatedBook) => {
-    updateBook(updatedBook);
+  const handleSubmit = (updatedChapter) => {
+    updateChapter(updatedChapter);
   };
 
-  const handleDelete = (id) => {
-    deleteBook(id);
+  const handleDelete = (bookId, chapterId) => {
+    deleteChapter({
+      bookId,
+      chapterId,
+    });
   };
 
   let error;
@@ -57,11 +60,12 @@ export default function BookUpdatePage() {
   }
 
   return (
-    <BookMutationComponent
-      headerTitle="Update the book"
+    <ChapterMutationComponent
+      headerTitle="Update the chapter"
       mutationTitle="Update"
       error={error}
-      book={book}
+      chapter={chapter}
+      bookId={bookId}
       onSubmit={handleSubmit}
       onDelete={handleDelete}
       isLoading={isLoading}

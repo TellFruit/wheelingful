@@ -1,4 +1,4 @@
-import { useFetchBooksByCurrentUserQuery } from '../store/apis/publish.api';
+import { useFetchBooksByCurrentUserQuery } from '../store/apis/publish-book.api';
 import { useState } from 'react';
 import { BookPaginatedList, SHARED_CONFIG } from '../../shared';
 import { PUBLISH_CONFIG } from '../configuration/publish.config';
