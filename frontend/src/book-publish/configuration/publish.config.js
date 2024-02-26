@@ -3,6 +3,8 @@ export const PUBLISH_CONFIG = {
     group: 'publish/books',
     booksByCurrentUser: 'list',
     publishBook: 'new',
+    publishChapter: ':bookId/chapters/new',
     updateBook: ':bookId',
+    updateChapter: ':bookId/chapters/:chapterId'
   },
 };

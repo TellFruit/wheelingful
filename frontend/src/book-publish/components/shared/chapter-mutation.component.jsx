@@ -13,43 +13,35 @@ import {
   Paper,
 } from '@mui/material';
 import Markdown from 'react-markdown';
-import { BasicSelect, FileUpload, SHARED_CONFIG } from '../../../shared';
 
-export default function BookMutationComponent({
+export default function ChapterMutationComponent({
   onSubmit,
   onDelete,
   headerTitle,
   mutationTitle,
   error,
-  book,
+  chapter,
+  bookId,
   isLoading,
   isSuccess,
   isError,
 }) {
   const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [category, setCategory] = useState(
-    SHARED_CONFIG.select.book.category[0]
-  );
-  const [status, setStatus] = useState(SHARED_CONFIG.select.book.status[0]);
-  const [coverBase64, setCoverBase64] = useState(null);
-  const [coverDataUrl, setCoverDataUrl] = useState(null);
+  const [text, setText] = useState('');
   const [showMarkdown, setShowMarkdown] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (book) {
-      setTitle(book.title);
-      setDescription(book.description);
-      setCategory(book.category);
-      setStatus(book.status);
+    if (chapter) {
+      setTitle(chapter.title);
+      setText(chapter.text);
     }
-  }, [book]);
+  }, [chapter]);
 
   useEffect(() => {
     if (isSuccess) {
       navigate(
-        `/${PUBLISH_CONFIG.routes.group}/${PUBLISH_CONFIG.routes.booksByCurrentUser}`
+        `/${PUBLISH_CONFIG.routes.group}/${bookId}`
       );
     }
   }, [isSuccess, navigate]);
@@ -60,62 +52,23 @@ export default function BookMutationComponent({
 
   const handleSubmit = () => {
     onSubmit({
-      id: onDelete ? book.id : null,
+      chapterId: onDelete ? chapter.id : null,
+      bookId: bookId,
       title,
-      description,
-      category,
-      status,
-      coverBase64,
+      text,
     });
   };
 
   const handleDelete = () => {
-    onDelete(book.id);
+    onDelete(chapter.chapterId);
   };
-
-  const handleCoverChange = (event) => {
-    const file = event.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setCoverBase64(reader.result.split(',')[1]);
-        setCoverDataUrl(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
-  let coverSource;
-  if (coverDataUrl) {
-    coverSource = coverDataUrl;
-  } else if (book) {
-    coverSource = book.coverUrl;
-  }
 
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="md">
       <Box>
         <Typography variant="h3" sx={{ textAlign: 'left', marginBottom: 2 }}>
           {headerTitle}
         </Typography>
-        <Stack direction={'row'} justifyContent={'space-around'}>
-          <Box sx={{ maxWidth: 200, overflow: 'hidden' }}>
-            <img
-              src={coverSource}
-              alt="[Book cover image is displayed here]"
-              style={{ width: '70%', height: 'auto' }}
-            ></img>
-          </Box>
-          <Stack justifyContent={'center'}>
-            <Typography
-              variant="h6"
-              sx={{ textAlign: 'center', marginBottom: 2 }}
-            >
-              Select book cover
-            </Typography>
-            <FileUpload onChange={handleCoverChange} />
-          </Stack>
-        </Stack>
         <Stack spacing={2} marginTop={2}>
           <TextField
             label="Title"
@@ -126,7 +79,7 @@ export default function BookMutationComponent({
           />
           <Button variant="outlined" size="small" onClick={handleShowMarkdown}>
             {' '}
-            Switch description view
+            Switch text view
           </Button>
           {showMarkdown ? (
             <Paper
@@ -134,56 +87,29 @@ export default function BookMutationComponent({
               sx={{ border: '1px grey solid', paddingLeft: 2, paddingRight: 2 }}
             >
               <Typography variant="body2" component="div">
-                {description === '' ? (
+                {text === '' ? (
                   <Markdown components={{ h1: 'h3', h2: 'h3' }}>
-                    *No description provided*
+                    *No text provided*
                   </Markdown>
                 ) : (
                   <Markdown components={{ h1: 'h3', h2: 'h3' }}>
-                    {description}
+                    {text}
                   </Markdown>
                 )}
               </Typography>
             </Paper>
           ) : (
             <TextField
-              label="Description"
+              label="Text"
               variant="outlined"
               type="password"
               fullWidth
               multiline
               minRows={2}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
+              value={text}
+              onChange={(e) => setText(e.target.value)}
             />
           )}
-        </Stack>
-        <Stack
-          direction={'row'}
-          spacing={2}
-          justifyContent={'space-around'}
-          marginTop={2}
-        >
-          <Box minWidth={120}>
-            <BasicSelect
-              label="Category"
-              items={SHARED_CONFIG.select.book.category}
-              value={category}
-              onChange={(e) => {
-                setCategory(e.target.value);
-              }}
-            />
-          </Box>
-          <Box minWidth={120}>
-            <BasicSelect
-              label="Status"
-              items={SHARED_CONFIG.select.book.status}
-              value={status}
-              onChange={(e) => {
-                setStatus(e.target.value);
-              }}
-            />
-          </Box>
         </Stack>
         {isError && (
           <Alert severity="error" sx={{ marginTop: 2 }}>

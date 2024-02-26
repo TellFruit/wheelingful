@@ -68,7 +68,7 @@ export function BookPaginatedList({
                         marginTop={1}
                         sx={{ height: 200, overflow: 'hidden' }}
                       >
-                        <Typography variant="body2">
+                        <Typography variant="body2" component="div">
                           <Markdown components={{ h1: 'h3', h2: 'h3' }}>
                             {book.description}
                           </Markdown>
