@@ -5,11 +5,13 @@ import ProtectedWrapper from '../../auth/components/protected.wrapper';
 import BookCreatePage from '../components/book-create.page';
 import BookUpdatePage from '../components/book-update.page';
 import PublishDrawer from '../components/publish-drawer.component';
+import ChapterCreatePage from '../components/chapter-create.page';
+import ChapterUpdatePage from '../components/chapter-update.page';
 
 export default function PublishRouter() {
   return (
     <Routes>
-      <Route element={<PublishDrawer />} >
+      <Route element={<PublishDrawer />}>
         <Route
           path={PUBLISH_CONFIG.routes.booksByCurrentUser}
           element={
@@ -31,6 +33,22 @@ export default function PublishRouter() {
           element={
             <ProtectedWrapper>
               <BookUpdatePage />
+            </ProtectedWrapper>
+          }
+        />
+        <Route
+          path={PUBLISH_CONFIG.routes.publishChapter}
+          element={
+            <ProtectedWrapper>
+              <ChapterCreatePage />
+            </ProtectedWrapper>
+          }
+        />
+        <Route
+          path={PUBLISH_CONFIG.routes.updateChapter}
+          element={
+            <ProtectedWrapper>
+              <ChapterUpdatePage />
             </ProtectedWrapper>
           }
         />

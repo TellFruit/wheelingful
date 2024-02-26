@@ -1,4 +1,4 @@
-import { useCreateBookMutation } from '../store/apis/publish.api';
+import { useCreateBookMutation } from '../store/apis/publish-book.api';
 import BookMutationComponent from './shared/book-mutation.component';
 import { renderValidationErrorsObject } from '../../shared';
 
