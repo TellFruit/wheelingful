@@ -91,7 +91,7 @@ export function BookPaginatedList({
           showLastButton
           color="primary"
           size="large"
-          sx={{ marginTop: '20px' }}
+          sx={{ marginTop: 3 }}
         />
       </Box>
     </Box>

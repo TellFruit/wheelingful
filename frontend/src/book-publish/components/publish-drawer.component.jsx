@@ -11,16 +11,21 @@ import {
   Divider,
 } from '@mui/material';
 import ListAltIcon from '@mui/icons-material/ListAlt';
+import AddIcon from '@mui/icons-material/Add';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import { Link, Outlet } from 'react-router-dom';
+import { Link, Outlet, useParams } from 'react-router-dom';
 import { PUBLISH_CONFIG } from '../configuration/publish.config';
 
 const ListItemStyle = {
   textDecoration: 'none',
-  color: 'inherit'
+  color: 'inherit',
 };
 
 export default function PublishDrawer() {
+  const { bookId } = useParams();
+
+  const isBookView = bookId !== undefined;
+
   return (
     <Stack direction={'row'}>
       <Drawer
@@ -53,11 +58,25 @@ export default function PublishDrawer() {
             >
               <ListItemButton>
                 <ListItemIcon>
-                  <AddCircleOutlineIcon />
+                  {isBookView ? <AddIcon /> : <AddCircleOutlineIcon />}
                 </ListItemIcon>
                 <ListItemText primary={'Publish book'} />
               </ListItemButton>
             </ListItem>
+            {isBookView && (
+              <ListItem
+                component={Link}
+                sx={ListItemStyle}
+                to={`/${PUBLISH_CONFIG.routes.group}/${bookId}/chapters/new`}
+              >
+                <ListItemButton>
+                  <ListItemIcon>
+                    <AddCircleOutlineIcon />
+                  </ListItemIcon>
+                  <ListItemText primary={'Publish chapter'} />
+                </ListItemButton>
+              </ListItem>
+            )}
           </List>
           <Divider />
         </Box>
