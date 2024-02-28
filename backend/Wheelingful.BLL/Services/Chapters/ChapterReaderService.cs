@@ -16,13 +16,15 @@ public class ChapterReaderService(
     {
         var query = dbContext.Chapters
             .Where(c => c.BookId == request.BookId)
+            .OrderBy(c => c.CreatedAt)
             .AsQueryable();
 
         return query
             .Select(c => new FetchChapterPropsResponse
             {
                 Id = c.Id,
-                Title = c.Title
+                Title = c.Title,
+                Date = c.CreatedAt.ToShortDateString(),
             })
             .ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
     }

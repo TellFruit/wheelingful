@@ -14,6 +14,7 @@ import {
 } from '@mui/material';
 import Markdown from 'react-markdown';
 import { BasicSelect, FileUpload, SHARED_CONFIG } from '../../../shared';
+import ChaptersByBook from '../chapters-by-book.component';
 
 export default function BookMutationComponent({
   onSubmit,
@@ -60,7 +61,7 @@ export default function BookMutationComponent({
 
   const handleSubmit = () => {
     onSubmit({
-      id: onDelete ? book.id : null,
+      id: book ? book.id : null,
       title,
       description,
       category,
@@ -190,6 +191,10 @@ export default function BookMutationComponent({
             {error}
           </Alert>
         )}
+        <Box marginTop={2}>
+          <Divider />
+        </Box>
+        {book && <ChaptersByBook />}
         <Box marginTop={2}>
           <Divider variant="middle" />
         </Box>

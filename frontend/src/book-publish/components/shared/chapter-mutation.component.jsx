@@ -60,7 +60,7 @@ export default function ChapterMutationComponent({
   };
 
   const handleDelete = () => {
-    onDelete(chapter.chapterId);
+    onDelete(bookId, chapter.id);
   };
 
   return (
