@@ -1,8 +1,8 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
 import { baseQueryWithReauth } from '../../../auth';
 
-export const publishApi = createApi({
-  reducerPath: 'publishApi',
+export const publishBookApi = createApi({
+  reducerPath: 'publishBookApi',
   baseQuery: baseQueryWithReauth,
   endpoints(builder) {
     return {
@@ -80,4 +80,4 @@ export const {
   useCreateBookMutation,
   useUpdateBookMutation,
   useDeleteBookMutation,
-} = publishApi;
+} = publishBookApi;
