@@ -1,8 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using StackExchange.Redis;
 using System.Text.RegularExpressions;
+using Wheelingful.DAL.Contracts;
 using Wheelingful.DAL.DbContexts;
+using Wheelingful.DAL.Services;
 
 namespace Wheelingful.DAL;
 
@@ -24,5 +27,18 @@ public static class DependencyInjection
 
         services.AddDbContext<WheelingfulDbContext>(options =>
             options.UseMySql(parsedConnection, serverVersion));
+    }
+
+    public static void AddCacheService(this IServiceCollection services, IConfiguration config)
+    {
+        var redisConnection = config.GetConnectionString("RedisConnection");
+
+        services.AddStackExchangeRedisCache(options => options.Configuration = redisConnection);
+
+        services.AddSingleton<IConnectionMultiplexer>(
+            ConnectionMultiplexer
+                  .Connect(redisConnection!));
+
+        services.AddScoped<ICacheService, RedisCacheService>();
     }
 }

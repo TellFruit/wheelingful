@@ -3,8 +3,10 @@ using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Models.Requests;
+using Wheelingful.DAL.Contracts;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.DAL.Entities;
+using Wheelingful.DAL.Helpers;
 
 namespace Wheelingful.BLL.Services.Books;
 
@@ -12,6 +14,7 @@ internal class BookAuthorService(
     IBookCoverService bookCover,
     IChapterTextService textService,
     ICurrentUser currentUser,
+    ICacheService cacheService,
     WheelingfulDbContext dbContext) : IBookAuthorService
 {
     public async Task CreateBook(CreateBookRequest request)
@@ -39,13 +42,17 @@ internal class BookAuthorService(
         newBook.CoverId = coverId;
 
         await dbContext.SaveChangesAsync();
+
+        var prefix = nameof(Book).ToCachePrefix();
+
+        await cacheService.RemoveByPrefix(prefix);
     }
 
     public async Task UpdateBook(UpdateBookRequest request)
     {
         var book = await dbContext.Books.FirstAsync(b => b.Id == request.BookId);
 
-        string? coverId = book.CoverId;
+        var coverId = book.CoverId;
         if (request.CoverBase64 != null)
         {
             coverId = await bookCover.UpdateCover(book.CoverId, request.CoverBase64, book.Id, currentUser.Id);
@@ -61,6 +68,10 @@ internal class BookAuthorService(
         dbContext.Update(book);
 
         await dbContext.SaveChangesAsync();
+
+        var prefix = nameof(Book).ToCachePrefix(request.BookId);
+
+        await cacheService.RemoveByPrefix(prefix);
     }
 
     public async Task DeleteBook(DeleteBookRequest request)
@@ -78,5 +89,9 @@ internal class BookAuthorService(
         await dbContext.Books
             .Where(b => b.Id == request.BookId)
             .ExecuteDeleteAsync();
+
+        var prefix = nameof(Book).ToCachePrefix(request.BookId);
+
+        await cacheService.RemoveByPrefix(prefix);
     }
 }
