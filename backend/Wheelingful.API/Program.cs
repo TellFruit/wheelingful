@@ -12,19 +12,12 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.AddLogging();
+
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
-
-builder.Services.AddCors(options =>
-{
-    options.AddPolicy(PolicyContants.AllowClientOrigin, corsBuilder =>
-    {
-        corsBuilder.WithOrigins(builder.Configuration["CORS:ClientOrigin"]!)
-            .AllowAnyHeader()
-            .AllowAnyMethod();
-    });
-});
+builder.Services.AddCors(builder.Configuration);
 
 builder.Services.AddDbContext(builder.Configuration);
 builder.Services.AddCacheService(builder.Configuration);
@@ -58,6 +51,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
+} else
+{
+    app.UseExceptionHandler(exceptionHandlerApp => 
+        exceptionHandlerApp.Run(async context => 
+            await Results.Problem()
+                .ExecuteAsync(context)));
 }
 
 app.UseHttpsRedirection();

@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Extensions.Generic;
 using Wheelingful.BLL.Models.Requests;
@@ -12,12 +15,17 @@ using Wheelingful.DAL.Helpers;
 namespace Wheelingful.BLL.Services.Chapters;
 
 public class ChapterReaderService(
+    ICurrentUser currentUser,
     IChapterTextService textService,
+    ILogger<ChapterReaderService> logger,
     ICacheService cacheService,
     WheelingfulDbContext dbContext) : IChapterReaderService
 {
     public Task<FetchPaginationResponse<FetchChapterPropsResponse>> GetChapters(FetchChapterPaginationRequest request)
     {
+        logger.LogInformation("User {userId} fetched chapters: {request}",
+            currentUser.Id, JsonSerializer.Serialize(request));
+
         var query = dbContext.Chapters
             .Where(c => c.BookId == request.BookId)
             .OrderBy(c => c.CreatedAt)
@@ -41,6 +49,9 @@ public class ChapterReaderService(
 
     public async Task<FetchChapterResponse> GetChapter(FetchChapterRequest request)
     {
+        logger.LogInformation("User {userId} fetched a chapter: {request}",
+            currentUser.Id, JsonSerializer.Serialize(request));
+
         var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
 
         var key = CacheHelper.GetCacheKey(prefix, request);

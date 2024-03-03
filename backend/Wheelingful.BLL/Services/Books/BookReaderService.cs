@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
@@ -14,13 +16,17 @@ using Wheelingful.DAL.Helpers;
 namespace Wheelingful.BLL.Services.Books;
 
 public class BookReaderService(
-    ICurrentUser currentUser, 
+    ICurrentUser currentUser,
     IBookCoverService bookCover,
+    ILogger<BookReaderService> logger,
     ICacheService cacheService,
     WheelingfulDbContext dbContext) : IBookReaderService
 {
     public Task<FetchPaginationResponse<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request)
     {
+        logger.LogInformation("User {userId} fetched book list with parameters: {request}",
+            currentUser.Id, JsonSerializer.Serialize(request));
+
         var query = dbContext.Books
             .Include(b => b.Users)
             .AsQueryable();
@@ -66,6 +72,9 @@ public class BookReaderService(
 
     public Task<FetchBookResponse> GetBook(FetchBookRequest request)
     {
+        logger.LogInformation("User {userId} fetched the book: {request}",
+            currentUser.Id, JsonSerializer.Serialize(request));
+
         var prefix = nameof(Book).ToCachePrefix(request.BookId);
 
         var key = CacheHelper.GetCacheKey(prefix, request);
