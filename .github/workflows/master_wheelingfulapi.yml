@@ -58,6 +58,7 @@ jobs:
           CLIENT_ORIGIN: ${{ secrets.CLIENT_ORIGIN }}
           IMAGEKIT_PUBLIC_KEY: ${{ secrets.IMAGEKIT_PUBLIC_KEY }}
           IMAGEKIT_PRIVATE_KEY: ${{ secrets.IMAGEKIT_PRIVATE_KEY }}
+          REDIS_CONNECTION: ${{ secrets.REDIS_CONNECTION }}
         with:
           tokenPrefix: '#{'
           tokenSuffix: '}#'

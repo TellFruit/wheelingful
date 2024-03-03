@@ -27,6 +27,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext(builder.Configuration);
+builder.Services.AddCacheService(builder.Configuration);
 builder.Services
     .AddIdentityApiEndpoints<AppUser>()
     .AddRoles<IdentityRole>()

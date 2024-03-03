@@ -1,19 +1,22 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Models.Requests;
+using Wheelingful.DAL.Contracts;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.DAL.Entities;
+using Wheelingful.DAL.Helpers;
 
 namespace Wheelingful.BLL.Services.Chapters;
 
 public class ChapterAuthorService(
-    IChapterTextService textService, 
+    IChapterTextService textService,
+    ICacheService cacheService,
     WheelingfulDbContext dbContext) : IChapterAuthorService
 {
     public async Task CreateChapter(CreateChapterRequest request)
     {
         var newChapter = new Chapter
-        { 
+        {
             Title = request.Title,
             BookId = request.BookId,
         };
@@ -23,6 +26,10 @@ public class ChapterAuthorService(
         await dbContext.SaveChangesAsync();
 
         await textService.WriteText(request.Text, newChapter.Id, request.BookId);
+
+        var prefix = nameof(Chapter).ToCachePrefix();
+
+        await cacheService.RemoveByPrefix(prefix);
     }
 
     public async Task UpdateChapter(UpdateChapterRequest request)
@@ -37,14 +44,22 @@ public class ChapterAuthorService(
         {
             await textService.WriteText(request.Text, request.ChapterId, request.BookId);
         }
+
+        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
+
+        await cacheService.RemoveByPrefix(prefix);
     }
 
-    public Task DeleteChapter(DeleteChapterRequest request)
+    public async Task DeleteChapter(DeleteChapterRequest request)
     {
         textService.DeleteByChapter(request.ChapterId, request.BookId);
 
-        return dbContext.Chapters
+        await dbContext.Chapters
             .Where(c => c.Id == request.ChapterId)
             .ExecuteDeleteAsync();
+
+        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
+
+        await cacheService.RemoveByPrefix(prefix);
     }
 }
