@@ -19,8 +19,8 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwagger();
 builder.Services.AddCors(builder.Configuration);
 
-builder.Services.AddDbContext(builder.Configuration);
 builder.Services.AddCacheService(builder.Configuration);
+builder.Services.AddDbContext();
 builder.Services
     .AddIdentityApiEndpoints<AppUser>()
     .AddRoles<IdentityRole>()

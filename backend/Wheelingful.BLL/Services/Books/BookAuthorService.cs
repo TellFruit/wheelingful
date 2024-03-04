@@ -49,9 +49,9 @@ internal class BookAuthorService(
 
         await dbContext.SaveChangesAsync();
 
-        var prefix = nameof(Book).ToCachePrefix();
+        var listPrefix = nameof(Book).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 
     public async Task UpdateBook(UpdateBookRequest request)
@@ -78,9 +78,13 @@ internal class BookAuthorService(
 
         await dbContext.SaveChangesAsync();
 
-        var prefix = nameof(Book).ToCachePrefix(request.BookId);
+        var entryById = nameof(Book).ToCachePrefix(request.BookId);
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByKey(entryById);
+
+        var listPrefix = nameof(Book).ToCachePrefix();
+
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 
     public async Task DeleteBook(DeleteBookRequest request)
@@ -102,8 +106,8 @@ internal class BookAuthorService(
             .Where(b => b.Id == request.BookId)
             .ExecuteDeleteAsync();
 
-        var prefix = nameof(Book).ToCachePrefix(request.BookId);
+        var listPrefix = nameof(Book).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 }

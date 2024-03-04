@@ -49,6 +49,8 @@ public class BookReaderService(
             CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id)
         });
 
+        var fetchValue = () => selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
+
         if (FiltersAreStandard(request))
         {
             var prefix = nameof(Book).ToCachePrefix();
@@ -60,14 +62,10 @@ public class BookReaderService(
                 key = CacheHelper.GetCacheKey(prefix, new { request, currentUser.Id });
             }
 
-            return cacheService.GetAndSet(key, () =>
-            {
-                return selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
-            },
-            CacheHelper.DefaultCacheExpiration);
+            return cacheService.GetAndSet(key, fetchValue, CacheHelper.DefaultCacheExpiration);
         }
 
-        return selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
+        return fetchValue();
     }
 
     public Task<FetchBookResponse> GetBook(FetchBookRequest request)
@@ -75,9 +73,7 @@ public class BookReaderService(
         logger.LogInformation("User {userId} fetched the book: {request}",
             currentUser.Id, JsonSerializer.Serialize(request));
 
-        var prefix = nameof(Book).ToCachePrefix(request.BookId);
-
-        var key = CacheHelper.GetCacheKey(prefix, request);
+        var key = nameof(Book).ToCachePrefix(request.BookId);
 
         return cacheService.GetAndSet(key, () =>
         {

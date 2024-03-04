@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Wheelingful.API.Constants;
 using Wheelingful.API.Models.Bindings;
 using Wheelingful.BLL.Contracts.Books;
@@ -50,13 +49,9 @@ public static class BookExtension
         });
 
         endpoints.MapGet("/{bookId}", async Task<Results<Ok<FetchBookResponse>, ValidationProblem>>
-            ([AsParameters] FetchBookRequest request, [FromServices] IBookReaderService handler
-             , [FromServices] ILogger logger) =>
+            ([AsParameters] FetchBookRequest request, [FromServices] IBookReaderService handler) =>
         {
             var result = await handler.GetBook(request);
-
-            logger.LogWarning("ERROR INCOMING!");
-            throw new Exception();
 
             return TypedResults.Ok(result);
         });

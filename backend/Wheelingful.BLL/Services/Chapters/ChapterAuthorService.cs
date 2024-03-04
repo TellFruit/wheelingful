@@ -35,9 +35,11 @@ public class ChapterAuthorService(
 
         await textService.WriteText(request.Text, newChapter.Id, request.BookId);
 
-        var prefix = nameof(Chapter).ToCachePrefix();
+        var listPrefix = nameof(Chapter).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        var key = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
+
+        await cacheService.RemoveByKey(key);
     }
 
     public async Task UpdateChapter(UpdateChapterRequest request)
@@ -56,9 +58,15 @@ public class ChapterAuthorService(
             await textService.WriteText(request.Text, request.ChapterId, request.BookId);
         }
 
-        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
+        var entryById = nameof(Chapter).ToCachePrefix(request.ChapterId);
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByKey(entryById);
+
+        var listPrefix = nameof(Chapter).ToCachePrefix();
+
+        var listKey = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
+
+        await cacheService.RemoveByKey(listKey);
     }
 
     public async Task DeleteChapter(DeleteChapterRequest request)
@@ -72,8 +80,10 @@ public class ChapterAuthorService(
             .Where(c => c.Id == request.ChapterId)
             .ExecuteDeleteAsync();
 
-        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
+        var listPrefix = nameof(Chapter).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        var listKey = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
+
+        await cacheService.RemoveByKey(listKey);
     }
 }

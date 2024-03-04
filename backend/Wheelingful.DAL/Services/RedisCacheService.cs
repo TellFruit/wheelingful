@@ -36,8 +36,13 @@ public class RedisCacheService(
         return data;
     }
 
+    public Task RemoveByKey(string key)
+    {
+        return distributedCache.RemoveAsync(key);
+    }
+
     // TODO: Redesign to avoid low performance risk and dependency on Redis
-    public async Task RemoveByPrefix(string prefix)
+    public Task RemoveByPrefix(string prefix)
     {
         var enpoint = redis.GetEndPoints().First();
 
@@ -45,6 +50,6 @@ public class RedisCacheService(
 
         var keys = server.Keys(pattern: prefix + "*");
 
-        await _redisDb.KeyDeleteAsync(keys.ToArray());
+        return _redisDb.KeyDeleteAsync(keys.ToArray());
     }
 }

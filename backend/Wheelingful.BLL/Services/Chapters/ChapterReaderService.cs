@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using System.Text.Json;
+using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Extensions.Generic;
@@ -38,13 +39,16 @@ public class ChapterReaderService(
 
         var prefix = nameof(Chapter).ToCachePrefix();
 
-        var key = CacheHelper.GetCacheKey(prefix, request);
+        var key = CacheHelper.GetCacheKey(prefix, new { request.BookId });
 
-        return cacheService.GetAndSet(key, () =>
+        var fetchValue = () => query.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
+
+        if (FiltersAreStandard(request))
         {
-            return query.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
-        },
-        CacheHelper.DefaultCacheExpiration);
+            return cacheService.GetAndSet(key, fetchValue, CacheHelper.DefaultCacheExpiration);
+        }
+
+        return fetchValue();
     }
 
     public async Task<FetchChapterResponse> GetChapter(FetchChapterRequest request)
@@ -52,9 +56,7 @@ public class ChapterReaderService(
         logger.LogInformation("User {userId} fetched a chapter: {request}",
             currentUser.Id, JsonSerializer.Serialize(request));
 
-        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
-
-        var key = CacheHelper.GetCacheKey(prefix, request);
+        var key = nameof(Chapter).ToCachePrefix(request.ChapterId);
 
         var chapter = await cacheService.GetAndSet(key, () =>
         {
@@ -68,5 +70,11 @@ public class ChapterReaderService(
             Title = chapter.Title,
             Text = await textService.ReadText(chapter.Id, chapter.BookId),
         };
+    }
+
+    private bool FiltersAreStandard(FetchChapterPaginationRequest request)
+    {
+        return request.PageSize == PaginationConstants.DefaultPageSize
+            && request.PageNumber == PaginationConstants.DefaultPageNumber;
     }
 }
