@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Contracts.Images;
 using Wheelingful.BLL.Models.Options;
@@ -6,12 +7,17 @@ using Wheelingful.BLL.Models.Requests;
 
 namespace Wheelingful.BLL.Services.Books;
 
-internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOptions> options) : IBookCoverService
+internal class BookCoverService(
+    IImageService imageManager, 
+    ILogger<BookCoverService> logger, 
+    IOptions<BookCoverOptions> options) : IBookCoverService
 {
     private readonly BookCoverOptions _coverOptions = options.Value;
 
     public string GetCoverUrl(int bookId, string authorId)
     {
+        logger.LogInformation("Generating cover URL for book {bookId}", bookId);
+
         var coverName = GetBookCoverName(bookId, authorId);
 
         var relativePath = $"{_coverOptions.Folder}/{coverName}";
@@ -23,9 +29,11 @@ internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOp
         });
     }
 
-    public async Task<string> UploadCover(string base64, int bookId, string authorId)
+    public Task<string> UploadCover(string base64, int bookId, string authorId)
     {
-        return await imageManager.UploadImage(new UploadImageRequest
+        logger.LogInformation("Uploading cover for book {bookId}", bookId);
+
+        return imageManager.UploadImage(new UploadImageRequest
         {
             Base64 = base64,
             Name = GetBookCoverName(bookId, authorId),
@@ -33,9 +41,11 @@ internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOp
         });
     }
 
-    public async Task<string> UpdateCover(string imageId, string base64, int bookId, string authorId)
+    public Task<string> UpdateCover(string imageId, string base64, int bookId, string authorId)
     {
-        return await imageManager.UpdateImage(imageId, new UploadImageRequest
+        logger.LogInformation("Updating cover for book {bookId}", bookId);
+
+        return imageManager.UpdateImage(imageId, new UploadImageRequest
         {
             Base64 = base64,
             Name = GetBookCoverName(bookId, authorId),
@@ -43,9 +53,11 @@ internal class BookCoverService(IImageService imageManager, IOptions<BookCoverOp
         });
     }
 
-    public async Task DeleteCover(string imageId)
+    public Task DeleteCover(string imageId)
     {
-        await imageManager.DeleteImage(imageId);
+        logger.LogInformation("Deleting cover {coverId}", imageId);
+
+        return imageManager.DeleteImage(imageId);
     }
 
     private string GetBookCoverName(int bookId, string authorId)

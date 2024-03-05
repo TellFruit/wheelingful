@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Contracts.Chapters;
@@ -14,11 +15,15 @@ internal class BookAuthorService(
     IBookCoverService bookCover,
     IChapterTextService textService,
     ICurrentUser currentUser,
+    ILogger<BookAuthorService> logger,
     ICacheService cacheService,
     WheelingfulDbContext dbContext) : IBookAuthorService
 {
     public async Task CreateBook(CreateBookRequest request)
     {
+        logger.LogInformation("User {userId} created a book: {@request}",
+            currentUser.Id, request);
+
         var newBook = new Book
         {
             Title = request.Title,
@@ -43,13 +48,16 @@ internal class BookAuthorService(
 
         await dbContext.SaveChangesAsync();
 
-        var prefix = nameof(Book).ToCachePrefix();
+        var listPrefix = nameof(Book).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 
     public async Task UpdateBook(UpdateBookRequest request)
     {
+        logger.LogInformation("User {userId} updated the book: {@request}",
+            currentUser.Id, request);
+
         var book = await dbContext.Books.FirstAsync(b => b.Id == request.BookId);
 
         var coverId = book.CoverId;
@@ -69,13 +77,20 @@ internal class BookAuthorService(
 
         await dbContext.SaveChangesAsync();
 
-        var prefix = nameof(Book).ToCachePrefix(request.BookId);
+        var entryById = nameof(Book).ToCachePrefix(request.BookId);
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByKey(entryById);
+
+        var listPrefix = nameof(Book).ToCachePrefix();
+
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 
     public async Task DeleteBook(DeleteBookRequest request)
     {
+        logger.LogInformation("User {userId} deleted the book: {@request}",
+            currentUser.Id, request);
+
         textService.DeleteByBook(request.BookId);
 
         var coverId = await dbContext
@@ -90,8 +105,8 @@ internal class BookAuthorService(
             .Where(b => b.Id == request.BookId)
             .ExecuteDeleteAsync();
 
-        var prefix = nameof(Book).ToCachePrefix(request.BookId);
+        var listPrefix = nameof(Book).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 }

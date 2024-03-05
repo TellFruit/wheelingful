@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Wheelingful.BLL.Constants;
+using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Extensions.Generic;
 using Wheelingful.BLL.Models.Requests;
@@ -12,12 +15,17 @@ using Wheelingful.DAL.Helpers;
 namespace Wheelingful.BLL.Services.Chapters;
 
 public class ChapterReaderService(
+    ICurrentUser currentUser,
     IChapterTextService textService,
+    ILogger<ChapterReaderService> logger,
     ICacheService cacheService,
     WheelingfulDbContext dbContext) : IChapterReaderService
 {
     public Task<FetchPaginationResponse<FetchChapterPropsResponse>> GetChapters(FetchChapterPaginationRequest request)
     {
+        logger.LogInformation("User {userId} fetched chapters: {@request}",
+            currentUser.Id, request);
+
         var query = dbContext.Chapters
             .Where(c => c.BookId == request.BookId)
             .OrderBy(c => c.CreatedAt)
@@ -30,20 +38,24 @@ public class ChapterReaderService(
 
         var prefix = nameof(Chapter).ToCachePrefix();
 
-        var key = CacheHelper.GetCacheKey(prefix, request);
+        var key = CacheHelper.GetCacheKey(prefix, new { request.BookId });
 
-        return cacheService.GetAndSet(key, () =>
+        var fetchValue = () => query.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
+
+        if (FiltersAreStandard(request))
         {
-            return query.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
-        },
-        CacheHelper.DefaultCacheExpiration);
+            return cacheService.GetAndSet(key, fetchValue, CacheHelper.DefaultCacheExpiration);
+        }
+
+        return fetchValue();
     }
 
     public async Task<FetchChapterResponse> GetChapter(FetchChapterRequest request)
     {
-        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
+        logger.LogInformation("User {userId} fetched a chapter: {@request}",
+            currentUser.Id, request);
 
-        var key = CacheHelper.GetCacheKey(prefix, request);
+        var key = nameof(Chapter).ToCachePrefix(request.ChapterId);
 
         var chapter = await cacheService.GetAndSet(key, () =>
         {
@@ -57,5 +69,11 @@ public class ChapterReaderService(
             Title = chapter.Title,
             Text = await textService.ReadText(chapter.Id, chapter.BookId),
         };
+    }
+
+    private bool FiltersAreStandard(FetchChapterPaginationRequest request)
+    {
+        return request.PageSize == PaginationConstants.DefaultPageSize
+            && request.PageNumber == PaginationConstants.DefaultPageNumber;
     }
 }

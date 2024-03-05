@@ -1,4 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
+using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Models.Requests;
 using Wheelingful.DAL.Contracts;
@@ -9,12 +12,17 @@ using Wheelingful.DAL.Helpers;
 namespace Wheelingful.BLL.Services.Chapters;
 
 public class ChapterAuthorService(
+    ICurrentUser currentUser,
     IChapterTextService textService,
     ICacheService cacheService,
+    ILogger<ChapterAuthorService> logger,
     WheelingfulDbContext dbContext) : IChapterAuthorService
 {
     public async Task CreateChapter(CreateChapterRequest request)
     {
+        logger.LogInformation("User {userId} created a chapter: {@request}",
+            currentUser.Id, request);
+
         var newChapter = new Chapter
         {
             Title = request.Title,
@@ -27,13 +35,18 @@ public class ChapterAuthorService(
 
         await textService.WriteText(request.Text, newChapter.Id, request.BookId);
 
-        var prefix = nameof(Chapter).ToCachePrefix();
+        var listPrefix = nameof(Chapter).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        var key = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
+
+        await cacheService.RemoveByKey(key);
     }
 
     public async Task UpdateChapter(UpdateChapterRequest request)
     {
+        logger.LogInformation("User {userId} updated the chapter: {@request}",
+            currentUser.Id, request);
+
         await dbContext.Chapters
             .Where(c => c.Id == request.ChapterId)
             .ExecuteUpdateAsync(setters => setters
@@ -45,21 +58,32 @@ public class ChapterAuthorService(
             await textService.WriteText(request.Text, request.ChapterId, request.BookId);
         }
 
-        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
+        var entryById = nameof(Chapter).ToCachePrefix(request.ChapterId);
 
-        await cacheService.RemoveByPrefix(prefix);
+        await cacheService.RemoveByKey(entryById);
+
+        var listPrefix = nameof(Chapter).ToCachePrefix();
+
+        var listKey = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
+
+        await cacheService.RemoveByKey(listKey);
     }
 
     public async Task DeleteChapter(DeleteChapterRequest request)
     {
+        logger.LogInformation("User {userId} deleted the chapter: {@request}",
+            currentUser.Id, request);
+
         textService.DeleteByChapter(request.ChapterId, request.BookId);
 
         await dbContext.Chapters
             .Where(c => c.Id == request.ChapterId)
             .ExecuteDeleteAsync();
 
-        var prefix = nameof(Chapter).ToCachePrefix(request.ChapterId);
+        var listPrefix = nameof(Chapter).ToCachePrefix();
 
-        await cacheService.RemoveByPrefix(prefix);
+        var listKey = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
+
+        await cacheService.RemoveByKey(listKey);
     }
 }

@@ -11,7 +11,7 @@ namespace Wheelingful.DAL;
 
 public static class DependencyInjection
 {
-    public static void AddDbContext(this IServiceCollection services, IConfiguration config)
+    public static void AddDbContext(this IServiceCollection services)
     {
         var serverVersion = new MySqlServerVersion(new Version(5, 7));
 

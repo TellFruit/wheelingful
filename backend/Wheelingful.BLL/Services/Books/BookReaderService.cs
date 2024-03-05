@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using System.Text.Json;
 using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
@@ -14,13 +16,17 @@ using Wheelingful.DAL.Helpers;
 namespace Wheelingful.BLL.Services.Books;
 
 public class BookReaderService(
-    ICurrentUser currentUser, 
+    ICurrentUser currentUser,
     IBookCoverService bookCover,
+    ILogger<BookReaderService> logger,
     ICacheService cacheService,
     WheelingfulDbContext dbContext) : IBookReaderService
 {
     public Task<FetchPaginationResponse<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request)
     {
+        logger.LogInformation("User {userId} fetched book list with parameters: {@request}",
+            currentUser.Id, request);
+
         var query = dbContext.Books
             .Include(b => b.Users)
             .AsQueryable();
@@ -43,6 +49,8 @@ public class BookReaderService(
             CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id)
         });
 
+        var fetchValue = () => selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
+
         if (FiltersAreStandard(request))
         {
             var prefix = nameof(Book).ToCachePrefix();
@@ -54,21 +62,18 @@ public class BookReaderService(
                 key = CacheHelper.GetCacheKey(prefix, new { request, currentUser.Id });
             }
 
-            return cacheService.GetAndSet(key, () =>
-            {
-                return selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
-            },
-            CacheHelper.DefaultCacheExpiration);
+            return cacheService.GetAndSet(key, fetchValue, CacheHelper.DefaultCacheExpiration);
         }
 
-        return selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
+        return fetchValue();
     }
 
     public Task<FetchBookResponse> GetBook(FetchBookRequest request)
     {
-        var prefix = nameof(Book).ToCachePrefix(request.BookId);
+        logger.LogInformation("User {userId} fetched the book: {@request}",
+            currentUser.Id, request);
 
-        var key = CacheHelper.GetCacheKey(prefix, request);
+        var key = nameof(Book).ToCachePrefix(request.BookId);
 
         return cacheService.GetAndSet(key, () =>
         {

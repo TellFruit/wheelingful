@@ -1,12 +1,16 @@
-﻿using Wheelingful.BLL.Constants;
+﻿using Microsoft.Extensions.Logging;
+using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Chapters;
 
 namespace Wheelingful.BLL.Services.Chapters;
 
-public class ChapterTextService() : IChapterTextService
+public class ChapterTextService(ILogger<ChapterTextService> logger) : IChapterTextService
 {
     public Task WriteText(string text, int chapterId, int bookId)
     {
+        logger.LogInformation("Writing text for chapter {chapterId} of book {bookId}", 
+            chapterId, bookId);
+
         var fileDirectory = GetFileDirectory(bookId);
 
         if (!Directory.Exists(fileDirectory))
@@ -21,6 +25,9 @@ public class ChapterTextService() : IChapterTextService
 
     public Task<string> ReadText(int chapterId, int bookId)
     {
+        logger.LogInformation("Read text for chapter {chapterId} of book {bookId}",
+            chapterId, bookId);
+
         var path = GetFilePath(bookId, chapterId);
 
         return File.ReadAllTextAsync(path);
@@ -28,6 +35,9 @@ public class ChapterTextService() : IChapterTextService
 
     public void DeleteByChapter(int chapterId, int bookId)
     {
+        logger.LogInformation("Delete text for chapter {chapterId} of book {bookId}",
+            chapterId, bookId);
+
         var path = GetFilePath(bookId, chapterId);
 
         File.Delete(path);
@@ -35,6 +45,8 @@ public class ChapterTextService() : IChapterTextService
 
     public void DeleteByBook(int bookId)
     {
+        logger.LogInformation("Delete text for all chapters of book {bookId}",bookId);
+
         var fileDirectory = GetFileDirectory(bookId); 
 
         if (Directory.Exists(fileDirectory))
