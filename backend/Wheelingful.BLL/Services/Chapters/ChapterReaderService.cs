@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Chapters;
@@ -24,8 +23,8 @@ public class ChapterReaderService(
 {
     public Task<FetchPaginationResponse<FetchChapterPropsResponse>> GetChapters(FetchChapterPaginationRequest request)
     {
-        logger.LogInformation("User {userId} fetched chapters: {request}",
-            currentUser.Id, JsonSerializer.Serialize(request));
+        logger.LogInformation("User {userId} fetched chapters: {@request}",
+            currentUser.Id, request);
 
         var query = dbContext.Chapters
             .Where(c => c.BookId == request.BookId)
@@ -53,8 +52,8 @@ public class ChapterReaderService(
 
     public async Task<FetchChapterResponse> GetChapter(FetchChapterRequest request)
     {
-        logger.LogInformation("User {userId} fetched a chapter: {request}",
-            currentUser.Id, JsonSerializer.Serialize(request));
+        logger.LogInformation("User {userId} fetched a chapter: {@request}",
+            currentUser.Id, request);
 
         var key = nameof(Chapter).ToCachePrefix(request.ChapterId);
 

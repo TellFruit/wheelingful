@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Contracts.Chapters;
@@ -22,8 +21,8 @@ internal class BookAuthorService(
 {
     public async Task CreateBook(CreateBookRequest request)
     {
-        logger.LogInformation("User {userId} created a book: {request}",
-            currentUser.Id, JsonSerializer.Serialize(request));
+        logger.LogInformation("User {userId} created a book: {@request}",
+            currentUser.Id, request);
 
         var newBook = new Book
         {
@@ -56,8 +55,8 @@ internal class BookAuthorService(
 
     public async Task UpdateBook(UpdateBookRequest request)
     {
-        logger.LogInformation("User {userId} updated the book: {request}",
-            currentUser.Id, JsonSerializer.Serialize(request));
+        logger.LogInformation("User {userId} updated the book: {@request}",
+            currentUser.Id, request);
 
         var book = await dbContext.Books.FirstAsync(b => b.Id == request.BookId);
 
@@ -89,8 +88,8 @@ internal class BookAuthorService(
 
     public async Task DeleteBook(DeleteBookRequest request)
     {
-        logger.LogInformation("User {userId} deleted the book: {request}",
-            currentUser.Id, JsonSerializer.Serialize(request));
+        logger.LogInformation("User {userId} deleted the book: {@request}",
+            currentUser.Id, request);
 
         textService.DeleteByBook(request.BookId);
 

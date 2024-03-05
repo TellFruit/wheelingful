@@ -5,7 +5,6 @@ using Wheelingful.API.Validators;
 using Wheelingful.BLL.Models.Requests;
 using Wheelingful.API.Models.Bindings;
 using Microsoft.OpenApi.Models;
-using Microsoft.Extensions.Logging.AzureAppServices;
 using Wheelingful.API.Constants;
 
 namespace Wheelingful.API.Extensions;
@@ -14,13 +13,7 @@ public static class DependencyInjection
 {
     public static void AddLogging(this WebApplicationBuilder builder)
     {
-        builder.Logging.AddAzureWebAppDiagnostics();
-        builder.Services.Configure<AzureFileLoggerOptions>(options =>
-        {
-            options.FileName = "azure-diagnostics-";
-            options.FileSizeLimit = 50 * 1024;
-            options.RetainedFileCountLimit = 5;
-        });
+        builder.Services.AddApplicationInsightsTelemetry();
     }
 
     public static void AddSwagger(this IServiceCollection services)
