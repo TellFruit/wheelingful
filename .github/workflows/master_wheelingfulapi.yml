@@ -59,6 +59,7 @@ jobs:
           IMAGEKIT_PUBLIC_KEY: ${{ secrets.IMAGEKIT_PUBLIC_KEY }}
           IMAGEKIT_PRIVATE_KEY: ${{ secrets.IMAGEKIT_PRIVATE_KEY }}
           REDIS_CONNECTION: ${{ secrets.REDIS_CONNECTION }}
+          APP_INSIGHTS_CONNECTION: ${{ secrets.APP_INSIGHTS_CONNECTION }}
         with:
           tokenPrefix: '#{'
           tokenSuffix: '}#'

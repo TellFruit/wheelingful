@@ -8,7 +8,7 @@ public class ChapterTextService(ILogger<ChapterTextService> logger) : IChapterTe
 {
     public Task WriteText(string text, int chapterId, int bookId)
     {
-        logger.LogInformation("Writing text for chapter {chapterId} of book {bookId}", 
+        logger.LogInformation("Writing text for chapter {ChapterId} of book {BookId}", 
             chapterId, bookId);
 
         var fileDirectory = GetFileDirectory(bookId);
@@ -25,7 +25,7 @@ public class ChapterTextService(ILogger<ChapterTextService> logger) : IChapterTe
 
     public Task<string> ReadText(int chapterId, int bookId)
     {
-        logger.LogInformation("Read text for chapter {chapterId} of book {bookId}",
+        logger.LogInformation("Reading text for chapter {ChapterId} of book {BookId}",
             chapterId, bookId);
 
         var path = GetFilePath(bookId, chapterId);
@@ -35,7 +35,7 @@ public class ChapterTextService(ILogger<ChapterTextService> logger) : IChapterTe
 
     public void DeleteByChapter(int chapterId, int bookId)
     {
-        logger.LogInformation("Delete text for chapter {chapterId} of book {bookId}",
+        logger.LogInformation("Deleting text of chapter {ChapterId} from book {BookId}",
             chapterId, bookId);
 
         var path = GetFilePath(bookId, chapterId);
@@ -45,7 +45,7 @@ public class ChapterTextService(ILogger<ChapterTextService> logger) : IChapterTe
 
     public void DeleteByBook(int bookId)
     {
-        logger.LogInformation("Delete text for all chapters of book {bookId}",bookId);
+        logger.LogInformation("Deleting text of all the chapters from book {BookId}",bookId);
 
         var fileDirectory = GetFileDirectory(bookId); 
 

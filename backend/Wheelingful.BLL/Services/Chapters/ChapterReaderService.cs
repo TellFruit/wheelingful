@@ -23,7 +23,7 @@ public class ChapterReaderService(
 {
     public Task<FetchPaginationResponse<FetchChapterPropsResponse>> GetChapters(FetchChapterPaginationRequest request)
     {
-        logger.LogInformation("User {userId} fetched chapters: {@request}",
+        logger.LogInformation("User {UserId} fetched chapters: {@Request}",
             currentUser.Id, request);
 
         var query = dbContext.Chapters
@@ -52,7 +52,7 @@ public class ChapterReaderService(
 
     public async Task<FetchChapterResponse> GetChapter(FetchChapterRequest request)
     {
-        logger.LogInformation("User {userId} fetched a chapter: {@request}",
+        logger.LogInformation("User {UserId} fetched a chapter: {@Request}",
             currentUser.Id, request);
 
         var key = nameof(Chapter).ToCachePrefix(request.ChapterId);
