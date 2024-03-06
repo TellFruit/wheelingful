@@ -9,6 +9,7 @@ using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
 using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Microsoft.EntityFrameworkCore;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -63,6 +64,8 @@ app.UseHttpsRedirection();
 
 app.UseAuthentication();
 app.UseAuthorization();
+
+app.UseSerilogRequestLogging();
 
 app.MapIdentityPartialApi<AppUser>();
 

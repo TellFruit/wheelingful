@@ -6,6 +6,7 @@ using Wheelingful.BLL.Models.Requests;
 using Wheelingful.API.Models.Bindings;
 using Microsoft.OpenApi.Models;
 using Wheelingful.API.Constants;
+using Serilog;
 
 namespace Wheelingful.API.Extensions;
 
@@ -13,7 +14,10 @@ public static class DependencyInjection
 {
     public static void AddLogging(this WebApplicationBuilder builder)
     {
-        builder.Services.AddApplicationInsightsTelemetry();
+        builder.Host.UseSerilog((context, configuration) =>
+            configuration.ReadFrom.Configuration(context.Configuration));
+
+        builder.Services.AddApplicationInsightsTelemetry(builder.Configuration);
     }
 
     public static void AddSwagger(this IServiceCollection services)

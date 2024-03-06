@@ -16,8 +16,6 @@ internal class BookCoverService(
 
     public string GetCoverUrl(int bookId, string authorId)
     {
-        logger.LogInformation("Generating cover URL for book {bookId}", bookId);
-
         var coverName = GetBookCoverName(bookId, authorId);
 
         var relativePath = $"{_coverOptions.Folder}/{coverName}";
@@ -31,7 +29,7 @@ internal class BookCoverService(
 
     public Task<string> UploadCover(string base64, int bookId, string authorId)
     {
-        logger.LogInformation("Uploading cover for book {bookId}", bookId);
+        logger.LogInformation("Uploading cover for book {BookId}", bookId);
 
         return imageManager.UploadImage(new UploadImageRequest
         {
@@ -43,7 +41,7 @@ internal class BookCoverService(
 
     public Task<string> UpdateCover(string imageId, string base64, int bookId, string authorId)
     {
-        logger.LogInformation("Updating cover for book {bookId}", bookId);
+        logger.LogInformation("Updating cover for book {BookId}", bookId);
 
         return imageManager.UpdateImage(imageId, new UploadImageRequest
         {
@@ -55,7 +53,7 @@ internal class BookCoverService(
 
     public Task DeleteCover(string imageId)
     {
-        logger.LogInformation("Deleting cover {coverId}", imageId);
+        logger.LogInformation("Deleting cover {CoverId}", imageId);
 
         return imageManager.DeleteImage(imageId);
     }

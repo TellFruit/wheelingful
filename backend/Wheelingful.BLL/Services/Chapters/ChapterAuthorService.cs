@@ -20,7 +20,7 @@ public class ChapterAuthorService(
 {
     public async Task CreateChapter(CreateChapterRequest request)
     {
-        logger.LogInformation("User {userId} created a chapter: {@request}",
+        logger.LogInformation("User {UserId} created a chapter: {@Request}",
             currentUser.Id, request);
 
         var newChapter = new Chapter
@@ -44,7 +44,7 @@ public class ChapterAuthorService(
 
     public async Task UpdateChapter(UpdateChapterRequest request)
     {
-        logger.LogInformation("User {userId} updated the chapter: {@request}",
+        logger.LogInformation("User {UserId} updated the chapter: {@Request}",
             currentUser.Id, request);
 
         await dbContext.Chapters
@@ -71,7 +71,7 @@ public class ChapterAuthorService(
 
     public async Task DeleteChapter(DeleteChapterRequest request)
     {
-        logger.LogInformation("User {userId} deleted the chapter: {@request}",
+        logger.LogInformation("User {UserId} deleted the chapter: {@Request}",
             currentUser.Id, request);
 
         textService.DeleteByChapter(request.ChapterId, request.BookId);

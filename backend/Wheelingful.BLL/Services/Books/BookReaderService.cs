@@ -24,7 +24,7 @@ public class BookReaderService(
 {
     public Task<FetchPaginationResponse<FetchBookResponse>> GetBooks(FetchBookPaginationRequest request)
     {
-        logger.LogInformation("User {userId} fetched book list with parameters: {@request}",
+        logger.LogInformation("User {UserId} fetched book list with parameters: {@Request}",
             currentUser.Id, request);
 
         var query = dbContext.Books
@@ -70,7 +70,7 @@ public class BookReaderService(
 
     public Task<FetchBookResponse> GetBook(FetchBookRequest request)
     {
-        logger.LogInformation("User {userId} fetched the book: {@request}",
+        logger.LogInformation("User {UserId} fetched the book: {@Request}",
             currentUser.Id, request);
 
         var key = nameof(Book).ToCachePrefix(request.BookId);
