@@ -3,5 +3,6 @@ export const READ_CONFIG = {
     group: 'read/books',
     browseBooks: 'list',
     readBook: ':bookId',
+    readChapter: ':bookId/chapters/:chapterId',
   },
 };
