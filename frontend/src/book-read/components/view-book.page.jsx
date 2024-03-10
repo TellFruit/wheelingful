@@ -1,37 +1,61 @@
-/* eslint-disable no-unused-vars */
 import { Paper, Box, Stack, Typography, Alert, Button } from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useParams } from 'react-router';
-import { renderValidationErrorsObject } from '../../shared';
-import { useFetchBooksByIdQuery } from '../store/apis/read.api';
+import { useParams, useNavigate } from 'react-router';
 import Markdown from 'react-markdown';
 import AutoStoriesIcon from '@mui/icons-material/AutoStories';
 import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ChaptersByBook from './chapters-by-book.component';
+import { SHARED_CONFIG, renderValidationErrorsObject } from '../../shared';
+import {
+  useFetchBooksByIdQuery,
+  useFetchChaptersByBookQuery,
+} from '../store/apis/read.api';
+import { READ_CONFIG } from '../configuration/read.config';
 
 export default function ViewBook() {
   const { bookId } = useParams();
 
+  const navigate = useNavigate();
+
   const {
     data: book,
-    error: fetchingError,
-    isFetching,
-    isError,
+    error,
+    isFetching: bookFetching,
+    isError: bookError,
   } = useFetchBooksByIdQuery(bookId);
 
-  if (isFetching) {
+  const pageNumber = 1;
+  const pageSize = SHARED_CONFIG.pagination.defaultPageSize;
+  const {
+    data: firstChapters,
+    isFetching: chapterFetching,
+    isError: chapterError,
+  } = useFetchChaptersByBookQuery({
+    bookId,
+    pageNumber,
+    pageSize,
+  });
+
+  const handleReadNow = () => {
+    navigate(
+      `/${READ_CONFIG.routes.group}/${bookId}/chapters/${firstChapters.items[0].id}`
+    );
+  };
+
+  if (bookFetching) {
     return (
       <Typography variant="h5" component="div" sx={{ marginTop: 2 }}>
         Pending...
       </Typography>
     );
-  } else if (isError) {
-    let error = renderValidationErrorsObject(fetchingError.data.errors);
+  } else if (bookError) {
+    let errorMessage = renderValidationErrorsObject(error.data.errors);
 
     return (
       <Stack sx={{ marginTop: 2 }}>
-        <Alert severity="error">{error}</Alert>
+        <Alert severity="error">{errorMessage}</Alert>
       </Stack>
     );
   }
@@ -68,7 +92,7 @@ export default function ViewBook() {
                   </Typography>
                 </Stack>
                 <Box>
-                  <Typography variant="body2">
+                  <Typography variant="body2" component="div">
                     <Markdown components={{ h1: 'h3', h2: 'h3' }}>
                       {book.description}
                     </Markdown>
@@ -122,11 +146,26 @@ export default function ViewBook() {
                 size="large"
                 startIcon={<AutoStoriesIcon />}
                 endIcon={<AutoStoriesIcon />}
+                disabled={chapterFetching && chapterError}
                 fullWidth
+                onClick={handleReadNow}
               >
                 Read now
               </Button>
             </Stack>
+          </Paper>
+        </Grid>
+        <Grid lg={8}>
+          <Paper
+            elevation={6}
+            sx={{
+              paddingLeft: 3,
+              paddingRight: 3,
+              paddingTop: 1,
+              paddingBottom: 2,
+            }}
+          >
+            <ChaptersByBook />
           </Paper>
         </Grid>
       </Grid>

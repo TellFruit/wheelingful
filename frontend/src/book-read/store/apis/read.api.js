@@ -7,7 +7,6 @@ export const readApi = createApi({
   endpoints(builder) {
     return {
       fetchBooksFiltered: builder.query({
-        providesTags: ['Books'],
         query: (pagination) => {
           return {
             url: '/books',
@@ -20,10 +19,29 @@ export const readApi = createApi({
         },
       }),
       fetchBooksById: builder.query({
-        providesTags: ['Book'],
         query: (id) => {
           return {
             url: `/books/${id}`,
+            method: 'GET',
+          };
+        },
+      }),
+      fetchChaptersByBook: builder.query({
+        query: (pagination) => {
+          return {
+            url: `/books/${pagination.bookId}/chapters`,
+            params: {
+              pageNumber: pagination.pageNumber,
+              pageSize: pagination.pageSize,
+            },
+            method: 'GET',
+          };
+        },
+      }),
+      fetchChapterById: builder.query({
+        query: (chapterId) => {
+          return {
+            url: `/books/chapters/${chapterId}`,
             method: 'GET',
           };
         },
@@ -35,4 +53,6 @@ export const readApi = createApi({
 export const {
   useFetchBooksFilteredQuery,
   useFetchBooksByIdQuery,
+  useFetchChaptersByBookQuery,
+  useFetchChapterByIdQuery,
 } = readApi;

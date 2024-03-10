@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Chapters;
 using Wheelingful.BLL.Models.Requests;

@@ -59,7 +59,25 @@ public class ChapterReaderService(
 
         var chapter = await cacheService.GetAndSet(key, () =>
         {
-            return dbContext.Chapters.FirstAsync(c => c.Id == request.ChapterId);
+            return dbContext.Chapters
+                .Where(c => c.Id == request.ChapterId)
+                .Select(c => new
+                {
+                    c.Id,
+                    c.Title,
+                    c.BookId,
+                    PreviousChapterId = dbContext.Chapters
+                        .Where(pc => pc.CreatedAt < c.CreatedAt)
+                        .OrderByDescending(pc => pc.CreatedAt)
+                        .Select(pc => (int?)pc.Id)
+                        .FirstOrDefault(),
+                    NextChapterId = dbContext.Chapters
+                        .Where(nc => nc.CreatedAt > c.CreatedAt)
+                        .OrderBy(nc => nc.CreatedAt)
+                        .Select(nc => (int?)nc.Id)
+                        .FirstOrDefault()
+                })
+                .FirstAsync();
         },
         CacheHelper.DefaultCacheExpiration);
 
@@ -68,6 +86,8 @@ public class ChapterReaderService(
             Id = chapter.Id,
             Title = chapter.Title,
             Text = await textService.ReadText(chapter.Id, chapter.BookId),
+            PreviousChapterId = chapter.PreviousChapterId,
+            NextChapterId = chapter.NextChapterId,
         };
     }
 

@@ -31,7 +31,7 @@ namespace Wheelingful.DAL.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("Authorship");
+                    b.ToTable("Authorship", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
@@ -314,7 +314,7 @@ namespace Wheelingful.DAL.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Books");
+                    b.ToTable("Books", (string)null);
                 });
 
             modelBuilder.Entity("Wheelingful.DAL.Entities.Chapter", b =>
@@ -341,7 +341,7 @@ namespace Wheelingful.DAL.Migrations
 
                     b.HasIndex("BookId");
 
-                    b.ToTable("Chapters");
+                    b.ToTable("Chapters", (string)null);
                 });
 
             modelBuilder.Entity("Authorship", b =>

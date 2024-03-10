@@ -191,10 +191,12 @@ export default function BookMutationComponent({
             {error}
           </Alert>
         )}
-        <Box marginTop={2}>
-          <Divider />
-        </Box>
-        {book && <ChaptersByBook />}
+        {book && (
+          <Box marginTop={2}>
+            <Divider />
+            <ChaptersByBook />
+          </Box>
+        )}
         <Box marginTop={2}>
           <Divider variant="middle" />
         </Box>
