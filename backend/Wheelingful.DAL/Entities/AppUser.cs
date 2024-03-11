@@ -9,4 +9,5 @@ public sealed class AppUser : IdentityUser, IBaseTimestamp
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public List<Book> Books { get; set; } = [];
+    public List<Review> Reviews { get; set; } = [];
 }

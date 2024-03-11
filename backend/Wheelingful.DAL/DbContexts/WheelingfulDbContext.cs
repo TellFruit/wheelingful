@@ -9,6 +9,7 @@ public class WheelingfulDbContext : IdentityDbContext<AppUser>
 {
     public DbSet<Book> Books { get; set; }
     public DbSet<Chapter> Chapters { get; set; }
+    public DbSet<Review> Reviews { get; set; }
 
     public WheelingfulDbContext(DbContextOptions<WheelingfulDbContext> options) 
         : base(options) { }
@@ -22,6 +23,7 @@ public class WheelingfulDbContext : IdentityDbContext<AppUser>
     {
         modelBuilder.BuildBook();
         modelBuilder.BuildChapter();
+        modelBuilder.BuildReview();
 
         base.OnModelCreating(modelBuilder);
 
