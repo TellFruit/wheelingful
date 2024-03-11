@@ -12,4 +12,5 @@ public sealed class Book : BaseEntity
     public string CoverId { get; set; } = string.Empty;
 
     public List<AppUser> Users { get; set; } = [];
+    public List<Review> Reviews { get; set; } = [];
 }
