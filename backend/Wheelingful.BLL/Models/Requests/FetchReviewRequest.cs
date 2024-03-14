@@ -3,5 +3,4 @@
 public class FetchReviewRequest
 {
     public int BookId { get; set; }
-    public required string UserId { get; set; }
 }

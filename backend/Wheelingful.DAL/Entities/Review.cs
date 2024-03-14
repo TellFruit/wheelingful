@@ -9,8 +9,8 @@ public class Review : IBaseTimestamp
     public required string Title { get; set; }
     public required string Text { get; set; }
     public int Score { get; set; }
-    public DateTime CreatedAt { get; set; } = DateTime.Now;
-    public DateTime UpdatedAt { get; set; } = DateTime.Now;
+    public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
+    public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
 
     public Book Book { get; set; } = null!;
     public AppUser User { get; set; } = null!;
