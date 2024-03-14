@@ -7,7 +7,7 @@ public class FetchReviewPaginationRequest : FetchPaginationRequest
     public int? BookId { get; set; }
     public bool? DoFetchByCurrentUser { get; set; }
 
-    public FetchReviewPaginationRequest(int? bookId, int? pageNumber, int? pageSize, bool? doFetchByCurrentUser)
+    public FetchReviewPaginationRequest(int? bookId, bool? doFetchByCurrentUser, int? pageNumber, int? pageSize)
         : base(pageNumber, pageSize)
     {
         BookId = bookId;

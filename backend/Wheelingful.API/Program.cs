@@ -7,7 +7,6 @@ using Wheelingful.DAL.Enums;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
-using SharpGrip.FluentValidation.AutoValidation.Endpoints.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
 
@@ -42,7 +41,10 @@ builder.Services
 builder.Services.AddAuthorizationBuilder()
   .AddPolicy(PolicyContants.AuthorizeAuthor, policy =>
         policy
-            .RequireRole(nameof(UserRoleEnum.Admin), nameof(UserRoleEnum.Author)));
+            .RequireRole(nameof(UserRoleEnum.Admin), nameof(UserRoleEnum.Author)))
+  .AddPolicy(PolicyContants.AuthorizeReader, policy =>
+        policy
+            .RequireRole(nameof(UserRoleEnum.Reader)));
 
 var app = builder.Build();
 
@@ -69,11 +71,7 @@ app.UseSerilogRequestLogging();
 
 app.MapIdentityPartialApi<AppUser>();
 
-var bookGroup = app.MapGroup("/books")
-    .AddFluentValidationAutoValidation();
-
-bookGroup.MapBookApi();
-bookGroup.MapChapterApi();
+app.MapAppApi();
 
 Directory.CreateDirectory("App_Data");
 

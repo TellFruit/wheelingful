@@ -26,6 +26,7 @@ public class ReviewService(
             currentUser.Id, request);
 
         var query = dbContext.Reviews
+            .Include(r => r.User)
             .Where(r => r.BookId == request.BookId);
 
         var doFetchByCurrentUser = request.DoFetchByCurrentUser.HasValue
@@ -45,6 +46,7 @@ public class ReviewService(
         {
             BookId = r.BookId,
             UserId = r.UserId,
+            UserName = r.User.UserName!,
             Text = r.Text,
             Title = r.Title,
             Score = r.Score,
@@ -74,20 +76,22 @@ public class ReviewService(
         logger.LogInformation("User {UserId} fetched the review: {@Request}",
             currentUser.Id, request);
 
-        var key = nameof(Review).ToCachePrefix(request.BookId) + request.UserId;
+        var key = nameof(Review).ToCachePrefix(request.BookId) + currentUser.Id;
 
         return cacheService.GetAndSet(key, () =>
         {
             return dbContext.Reviews
+            .Include(r => r.User)
             .Select(r => new FetchReviewResponse
             {
                 BookId = r.BookId,
                 UserId = r.UserId,
+                UserName = r.User.UserName!,
                 Text = r.Text,
                 Title = r.Title,
                 Score = r.Score,
             })
-            .FirstAsync(r => r.BookId == request.BookId && r.UserId == request.UserId);
+            .FirstAsync(r => r.BookId == request.BookId && r.UserId == currentUser.Id);
         },
         CacheHelper.DefaultCacheExpiration);
     }
@@ -123,7 +127,7 @@ public class ReviewService(
             currentUser.Id, request);
 
         await dbContext.Reviews
-            .Where(r => r.BookId == request.BookId && r.UserId == request.UserId)
+            .Where(r => r.BookId == request.BookId && r.UserId == currentUser.Id)
             .ExecuteUpdateAsync(setters => setters
                 .SetProperty(r => r.Title, request.Title)
                 .SetProperty(r => r.Text, request.Text)
@@ -143,7 +147,7 @@ public class ReviewService(
             currentUser.Id, request);
 
         await dbContext.Reviews
-            .Where(r => r.BookId == request.BookId && r.UserId == request.UserId)
+            .Where(r => r.BookId == request.BookId && r.UserId == currentUser.Id)
             .ExecuteDeleteAsync();
 
         var listPrefix = nameof(Review).ToCachePrefix();
