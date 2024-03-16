@@ -7,6 +7,7 @@ using Wheelingful.API.Models.Bindings;
 using Microsoft.OpenApi.Models;
 using Wheelingful.API.Constants;
 using Serilog;
+using Wheelingful.API.Models;
 
 namespace Wheelingful.API.Extensions;
 
@@ -73,6 +74,7 @@ public static class DependencyInjection
         services.AddScoped<IValidator<UpdateBookBinding>, UpdateBookValidator>();
         services.AddScoped<IValidator<DeleteBookRequest>, DeleteBookValidator>();
         services.AddScoped<IValidator<FetchBookRequest>, FetchBookValidator>();
+        services.AddScoped<IValidator<FetchReviewsByBookRequest>, FetchReviewsByBookValidator>();
         services.AddScoped<IValidator<FetchBookPaginationRequest>, FetchBookPaginationValidator>();
 
         services.AddScoped<IValidator<CreateChapterBinding>,  CreateChapterValidator>();
@@ -80,5 +82,11 @@ public static class DependencyInjection
         services.AddScoped<IValidator<DeleteChapterRequest>, DeleteChapterValidator>();
         services.AddScoped<IValidator<FetchChapterRequest>, FetchChapterValidator>();
         services.AddScoped<IValidator<FetchChapterPaginationRequest>, FetchChapterPaginationValidator>();
+
+        services.AddScoped<IValidator<CreateReviewBinding>, CreateReviewValidator>();
+        services.AddScoped<IValidator<UpdateReviewBinding>, UpdateReviewValidator>();
+        services.AddScoped<IValidator<DeleteReviewRequest>, DeleteReviewValidator>();
+        services.AddScoped<IValidator<FetchReviewRequest>, FetchReviewValidator>();
+        services.AddScoped<IValidator<FetchReviewsByCurrentUserRequest>, FetchReviewsByCurrentUserValidator>();
     }
 }

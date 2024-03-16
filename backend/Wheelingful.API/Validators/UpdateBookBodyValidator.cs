@@ -15,6 +15,8 @@ public class UpdateBookBodyValidator : AbstractValidator<UpdateBookBody>
                 .WithMessage("Title must not exceed 255 characters.");
 
         RuleFor(b => b.Description)
+            .NotEmpty()
+                .WithMessage("Description is required.")
             .MaximumLength(1000)
                 .WithMessage("Description must not exceed 1000 characters.");
 
