@@ -3,7 +3,7 @@ using Wheelingful.DAL.Entities;
 
 namespace Wheelingful.API.Extensions.Validation;
 
-public static class BeActualChapterExtension
+public static class ValidateChapterExtension
 {
     public static Task<bool> BeActualChapter(this DbSet<Chapter> set, int chapterId)
     {
