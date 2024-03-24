@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Wheelingful.API.Constants;
+using Wheelingful.API.Models;
 using Wheelingful.API.Models.Bindings;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Models.Requests;
@@ -40,20 +41,31 @@ public static class BookExtension
         })
             .RequireAuthorization(PolicyContants.AuthorizeAuthor);
 
-        endpoints.MapGet("/", async Task<Results<Ok<FetchPaginationResponse<FetchBookResponse>>, ValidationProblem>>
-            ([AsParameters] FetchBookPaginationRequest request, [FromServices] IBookReaderService handler) =>
-        {
-            var result = await handler.GetBooks(request);
+        endpoints.MapGet("/", 
+            async Task<Results<Ok<FetchPaginationResponse<FetchBookResponse>>, ValidationProblem>>
+                ([AsParameters] FetchBookPaginationRequest request, [FromServices] IBookReaderService handler) =>
+            {
+                var result = await handler.GetBooks(request);
 
-            return TypedResults.Ok(result);
-        });
+                return TypedResults.Ok(result);
+            });
 
-        endpoints.MapGet("/{bookId}", async Task<Results<Ok<FetchBookResponse>, ValidationProblem>>
-            ([AsParameters] FetchBookRequest request, [FromServices] IBookReaderService handler) =>
-        {
-            var result = await handler.GetBook(request);
+        endpoints.MapGet("/{bookId}", 
+            async Task<Results<Ok<FetchBookResponse>, ValidationProblem>>
+                ([AsParameters] FetchBookRequest request, [FromServices] IBookReaderService handler) =>
+            {
+                var result = await handler.GetBook(request);
 
-            return TypedResults.Ok(result);
-        });
+                return TypedResults.Ok(result);
+            });
+
+        endpoints.MapGet("/{bookId}/reviews", 
+            async Task<Results<Ok<FetchPaginationResponse<FetchReviewResponse>>, ValidationProblem>>
+                ([AsParameters] FetchReviewsByBookRequest request, [FromServices] IReviewService handler) =>
+            {
+                var result = await handler.GetReviews(request);
+
+                return TypedResults.Ok(result);
+            });
     }
 }

@@ -1,6 +1,6 @@
 ﻿namespace Wheelingful.API.Extensions.Validation;
 
-public static class BeValidBase64Extension
+public static class ValidateImageExtension
 {
     public static bool BeValidBase64(this string value)
     {

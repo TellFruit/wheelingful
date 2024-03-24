@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Wheelingful.DAL.DbContexts;
 
@@ -11,9 +12,11 @@ using Wheelingful.DAL.DbContexts;
 namespace Wheelingful.DAL.Migrations
 {
     [DbContext(typeof(WheelingfulDbContext))]
-    partial class WheelingfulDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240311083950_Review")]
+    partial class Review
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -363,9 +366,6 @@ namespace Wheelingful.DAL.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("varchar(95)");
 
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
                     b.Property<int>("Score")
                         .HasColumnType("int");
 
@@ -378,9 +378,6 @@ namespace Wheelingful.DAL.Migrations
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("varchar(255)");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
 
                     b.HasKey("BookId", "UserId");
 
