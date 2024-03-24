@@ -8,7 +8,7 @@ using Wheelingful.DAL.DbContexts;
 
 namespace Wheelingful.BLL.Services.Books;
 
-internal class BookCoverService(
+public class BookCoverService(
     IImageService imageManager, 
     ILogger<BookCoverService> logger, 
     IOptions<BookCoverOptions> options,
