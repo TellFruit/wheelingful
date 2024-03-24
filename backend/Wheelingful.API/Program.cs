@@ -9,6 +9,8 @@ using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Microsoft.AspNetCore.Diagnostics;
+using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -50,17 +52,7 @@ var app = builder.Build();
 
 app.UseCors(PolicyContants.AllowClientOrigin);
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-} else
-{
-    app.UseExceptionHandler(exceptionHandlerApp => 
-        exceptionHandlerApp.Run(async context => 
-            await Results.Problem()
-                .ExecuteAsync(context)));
-}
+app.UseAppExtension();
 
 app.UseHttpsRedirection();
 
@@ -71,7 +63,7 @@ app.UseSerilogRequestLogging();
 
 app.MapIdentityPartialApi<AppUser>();
 
-app.MapAppApi();
+app.MapApiGroups();
 
 Directory.CreateDirectory("App_Data");
 

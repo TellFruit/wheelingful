@@ -2,9 +2,9 @@
 
 namespace Wheelingful.API.Extensions.Endpoints;
 
-public static class AppExtension
+public static class GroupExtension
 {
-    public static void MapAppApi(this WebApplication app)
+    public static void MapApiGroups(this WebApplication app)
     {
         var bookGroup = app.MapGroup("/books")
             .AddFluentValidationAutoValidation();
