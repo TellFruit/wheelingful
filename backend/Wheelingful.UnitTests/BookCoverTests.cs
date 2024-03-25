@@ -12,7 +12,7 @@ namespace Wheelingful.UnitTests;
 public class BookCoverTests
 {
     [Fact]
-    public void Get_cover_URL_returns_default()
+    public void Given_empty_coverId_when_get_cover_URL_then_default_cover()
     {
         // Arrange
 
@@ -58,7 +58,7 @@ public class BookCoverTests
     }
 
     [Fact]
-    public void Get_cover_URL_by_book()
+    public void Given_unique_coverId_when_get_cover_URL_then_unique_cover()
     {
         // Arrange
 
