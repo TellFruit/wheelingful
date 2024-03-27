@@ -43,7 +43,7 @@ public class BookCoverTests
 
         context.SaveChanges();
 
-        var bookCoverService = new BookCoverService(imageMock, loggerMock, optionsMock, context);
+        var bookCoverService = new BookCoverService(imageMock, loggerMock, optionsMock);
 
         // Act
 
@@ -89,7 +89,7 @@ public class BookCoverTests
 
         context.SaveChanges();
 
-        var bookCoverService = new BookCoverService(imageMock, loggerMock, optionsMock, context);
+        var bookCoverService = new BookCoverService(imageMock, loggerMock, optionsMock);
 
         // Act
 

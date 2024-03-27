@@ -4,8 +4,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Testcontainers.MySql;
 using Testcontainers.Redis;
+using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.DAL.DbContexts;
 using Wheelingful.IntegrationTests.Constants;
+using Wheelingful.IntegrationTests.Mocks;
 
 namespace Wheelingful.IntegrationTests.Abstract;
 
@@ -28,6 +30,12 @@ public abstract class BaseTest : IAsyncLifetime
             .WithWebHostBuilder(b =>
             {
                 b.UseEnvironment(ApiConstants.BaseEnvironment);
+                b.ConfigureServices(s =>
+                {
+                    RemoveService<ICurrentUser>(s);
+
+                    s.AddScoped<ICurrentUser, MockCurrentUser>();
+                });
                 b.UseSetting("ConnectionStrings:RedisConnection", _redisContainer.GetConnectionString());
             });
 
@@ -43,8 +51,14 @@ public abstract class BaseTest : IAsyncLifetime
 
     public async Task DisposeAsync()
     {
+        HttpClient.Dispose();
         await Factory.DisposeAsync();
         await _mySqlContainer.DisposeAsync();
         await _redisContainer.DisposeAsync();
+    }
+
+    private void RemoveService<T>(IServiceCollection services)
+    {
+        services.Where(s => s.ServiceType == typeof(T)).ToList().Select(services.Remove);
     }
 }

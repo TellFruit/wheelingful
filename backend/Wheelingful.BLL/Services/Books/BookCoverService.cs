@@ -11,8 +11,7 @@ namespace Wheelingful.BLL.Services.Books;
 public class BookCoverService(
     IImageService imageManager, 
     ILogger<BookCoverService> logger, 
-    IOptions<BookCoverOptions> options,
-    WheelingfulDbContext dbContext) : IBookCoverService
+    IOptions<BookCoverOptions> options) : IBookCoverService
 {
     private readonly BookCoverOptions _coverOptions = options.Value;
 
