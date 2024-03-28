@@ -12,7 +12,7 @@ namespace Wheelingful.UnitTests;
 public class BookCoverTests
 {
     [Fact]
-    public void Given_empty_coverId_when_get_cover_URL_then_default_cover()
+    public void BookCoverService_GetCoverUrl_ReturnDefaultUrl()
     {
         // Arrange
 
@@ -48,7 +48,7 @@ public class BookCoverTests
         // Act
 
         var expected = $"{BookCoverConstants.Endpoint}/{BookCoverConstants.Folder}/{BookCoverConstants.DefaultCover}";
-        var result = bookCoverService.GetCoverUrl(book.Id, DbConstants.AdminUserId);
+        var result = bookCoverService.GetCoverUrl(book.Id, DbConstants.AdminUserId, book.CoverId);
 
         // Assert
 
@@ -58,7 +58,7 @@ public class BookCoverTests
     }
 
     [Fact]
-    public void Given_unique_coverId_when_get_cover_URL_then_unique_cover()
+    public void BookCoverService_GetCoverUrl_ReturnUniqueUrl()
     {
         // Arrange
 
@@ -82,7 +82,7 @@ public class BookCoverTests
             Description = "Test Book",
             Category = BookCategoryEnum.Original,
             Status = BookStatusEnum.Ongoing,
-            CoverId = "12345"
+            CoverId = Guid.NewGuid().ToString(),
         };
 
         context.Books.Add(book);
@@ -94,7 +94,7 @@ public class BookCoverTests
         // Act
 
         var expected = $"{BookCoverConstants.Endpoint}/{BookCoverConstants.Folder}/{book.Id}-{DbConstants.AdminUserId}";
-        var result = bookCoverService.GetCoverUrl(book.Id, DbConstants.AdminUserId);
+        var result = bookCoverService.GetCoverUrl(book.Id, DbConstants.AdminUserId, book.CoverId);
 
         // Assert
 

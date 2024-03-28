@@ -9,7 +9,7 @@ namespace Wheelingful.UnitTests;
 public class BookAuthorValidationTests
 {
     [Fact]
-    public void Given_null_title_empty_when_validate_then_error()
+    public void BookValidator_Validate_ReturnTitleEmpty()
     {
         // Arrange
 
@@ -34,7 +34,7 @@ public class BookAuthorValidationTests
     }
 
     [Fact]
-    public void Given_long_title_empty_when_validate_then_error()
+    public void BookValidator_Validate_ReturnTitleTooLong()
     {
         // Arrange
 
@@ -59,7 +59,7 @@ public class BookAuthorValidationTests
     }
 
     [Fact]
-    public void Given_valid_title_empty_when_validate_then_ok()
+    public void BookValidator_Validate_ReturnTitleCorrect()
     {
         // Arrange
 
@@ -84,7 +84,7 @@ public class BookAuthorValidationTests
     }
 
     [Fact]
-    public void Given_enum_out_of_range_when_validate_then_error()
+    public void BookValidator_Validate_ReturnCategoryOutOfRange()
     {
         // Arrange
 
@@ -109,7 +109,7 @@ public class BookAuthorValidationTests
     }
 
     [Fact]
-    public void Given_valid_enum_when_validate_then_ok()
+    public void BookValidator_Validate_ReturnCategoryCorrect()
     {
         // Arrange
 
@@ -134,7 +134,7 @@ public class BookAuthorValidationTests
     }
 
     [Fact]
-    public void Given_invalid_base64_when_validate_then_error()
+    public void BookValidator_Validate_ReturnImageCorrupted()
     {
         // Arrange
 
@@ -163,7 +163,7 @@ public class BookAuthorValidationTests
     }
 
     [Fact]
-    public void Given_valid_base64_when_validate_then_error()
+    public void BookValidator_Validate_ReturnImageCorrect()
     {
         // Arrange
 

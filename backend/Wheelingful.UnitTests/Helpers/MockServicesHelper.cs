@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Moq;
+using Wheelingful.BLL.Contracts.Auth;
+using Wheelingful.UnitTests.Constants;
 
 namespace Wheelingful.UnitTests.Helpers;
 
@@ -17,6 +19,15 @@ public static class MockServicesHelper
         var mock = new Mock<IOptions<T>>();
         
         mock.Setup(m => m.Value).Returns(options);
+
+        return mock.Object;
+    }
+
+    public static ICurrentUser MockCurrentUser()
+    {
+        var mock = new Mock<ICurrentUser>();
+
+        mock.SetupGet(m => m.Id).Returns(DbConstants.AdminUserId);
 
         return mock.Object;
     }

@@ -11,6 +11,10 @@ public class TestDbContextFactory : IDbContextFactory<WheelingfulDbContext>
             .UseInMemoryDatabase($"InMemoryTestDb-{DateTime.Now.ToFileTimeUtc()}")
             .Options;
 
-        return new WheelingfulDbContext(options);
+        var context = new WheelingfulDbContext(options);
+
+        context.Database.EnsureCreated();
+
+        return context;
     }
 }

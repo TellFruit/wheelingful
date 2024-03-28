@@ -16,13 +16,8 @@ public class BookCoverService(
 {
     private readonly BookCoverOptions _coverOptions = options.Value;
 
-    public string GetCoverUrl(int bookId, string authorId)
+    public string GetCoverUrl(int bookId, string authorId, string coverId)
     {
-        var coverId = dbContext.Books
-            .Where(b => b.Id == bookId)
-            .Select(b => b.CoverId)
-            .First();
-
         var coverName = GetBookCoverName(bookId, authorId);
 
         string relativePath;
