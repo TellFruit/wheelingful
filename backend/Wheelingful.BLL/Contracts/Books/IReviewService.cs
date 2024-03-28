@@ -8,7 +8,4 @@ public interface IReviewService
 {
     Task<FetchPaginationResponse<FetchReviewResponse>> GetReviews(FetchReviewPaginationRequest request);
     Task<FetchReviewResponse> GetReview(FetchReviewRequest request);
-    Task CreateReview(CreateReviewRequest request);
-    Task UpdateReview(UpdateReviewRequest request);
-    Task DeleteReview(DeleteReviewRequest request);
 }

@@ -7,6 +7,8 @@ using Wheelingful.BLL.Models.Requests;
 using Wheelingful.BLL.Models.Responses.Generic;
 using Wheelingful.BLL.Models.Responses;
 using Wheelingful.API.Models;
+using MediatR;
+using Wheelingful.BLL.Models.Requests.Commands;
 
 namespace Wheelingful.API.Extensions.Endpoints;
 
@@ -15,31 +17,31 @@ public static class UserExtension
     public static void MapUserApi(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("/current/books/{bookId}/reviews", async Task<Results<Created, ValidationProblem>> (
-             [FromBody] CreateReviewBinding request, [FromServices] IReviewService handler) =>
+             [FromBody] CreateReviewBinding request, [FromServices] IMediator mediator) =>
         {
-            await handler.CreateReview(request.To());
+            await mediator.Send(request.To());
 
             return TypedResults.Created();
         })
             .RequireAuthorization(PolicyContants.AuthorizeReader);
 
         endpoints.MapPut("/current/books/{bookId}/reviews", async Task<Results<Ok, ValidationProblem>>
-            ([AsParameters] UpdateReviewBinding request, [FromServices] IReviewService handler) =>
+            ([AsParameters] UpdateReviewBinding request, [FromServices] IMediator mediator) =>
         {
-            await handler.UpdateReview(request.To());
+            await mediator.Send(request.To());
 
             return TypedResults.Ok();
         })
-            .RequireAuthorization(PolicyContants.AuthorizeAuthor);
+            .RequireAuthorization(PolicyContants.AuthorizeReader);
 
         endpoints.MapDelete("/current/books/{bookId}/reviews", async Task<Results<NoContent, ValidationProblem>>
-            ([AsParameters] DeleteReviewRequest request, [FromServices] IReviewService handler) =>
+            ([AsParameters] DeleteReviewCommand request, [FromServices] IMediator mediator) =>
         {
-            await handler.DeleteReview(request);
+            await mediator.Send(request);
 
             return TypedResults.NoContent();
         })
-            .RequireAuthorization(PolicyContants.AuthorizeAuthor);
+            .RequireAuthorization(PolicyContants.AuthorizeReader);
 
         endpoints.MapGet("/current/reviews", 
             async Task<Results<Ok<FetchPaginationResponse<FetchReviewResponse>>, ValidationProblem>>
@@ -48,7 +50,8 @@ public static class UserExtension
                 var result = await handler.GetReviews(request);
 
                 return TypedResults.Ok(result);
-            });
+            })
+                .RequireAuthorization(PolicyContants.AuthorizeReader); ;
 
         endpoints.MapGet("/current/books/{bookId}/reviews",
             async Task<Results<Ok<FetchReviewResponse>, ValidationProblem>>
@@ -57,6 +60,7 @@ public static class UserExtension
                 var result = await handler.GetReview(request);
 
                 return TypedResults.Ok(result);
-            });
+            })
+                .RequireAuthorization(PolicyContants.AuthorizeReader); ;
     }
 }

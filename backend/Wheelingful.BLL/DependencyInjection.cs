@@ -45,5 +45,10 @@ public static class DependencyInjection
             return new ImagekitClient(publicKey, privateKey, endpoint);
         });
         services.AddScoped<IImageService, ImageService>();
+
+        foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(assembly));
+        }
     }
 }

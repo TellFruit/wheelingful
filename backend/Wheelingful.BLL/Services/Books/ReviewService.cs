@@ -26,8 +26,7 @@ public class ReviewService(
             currentUser.Id, request);
 
         var query = dbContext.Reviews
-            .Include(r => r.User)
-            .Where(r => r.BookId == request.BookId);
+            .AsQueryable();
 
         var doFetchByCurrentUser = request.DoFetchByCurrentUser.HasValue
             && request.DoFetchByCurrentUser.Value;
@@ -56,7 +55,7 @@ public class ReviewService(
 
         if (FiltersAreStandard(request))
         {
-            var prefix = nameof(Book).ToCachePrefix();
+            var prefix = nameof(Review).ToCachePrefix();
 
             var key = CacheHelper.GetCacheKey(prefix, request);
 
@@ -94,67 +93,6 @@ public class ReviewService(
             .FirstAsync(r => r.BookId == request.BookId && r.UserId == currentUser.Id);
         },
         CacheHelper.DefaultCacheExpiration);
-    }
-
-    public async Task CreateReview(CreateReviewRequest request)
-    {
-        logger.LogInformation("User {UserId} created a review: {@Request}",
-            currentUser.Id, request);
-
-        var newReview = new Review
-        {
-            BookId = request.BookId,
-            UserId = currentUser.Id,
-            Title = request.Title,
-            Text = request.Text,
-            Score = request.Score,
-        };
-        
-        dbContext.Add(newReview);
-
-        await dbContext.SaveChangesAsync();
-
-        var listPrefix = nameof(Review).ToCachePrefix();
-
-        var key = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
-
-        await cacheService.RemoveByKey(key);
-    }
-
-    public async Task UpdateReview(UpdateReviewRequest request)
-    {
-        logger.LogInformation("User {UserId} updated a review: {@Request}",
-            currentUser.Id, request);
-
-        await dbContext.Reviews
-            .Where(r => r.BookId == request.BookId && r.UserId == currentUser.Id)
-            .ExecuteUpdateAsync(setters => setters
-                .SetProperty(r => r.Title, request.Title)
-                .SetProperty(r => r.Text, request.Text)
-                .SetProperty(r => r.Score, request.Score)
-                .SetProperty(r => r.UpdatedAt, DateTime.UtcNow));
-
-        var listPrefix = nameof(Review).ToCachePrefix();
-
-        var key = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
-
-        await cacheService.RemoveByKey(key);
-    }
-
-    public async Task DeleteReview(DeleteReviewRequest request)
-    {
-        logger.LogInformation("User {UserId} deleted a review: {@Request}",
-            currentUser.Id, request);
-
-        await dbContext.Reviews
-            .Where(r => r.BookId == request.BookId && r.UserId == currentUser.Id)
-            .ExecuteDeleteAsync();
-
-        var listPrefix = nameof(Review).ToCachePrefix();
-
-        var key = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
-
-        await cacheService.RemoveByKey(key);
     }
 
     private bool FiltersAreStandard(FetchReviewPaginationRequest request)

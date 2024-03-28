@@ -7,5 +7,8 @@ public class FetchReviewsByBookRequest : FetchReviewPaginationRequest
     public new int BookId { get; set; }
 
     public FetchReviewsByBookRequest(int bookId, int? pageNumber, int? pageSize) 
-        : base(bookId, null, pageNumber, pageSize) { }
+        : base(bookId, null, pageNumber, pageSize) 
+    {
+        BookId = bookId;
+    }
 }
