@@ -8,7 +8,7 @@ using Wheelingful.DAL.DbContexts;
 
 namespace Wheelingful.BLL.Services.Books;
 
-internal class BookCoverService(
+public class BookCoverService(
     IImageService imageManager, 
     ILogger<BookCoverService> logger, 
     IOptions<BookCoverOptions> options,
@@ -16,13 +16,8 @@ internal class BookCoverService(
 {
     private readonly BookCoverOptions _coverOptions = options.Value;
 
-    public string GetCoverUrl(int bookId, string authorId)
+    public string GetCoverUrl(int bookId, string authorId, string coverId)
     {
-        var coverId = dbContext.Books
-            .Where(b => b.Id == bookId)
-            .Select(b => b.CoverId)
-            .First();
-
         var coverName = GetBookCoverName(bookId, authorId);
 
         string relativePath;

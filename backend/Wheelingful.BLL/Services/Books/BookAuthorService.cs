@@ -11,7 +11,7 @@ using Wheelingful.DAL.Helpers;
 
 namespace Wheelingful.BLL.Services.Books;
 
-internal class BookAuthorService(
+public class BookAuthorService(
     IBookCoverService bookCover,
     IChapterTextService textService,
     ICurrentUser currentUser,

@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using System.Text.Json;
 using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
@@ -46,7 +45,7 @@ public class BookReaderService(
             Description = b.Description,
             Category = b.Category,
             Status = b.Status,
-            CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id)
+            CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id, b.CoverId)
         });
 
         var fetchValue = () => selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
@@ -86,7 +85,7 @@ public class BookReaderService(
                 Description = b.Description,
                 Category = b.Category,
                 Status = b.Status,
-                CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id)
+                CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id, b.CoverId)
             })
             .FirstAsync(b => b.Id == request.BookId);
         },
