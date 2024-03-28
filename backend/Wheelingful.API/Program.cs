@@ -9,8 +9,6 @@ using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
-using Microsoft.AspNetCore.Diagnostics;
-using Microsoft.AspNetCore.Mvc;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -72,3 +70,5 @@ var dbContext = scope.ServiceProvider.GetRequiredService<WheelingfulDbContext>()
 dbContext.Database.Migrate();
 
 app.Run();
+
+public partial class Program { }
