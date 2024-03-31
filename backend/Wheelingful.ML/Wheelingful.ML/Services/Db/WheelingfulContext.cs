@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore;
-using Pomelo.EntityFrameworkCore.MySql.Scaffolding.Internal;
+﻿using Microsoft.EntityFrameworkCore;
 using Wheelingful.ML.Models.Db;
 
 namespace Wheelingful.ML.Services.Db;
@@ -36,6 +33,10 @@ public partial class WheelingfulContext : DbContext
     public virtual DbSet<Efmigrationshistory> Efmigrationshistories { get; set; }
 
     public virtual DbSet<Review> Reviews { get; set; }
+
+    public virtual DbSet<Aspnetuserrole> Aspnetuserroles { get; set; }
+
+    public virtual DbSet<Authorship> Authorships { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseMySql("#{MYSQLCONNSTR_localdb}#", ServerVersion.Parse("5.7.44-mysql"));
@@ -98,26 +99,6 @@ public partial class WheelingfulContext : DbContext
                 .HasMaxLength(6)
                 .HasDefaultValueSql("'0001-01-01 00:00:00.000000'");
             entity.Property(e => e.UserName).HasMaxLength(256);
-
-            entity.HasMany(d => d.Roles).WithMany(p => p.Users)
-                .UsingEntity<Dictionary<string, object>>(
-                    "Aspnetuserrole",
-                    r => r.HasOne<Aspnetrole>().WithMany()
-                        .HasForeignKey("RoleId")
-                        .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId"),
-                    l => l.HasOne<Aspnetuser>().WithMany()
-                        .HasForeignKey("UserId")
-                        .HasConstraintName("FK_AspNetUserRoles_AspNetUsers_UserId"),
-                    j =>
-                    {
-                        j.HasKey("UserId", "RoleId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-                        j.ToTable("aspnetuserroles");
-                        j.HasIndex(new[] { "RoleId" }, "IX_AspNetUserRoles_RoleId");
-                        j.IndexerProperty<string>("UserId").HasMaxLength(95);
-                        j.IndexerProperty<string>("RoleId").HasMaxLength(95);
-                    });
         });
 
         modelBuilder.Entity<Aspnetuserclaim>(entity =>
@@ -188,26 +169,6 @@ public partial class WheelingfulContext : DbContext
             entity.Property(e => e.Status).HasColumnType("int(11)");
             entity.Property(e => e.Title).HasMaxLength(255);
             entity.Property(e => e.UpdatedAt).HasMaxLength(6);
-
-            entity.HasMany(d => d.Users).WithMany(p => p.Books)
-                .UsingEntity<Dictionary<string, object>>(
-                    "Authorship",
-                    r => r.HasOne<Aspnetuser>().WithMany()
-                        .HasForeignKey("UsersId")
-                        .HasConstraintName("FK_Authorship_AspNetUsers_UsersId"),
-                    l => l.HasOne<Book>().WithMany()
-                        .HasForeignKey("BooksId")
-                        .HasConstraintName("FK_Authorship_Books_BooksId"),
-                    j =>
-                    {
-                        j.HasKey("BooksId", "UsersId")
-                            .HasName("PRIMARY")
-                            .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
-                        j.ToTable("authorship");
-                        j.HasIndex(new[] { "UsersId" }, "IX_Authorship_UsersId");
-                        j.IndexerProperty<int>("BooksId").HasColumnType("int(11)");
-                        j.IndexerProperty<string>("UsersId").HasMaxLength(95);
-                    });
         });
 
         modelBuilder.Entity<Chapter>(entity =>
@@ -268,6 +229,42 @@ public partial class WheelingfulContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Reviews_AspNetUsers_UserId");
+        });
+
+        modelBuilder.Entity<Aspnetuserrole>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.RoleId }).HasName("PRIMARY");
+
+            entity.ToTable("aspnetuserroles");
+
+            entity.Property(e => e.UserId).HasMaxLength(95);
+            entity.Property(e => e.RoleId).HasMaxLength(95);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Roles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_AspNetUserRoles_AspNetUsers_UserId");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId");
+        });
+
+        modelBuilder.Entity<Authorship>(entity =>
+        {
+            entity.HasKey(e => new { e.BooksId, e.UsersId }).HasName("PRIMARY");
+
+            entity.ToTable("authorship");
+
+            entity.Property(e => e.UsersId).HasMaxLength(95);
+            entity.Property(e => e.BooksId).HasColumnType("int(11)");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Books)
+                .HasForeignKey(d => d.UsersId)
+                .HasConstraintName("FK_Authorship_AspNetUsers_UserId");
+
+            entity.HasOne(d => d.Book).WithMany(p => p.Users)
+                .HasForeignKey(d => d.BooksId)
+                .HasConstraintName("FK_Authorship_Books_BookId");
         });
 
         OnModelCreatingPartial(modelBuilder);
