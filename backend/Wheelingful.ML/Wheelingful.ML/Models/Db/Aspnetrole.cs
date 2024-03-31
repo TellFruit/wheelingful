@@ -15,5 +15,5 @@ public partial class Aspnetrole
 
     public virtual ICollection<Aspnetroleclaim> Aspnetroleclaims { get; set; } = new List<Aspnetroleclaim>();
 
-    public virtual ICollection<Aspnetuser> Users { get; set; } = new List<Aspnetuser>();
+    public virtual ICollection<Aspnetuserrole> Users { get; set; } = new List<Aspnetuserrole>();
 }

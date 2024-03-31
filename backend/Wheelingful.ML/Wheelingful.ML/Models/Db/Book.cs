@@ -25,5 +25,5 @@ public partial class Book
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-    public virtual ICollection<Aspnetuser> Users { get; set; } = new List<Aspnetuser>();
+    public virtual ICollection<Authorship> Users { get; set; } = new List<Authorship>();
 }
