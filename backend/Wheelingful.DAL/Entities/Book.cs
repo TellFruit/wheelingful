@@ -10,7 +10,8 @@ public sealed class Book : BaseEntity
     public BookCategoryEnum Category { get; set; }
     public BookStatusEnum Status { get; set; }
     public string CoverId { get; set; } = string.Empty;
+    public string UserId { get; set; } = string.Empty;
 
-    public List<AppUser> Users { get; set; } = [];
+    public AppUser User { get; set; } = null!;
     public List<Review> Reviews { get; set; } = [];
 }

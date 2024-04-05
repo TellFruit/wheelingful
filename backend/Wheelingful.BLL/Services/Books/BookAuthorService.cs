@@ -30,13 +30,8 @@ public class BookAuthorService(
             Description = request.Description,
             Category = request.Category,
             Status = request.Status,
+            UserId = currentUser.Id,
         };
-
-        var author = dbContext.Users
-            .AsTracking()
-            .First(u => u.Id == currentUser.Id);
-
-        newBook.Users.Add(author);
 
         dbContext.Add(newBook);
 

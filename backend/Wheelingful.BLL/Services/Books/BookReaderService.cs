@@ -27,16 +27,11 @@ public class BookReaderService(
             currentUser.Id, request);
 
         var query = dbContext.Books
-            .Include(b => b.Users)
+            .Include(b => b.User)
             .AsQueryable();
 
         var doFetchByCurrentUser = request.DoFetchByCurrentUser.HasValue
             && request.DoFetchByCurrentUser.Value;
-
-        if (doFetchByCurrentUser)
-        {
-            query = query.Where(b => b.Users.First().Id == currentUser.Id);
-        }
 
         var selected = query.Select(b => new FetchBookResponse
         {
@@ -45,8 +40,14 @@ public class BookReaderService(
             Description = b.Description,
             Category = b.Category,
             Status = b.Status,
-            CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id, b.CoverId)
+            CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId),
+            AuthorUserName = b.User.UserName!
         });
+
+        if (doFetchByCurrentUser)
+        {
+            query = query.Where(b => b.UserId == currentUser.Id);
+        }
 
         var fetchValue = () => selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
 
@@ -67,17 +68,20 @@ public class BookReaderService(
         return fetchValue();
     }
 
-    public Task<FetchBookResponse> GetBook(FetchBookRequest request)
+    public async Task<FetchBookResponse> GetBook(FetchBookRequest request)
     {
         logger.LogInformation("User {UserId} fetched the book: {@Request}",
             currentUser.Id, request);
 
+        var isReviewedByCurrentUser = await dbContext.Reviews
+            .AnyAsync(r => r.BookId == request.BookId 
+                        && r.UserId == currentUser.Id);
+
         var key = nameof(Book).ToCachePrefix(request.BookId);
 
-        return cacheService.GetAndSet(key, () =>
+        return await cacheService.GetAndSet(key, () =>
         {
             return dbContext.Books
-            .Include(b => b.Users)
             .Select(b => new FetchBookResponse
             {
                 Id = b.Id,
@@ -85,7 +89,9 @@ public class BookReaderService(
                 Description = b.Description,
                 Category = b.Category,
                 Status = b.Status,
-                CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id, b.CoverId)
+                CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId),
+                AuthorUserName = b.User.UserName!,
+                IsReviewedByCurrentUser = isReviewedByCurrentUser
             })
             .FirstAsync(b => b.Id == request.BookId);
         },

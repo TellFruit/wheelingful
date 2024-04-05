@@ -42,12 +42,19 @@ public static class DependencyInjection
     {
         var redisConnection = config.GetConnectionString("RedisConnection");
 
-        services.AddStackExchangeRedisCache(options => options.Configuration = redisConnection);
+        if (string.IsNullOrWhiteSpace(redisConnection))
+        {
+            services.AddScoped<ICacheService, FakeCacheService>();
+        }
+        else
+        {
+            services.AddStackExchangeRedisCache(options => options.Configuration = redisConnection);
 
-        services.AddSingleton<IConnectionMultiplexer>(
-            ConnectionMultiplexer
-                  .Connect(redisConnection!));
+            services.AddSingleton<IConnectionMultiplexer>(
+                ConnectionMultiplexer
+                      .Connect(redisConnection!));
 
-        services.AddScoped<ICacheService, RedisCacheService>();
+            services.AddScoped<ICacheService, RedisCacheService>();
+        }
     }
 }
