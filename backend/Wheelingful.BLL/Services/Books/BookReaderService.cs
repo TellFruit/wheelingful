@@ -26,17 +26,10 @@ public class BookReaderService(
         logger.LogInformation("User {UserId} fetched book list with parameters: {@Request}",
             currentUser.Id, request);
 
-        var query = dbContext.Books
-            .Include(b => b.Users)
-            .AsQueryable();
+        var query = dbContext.Books.AsQueryable();
 
         var doFetchByCurrentUser = request.DoFetchByCurrentUser.HasValue
             && request.DoFetchByCurrentUser.Value;
-
-        if (doFetchByCurrentUser)
-        {
-            query = query.Where(b => b.Users.First().Id == currentUser.Id);
-        }
 
         var selected = query.Select(b => new FetchBookResponse
         {
@@ -45,8 +38,13 @@ public class BookReaderService(
             Description = b.Description,
             Category = b.Category,
             Status = b.Status,
-            CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id, b.CoverId)
+            CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId)
         });
+
+        if (doFetchByCurrentUser)
+        {
+            query = query.Where(b => b.UserId == currentUser.Id);
+        }
 
         var fetchValue = () => selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
 
@@ -77,7 +75,6 @@ public class BookReaderService(
         return cacheService.GetAndSet(key, () =>
         {
             return dbContext.Books
-            .Include(b => b.Users)
             .Select(b => new FetchBookResponse
             {
                 Id = b.Id,
@@ -85,7 +82,7 @@ public class BookReaderService(
                 Description = b.Description,
                 Category = b.Category,
                 Status = b.Status,
-                CoverUrl = bookCover.GetCoverUrl(b.Id, b.Users.First().Id, b.CoverId)
+                CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId)
             })
             .FirstAsync(b => b.Id == request.BookId);
         },

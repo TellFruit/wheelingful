@@ -7,11 +7,6 @@ internal static class BuildModelExtension
 {
     public static void BuildBook(this ModelBuilder builder)
     {
-        builder.Entity<AppUser>()
-            .HasMany(u => u.Books)
-            .WithMany(b => b.Users)
-            .UsingEntity("Authorship");
-
         builder.Entity<Book>()
             .Property(b => b.Title)
             .HasMaxLength(255);
