@@ -42,7 +42,7 @@ public static class DependencyInjection
     {
         var redisConnection = config.GetConnectionString("RedisConnection");
 
-        if (string.IsNullOrEmpty(redisConnection))
+        if (string.IsNullOrWhiteSpace(redisConnection))
         {
             services.AddScoped<ICacheService, FakeCacheService>();
         }

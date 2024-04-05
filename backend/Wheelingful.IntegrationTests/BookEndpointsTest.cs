@@ -59,11 +59,8 @@ public class BookEndpointsTest : BaseTest
             Category = BookCategoryEnum.Original,
             Status = BookStatusEnum.Ongoing,
             CoverId = string.Empty,
+            UserId = newUserId
         };
-
-        var author = await db.Users.FindAsync(newUserId);
-        
-        newBook.Users.Add(author!);
 
         db.Add(newBook);
 
@@ -112,11 +109,8 @@ public class BookEndpointsTest : BaseTest
             Category = BookCategoryEnum.Original,
             Status = BookStatusEnum.Ongoing,
             CoverId = string.Empty,
+            UserId = DataConstants.AdminUserId
         };
-
-        var author = await db.Users.AsTracking().FirstAsync(u => u.Id == DataConstants.AdminUserId);
-
-        newBook.Users.Add(author!);
 
         db.Add(newBook);
 
@@ -152,7 +146,7 @@ public class BookEndpointsTest : BaseTest
                 Category = BookCategoryEnum.Original,
                 Status = BookStatusEnum.Ongoing,
                 CoverId = string.Empty,
-                Users = new() { await db.Users.AsTracking().FirstAsync(u => u.Id == newUserId) }
+                UserId = newUserId,
             },
             new Book
             {
@@ -161,7 +155,7 @@ public class BookEndpointsTest : BaseTest
                 Category = BookCategoryEnum.Original,
                 Status = BookStatusEnum.Ongoing,
                 CoverId = string.Empty,
-                Users = new() { await db.Users.AsTracking().FirstAsync(u => u.Id == DataConstants.AdminUserId) }
+                UserId = DataConstants.AdminUserId,
             },
         };
 
