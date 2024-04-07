@@ -45,9 +45,9 @@ public partial class Aspnetuser
 
     public virtual ICollection<Aspnetusertoken> Aspnetusertokens { get; set; } = new List<Aspnetusertoken>();
 
-    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
+    public virtual ICollection<Book> Books { get; set; } = new List<Book>();
 
-    public virtual ICollection<Authorship> Books { get; set; } = new List<Authorship>();
+    public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
     public virtual ICollection<Aspnetuserrole> Roles { get; set; } = new List<Aspnetuserrole>();
 }
