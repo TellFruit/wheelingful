@@ -21,9 +21,11 @@ public partial class Book
 
     public string CoverId { get; set; } = null!;
 
+    public string UserId { get; set; } = null!;
+
     public virtual ICollection<Chapter> Chapters { get; set; } = new List<Chapter>();
 
     public virtual ICollection<Review> Reviews { get; set; } = new List<Review>();
 
-    public virtual ICollection<Authorship> Users { get; set; } = new List<Authorship>();
+    public virtual Aspnetuser User { get; set; } = null!;
 }
