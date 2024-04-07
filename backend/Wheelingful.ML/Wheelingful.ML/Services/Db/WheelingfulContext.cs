@@ -36,10 +36,12 @@ public partial class WheelingfulContext : DbContext
 
     public virtual DbSet<Aspnetuserrole> Aspnetuserroles { get; set; }
 
-    public virtual DbSet<Authorship> Authorships { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-        => optionsBuilder.UseMySql("#{MYSQLCONNSTR_localdb}#", ServerVersion.Parse("5.7.44-mysql"));
+    {
+        optionsBuilder
+            .UseMySql("#{MYSQL_CONNECTION_STRING}#", ServerVersion.Parse("5.7.44-mysql"))
+            .UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
+    }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -101,6 +103,24 @@ public partial class WheelingfulContext : DbContext
             entity.Property(e => e.UserName).HasMaxLength(256);
         });
 
+        modelBuilder.Entity<Aspnetuserrole>(entity =>
+        {
+            entity.HasKey(e => new { e.UserId, e.RoleId }).HasName("PRIMARY");
+
+            entity.ToTable("aspnetuserroles");
+
+            entity.Property(e => e.UserId).HasMaxLength(95);
+            entity.Property(e => e.RoleId).HasMaxLength(95);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Roles)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_AspNetUserRoles_AspNetUsers_UserId");
+
+            entity.HasOne(d => d.Role).WithMany(p => p.Users)
+                .HasForeignKey(d => d.RoleId)
+                .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId");
+        });
+
         modelBuilder.Entity<Aspnetuserclaim>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PRIMARY");
@@ -159,6 +179,8 @@ public partial class WheelingfulContext : DbContext
 
             entity.ToTable("books");
 
+            entity.HasIndex(e => e.UserId, "IX_Books_UserId");
+
             entity.Property(e => e.Id).HasColumnType("int(11)");
             entity.Property(e => e.Category).HasColumnType("int(11)");
             entity.Property(e => e.CoverId)
@@ -169,6 +191,13 @@ public partial class WheelingfulContext : DbContext
             entity.Property(e => e.Status).HasColumnType("int(11)");
             entity.Property(e => e.Title).HasMaxLength(255);
             entity.Property(e => e.UpdatedAt).HasMaxLength(6);
+            entity.Property(e => e.UserId)
+                .HasMaxLength(95)
+                .HasDefaultValueSql("''");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Books)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Books_AspNetUsers_UserId");
         });
 
         modelBuilder.Entity<Chapter>(entity =>
@@ -229,42 +258,6 @@ public partial class WheelingfulContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Reviews)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Reviews_AspNetUsers_UserId");
-        });
-
-        modelBuilder.Entity<Aspnetuserrole>(entity =>
-        {
-            entity.HasKey(e => new { e.UserId, e.RoleId }).HasName("PRIMARY");
-
-            entity.ToTable("aspnetuserroles");
-
-            entity.Property(e => e.UserId).HasMaxLength(95);
-            entity.Property(e => e.RoleId).HasMaxLength(95);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Roles)
-                .HasForeignKey(d => d.UserId)
-                .HasConstraintName("FK_AspNetUserRoles_AspNetUsers_UserId");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
-                .HasConstraintName("FK_AspNetUserRoles_AspNetRoles_RoleId");
-        });
-
-        modelBuilder.Entity<Authorship>(entity =>
-        {
-            entity.HasKey(e => new { e.BooksId, e.UsersId }).HasName("PRIMARY");
-
-            entity.ToTable("authorship");
-
-            entity.Property(e => e.UsersId).HasMaxLength(95);
-            entity.Property(e => e.BooksId).HasColumnType("int(11)");
-
-            entity.HasOne(d => d.User).WithMany(p => p.Books)
-                .HasForeignKey(d => d.UsersId)
-                .HasConstraintName("FK_Authorship_AspNetUsers_UserId");
-
-            entity.HasOne(d => d.Book).WithMany(p => p.Users)
-                .HasForeignKey(d => d.BooksId)
-                .HasConstraintName("FK_Authorship_Books_BookId");
         });
 
         OnModelCreatingPartial(modelBuilder);

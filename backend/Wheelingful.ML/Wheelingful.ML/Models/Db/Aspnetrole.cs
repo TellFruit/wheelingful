@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Wheelingful.ML.Models.Db;
+﻿namespace Wheelingful.ML.Models.Db;
 
 public partial class Aspnetrole
 {

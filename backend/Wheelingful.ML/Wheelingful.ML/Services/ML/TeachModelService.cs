@@ -2,6 +2,7 @@
 using Microsoft.ML.Trainers;
 using Wheelingful.ML.Constants;
 using Wheelingful.ML.Models.ML;
+using Wheelingful.ML.Services.Db;
 
 namespace Wheelingful.ML.Services.ML;
 
@@ -24,13 +25,21 @@ public class TeachModelService
 
     public static (IDataView training, IDataView test) LoadData(MLContext mlContext)
     {
-        var trainingDataPath = CsvConstants.FileWithTrainingFaztorizationData;
-        var testDataPath = CsvConstants.FileWithTestingFaztorizationData;
+        using var dbContext = new WheelingfulContext();
 
-        IDataView trainingDataView = mlContext.Data.LoadFromTextFile<BookRating>(trainingDataPath, hasHeader: true, separatorChar: ',');
-        IDataView testDataView = mlContext.Data.LoadFromTextFile<BookRating>(testDataPath, hasHeader: true, separatorChar: ',');
+        var reviews = dbContext.Reviews.Select(r => new BookRating
+        {
+          BookId = r.BookId,
+          UserId = r.UserId,
+          ReviewScore = r.Score,
+        }).ToList();
 
-        return (trainingDataView, testDataView);
+        var splitData = mlContext.Data.TrainTestSplit(mlContext.Data.LoadFromEnumerable(reviews), testFraction: 0.2);
+
+        var r = splitData.TrainSet.Preview();
+        var u = splitData.TestSet.Preview();
+
+        return (splitData.TrainSet, splitData.TestSet);
     }
 
     public static ITransformer BuildAndTrainModel(MLContext mlContext, IDataView trainingDataView)
@@ -43,7 +52,7 @@ public class TeachModelService
             MatrixColumnIndexColumnName = "UserIdEncoded",
             MatrixRowIndexColumnName = "BookIdEncoded",
             LabelColumnName = "ReviewScore",
-            NumberOfIterations = 20,
+            NumberOfIterations = 10,
             ApproximationRank = 100
         };
 
