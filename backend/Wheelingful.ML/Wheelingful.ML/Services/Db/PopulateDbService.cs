@@ -3,7 +3,6 @@ using CsvHelper;
 using CsvHelper.Configuration;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using System.Text;
 using Wheelingful.ML.Constants;
 using Wheelingful.ML.Models.Csv;
 using Wheelingful.ML.Models.Db;
@@ -29,9 +28,28 @@ public class PopulateDbService
         _faker = new Faker();
     }
 
+    public void RunPopulate(string? dataSetName)
+    {
+        switch (dataSetName)
+        {
+            case "amazon":
+                PopulateWithAmazonReviews();
+                break;
+            case "crossing":
+                PopulateWithCrossingReviews();
+                break;
+            case "netflix":
+                PopulateWithNetflixReviews();
+                break;
+            default:
+                Console.WriteLine("There is no such dataset. Please, try again.");
+                break;
+        }
+    }
+
     public void PopulateWithAmazonReviews()
     {
-        using var streamReader = new StreamReader(CsvConstants.FileToPopulateWithAmazonData);
+        using var streamReader = new StreamReader(CsvConstants.FileWithAmazonData);
 
         using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
 
@@ -72,19 +90,129 @@ public class PopulateDbService
             }
 
             var bookId = ParseBookId(record.BookId, out bool isNewBook);
-            var book = record.ToBook(bookId, _random.Next(0, 2), now);
+            var book = record.ToBook(bookId, userId, _random.Next(0, 2), now);
 
             if (isNewBook)
             {
                 dbContext.Add(book);
-                dbContext.Add(new Authorship
-                {
-                    BooksId = bookId,
-                    UsersId = userId,
-                });
             }
 
             var review = record.ToReview(bookId, userId, now);
+
+            dbContext.Add(review);
+        }
+
+        dbContext.SaveChanges();
+        
+        Console.WriteLine("DONE!");
+        Console.WriteLine(countInvalid + " Invalid");
+    }
+
+    public void PopulateWithCrossingReviews()
+    {
+        using var streamReader = new StreamReader(CsvConstants.FileWithCrossingData);
+
+        using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+
+        var records = csvReader.GetRecords<CrossingReviewRecord>();
+
+        int countInvalid = 0;
+
+        using var dbContext = new WheelingfulContext();
+
+        foreach (var record in records)
+        {
+            var now = DateTime.UtcNow;
+
+            var email = _faker.Internet.Email(uniqueSuffix: Guid.NewGuid().ToString());
+            var userId = ParseUserId(record.UserId, out bool isNewUser);
+            var user = record.ToUser(userId, email, now);
+
+            if (isNewUser)
+            {
+                dbContext.Add(user);
+                dbContext.AddRange(new Aspnetuserrole
+                {
+                    UserId = userId,
+                    RoleId = DbConstants.ReaderRoleId
+                },
+                new Aspnetuserrole
+                {
+                    UserId = userId,
+                    RoleId = DbConstants.AuthorRoleId
+                });
+            }
+
+            var bookId = ParseBookId(record.BookId, out bool isNewBook);
+            var book = record.ToBook(bookId, userId, _random.Next(0, 2), now);
+
+            if (isNewBook)
+            {
+                dbContext.Add(book);
+            }
+
+            var reviewTitle = _faker.Lorem.Sentence(5);
+            var reviewText = _faker.Rant.Review("book");
+
+            var review = record.ToReview(bookId, userId, reviewTitle, reviewText, now);
+
+            dbContext.Add(review);
+        }
+
+        dbContext.SaveChanges();
+
+        Console.WriteLine("DONE!");
+        Console.WriteLine(countInvalid + " Invalid");
+    }
+
+    public void PopulateWithNetflixReviews()
+    {
+        using var streamReader = new StreamReader(CsvConstants.FileWithNetflixData);
+
+        using var csvReader = new CsvReader(streamReader, CultureInfo.InvariantCulture);
+
+        var records = csvReader.GetRecords<NetflixReviewRecord>();
+
+        int countInvalid = 0;
+
+        using var dbContext = new WheelingfulContext();
+
+        foreach (var record in records)
+        {
+            var now = DateTime.UtcNow;
+
+            var email = _faker.Internet.Email(uniqueSuffix: Guid.NewGuid().ToString());
+            var userId = ParseUserId(record.UserId, out bool isNewUser);
+            var user = record.ToUser(userId, email, now);
+
+            if (isNewUser)
+            {
+                dbContext.Add(user);
+                dbContext.AddRange(new Aspnetuserrole
+                {
+                    UserId = userId,
+                    RoleId = DbConstants.ReaderRoleId
+                },
+                new Aspnetuserrole
+                {
+                    UserId = userId,
+                    RoleId = DbConstants.AuthorRoleId
+                });
+            }
+
+            var bookId = ParseBookId(record.BookId, out bool isNewBook);
+            var bookTitle = _faker.Lorem.Sentence(4);
+            var book = record.ToBook(bookId, userId, _random.Next(0, 2), now, bookTitle);
+
+            if (isNewBook)
+            {
+                dbContext.Add(book);
+            }
+
+            var reviewText = _faker.Rant.Review("book");
+            var reviewTitle = _faker.Lorem.Sentence(5);
+
+            var review = record.ToReview(bookId, userId, now, reviewTitle, reviewText);
 
             dbContext.Add(review);
         }
@@ -97,7 +225,7 @@ public class PopulateDbService
 
     public void PopulateWitParsedReviews()
     {
-        using var streamReader = new StreamReader(CsvConstants.FileToPopulateWithFullParsedData);
+        using var streamReader = new StreamReader(CsvConstants.FileWithFullParsedData);
 
         List<string> badRecords = new List<string>();
         var config = new CsvConfiguration(CultureInfo.InvariantCulture)
@@ -137,11 +265,6 @@ public class PopulateDbService
             if (IsNewParsedBook(book.Id))
             {
                 dbContext.Add(book);
-                dbContext.Add(new Authorship
-                {
-                    BooksId = book.Id,
-                    UsersId = user.Id,
-                });
             }
 
             var review = record.ToReview();
@@ -156,11 +279,11 @@ public class PopulateDbService
 
     public void ExportFullData()
     {
-        var parsedDataFileName = CsvConstants.FileToPopulateWithFullParsedData;
+        var parsedDataFileName = CsvConstants.FileWithFullParsedData;
 
         using var dbContext = new WheelingfulContext();
 
-        var mySqlSecurePath = GetSecureFilePrive(dbContext);
+        var mySqlSecurePath = GetSecureFilePriv(dbContext);
 
         var parsedDataFilePath = mySqlSecurePath + parsedDataFileName;
 
@@ -169,6 +292,7 @@ public class PopulateDbService
                 b.Id AS BookId,
                 b.Title AS BookTitle,
                 b.Status AS BookStatus,
+                b.UserId AS BookAuthorId,
                 u.Id AS UserId,
                 u.Email AS UserEmail,
                 r.Score AS ReviewScore,
@@ -184,37 +308,9 @@ public class PopulateDbService
             LINES TERMINATED BY '\r\n';");
 
         string[] columnNames = {
-        "BookId", "BookTitle", "BookStatus", "UserId", "UserEmail",
+        "BookId", "BookTitle", "BookStatus", "BookAuthorId", "UserId", "UserEmail",
         "ReviewScore", "ReviewTitle", "ReviewText", "CreatedAt"
         };
-
-        MoveCsvExport(columnNames, parsedDataFileName, parsedDataFilePath);
-    }
-
-    public void ExportLearningData()
-    {
-        var parsedDataFileName = CsvConstants.FileToPopulateWithLearningParsedData;
-
-        using var dbContext = new WheelingfulContext();
-
-        var mySqlSecurePath = GetSecureFilePrive(dbContext);
-
-        var parsedDataFilePath = mySqlSecurePath + parsedDataFileName;
-
-        dbContext.Database.ExecuteSql($@"
-            SELECT 
-                b.Id AS BookId,
-                u.Id AS UserId,
-                r.Score AS ReviewScore
-            FROM reviews r
-            INNER JOIN books b ON r.BookId = b.Id
-            INNER JOIN aspnetusers u ON r.UserId = u.Id
-            INTO OUTFILE {parsedDataFilePath}
-            FIELDS TERMINATED BY ',' 
-            OPTIONALLY ENCLOSED BY '""'
-            LINES TERMINATED BY '\r\n';");
-
-        string[] columnNames = { "BookId", "UserId", "ReviewScore" };
 
         MoveCsvExport(columnNames, parsedDataFileName, parsedDataFilePath);
     }
@@ -229,7 +325,6 @@ public class PopulateDbService
             TRUNCATE TABLE wheelingful.aspnetusers;
             TRUNCATE TABLE wheelingful.aspnetuserroles;
             TRUNCATE TABLE wheelingful.books;
-            TRUNCATE TABLE wheelingful.authorship;
             TRUNCATE TABLE wheelingful.reviews;
 
             SET FOREIGN_KEY_CHECKS = 1;
@@ -238,7 +333,7 @@ public class PopulateDbService
         Console.WriteLine("DONE!");
     }
 
-    private string GetSecureFilePrive(WheelingfulContext dbContext)
+    private string GetSecureFilePriv(WheelingfulContext dbContext)
     {
         return dbContext.Database
             .SqlQuery<string>($"SELECT @@secure_file_priv;")

@@ -1,8 +1,10 @@
 ﻿using Wheelingful.ML.Services.Db;
+using Wheelingful.ML.Services.ML;
 
 bool running = true;
 
 var populateService = new PopulateDbService();
+var teachModelService = new TeachModelService();
 
 while (running)
 {
@@ -10,11 +12,10 @@ while (running)
     Console.WriteLine("The list of available commands:");
     Console.WriteLine("1. Populate database with dataset");
     Console.WriteLine("2. Export full parsed data");
-    Console.WriteLine("3. Export learning parsed data");
-    Console.WriteLine("4. Truncate affected tables");
-    Console.WriteLine("5. Populate database with parsed data");
-    Console.WriteLine("6. Generate recommendations model");
-    Console.WriteLine("7. Exit");
+    Console.WriteLine("3. Truncate affected tables");
+    Console.WriteLine("4. Populate database with parsed data");
+    Console.WriteLine("5. Generate recommendations model");
+    Console.WriteLine("6. Exit");
     Console.WriteLine();
 
     Console.Write("Please enter your choice: ");
@@ -26,30 +27,28 @@ while (running)
         switch (choice)
         {
             case "1":
+                Console.Write("Enter the name of the dataset: ");
+                var datasetName = Console.ReadLine();
                 Console.WriteLine("Populating...");
-                populateService.PopulateWithAmazonReviews();
+                populateService.RunPopulate(datasetName);
                 break;
             case "2":
                 Console.WriteLine("Exporting...");
                 populateService.ExportFullData();
                 break;
             case "3":
-                Console.WriteLine("Exporting...");
-                populateService.ExportLearningData();
-                break;
-            case "4":
                 Console.WriteLine("Truncate...");
                 populateService.TruncateAffectedTables();
                 break;
-            case "5":
+            case "4":
                 Console.WriteLine("Populating...");
                 populateService.PopulateWitParsedReviews();
                 break;
-            case "6":
+            case "5":
                 Console.WriteLine("Learning...");
-                Console.WriteLine("Not implemented!");
+                teachModelService.StartLearning();
                 break;
-            case "7":
+            case "6":
                 Console.WriteLine("Exiting...");
                 running = false;
                 break;

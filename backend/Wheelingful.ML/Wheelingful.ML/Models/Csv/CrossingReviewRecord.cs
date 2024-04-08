@@ -1,33 +1,27 @@
 ﻿using CsvHelper.Configuration.Attributes;
+using System;
 using Wheelingful.ML.Models.Db;
 
 namespace Wheelingful.ML.Models.Csv;
 
-public class AmazonReviewRecord
+public class CrossingReviewRecord
 {
-    [Name("Id")]
+    [Name("isbn")]
     public required string BookId { get; set; }
-    [Name("Title")]
+    [Name("book_title")]
     public required string BookTitle { get; set; }
-    [Name("User_id")]
+    [Name("user_id")]
     public required string UserId { get; set; }
-    [Name("review/score")]
-    public double ReviewScore { get; set; }
-    [Name("review/summary")]
-    public required string ReviewTitle { get; set; }
-    [Name("review/text")]
-    public required string ReviewText { get; set; }
 
     public bool IsValidRecord()
     {
-        return !string.IsNullOrEmpty(BookId) 
-            && !string.IsNullOrEmpty(UserId)
-            && ReviewScore > 0 && ReviewScore <= 5;
+        return !string.IsNullOrEmpty(BookId)
+            && !string.IsNullOrEmpty(UserId);
     }
 
     public Book ToBook(int bookId, string userId, int status, DateTime date)
     {
-        var truncatedTitle =  BookTitle.Length > 255 ? BookTitle[..255] : BookTitle;
+        var truncatedTitle = BookTitle.Length > 255 ? BookTitle[..255] : BookTitle;
 
         return new Book
         {
@@ -67,20 +61,40 @@ public class AmazonReviewRecord
         };
     }
 
-    public Review ToReview(int bookId, string userId, DateTime date)
+    public Review ToReview(int bookId, string userId, string reviewTitle, string reviewText, DateTime date)
     {
-        var truncatedTitle = ReviewTitle.Length > 255 ? ReviewTitle[..255] : ReviewTitle;
-        var truncatedText = ReviewText.Length > 1000 ? ReviewText[..1000] : ReviewText;
+        var truncatedTitle = reviewTitle.Length > 255 ? reviewTitle[..255] : reviewTitle;
+        var truncatedText = reviewText.Length > 1000 ? reviewText[..1000] : reviewText;
 
         return new Review
         {
             BookId = bookId,
             UserId = userId,
-            Score = (int)ReviewScore,
+            Score = GenerateRating(),
             Title = truncatedTitle,
             Text = truncatedText,
             CreatedAt = date,
             UpdatedAt = date,
         };
+    }
+
+    private int GenerateRating()
+    {
+        double[] probabilities = { 0.1, 0.1, 0.3, 0.3, 0.2 };
+
+        double randomNumber = new Random().NextDouble();
+        double cumulativeProbability = 0;
+
+        for (int i = 0; i < probabilities.Length; i++)
+        {
+            cumulativeProbability += probabilities[i];
+
+            if (randomNumber < cumulativeProbability)
+            {
+                return i + 1;
+            }
+        }
+
+        return 5;
     }
 }

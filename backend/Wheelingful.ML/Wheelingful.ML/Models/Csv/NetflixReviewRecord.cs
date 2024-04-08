@@ -3,31 +3,20 @@ using Wheelingful.ML.Models.Db;
 
 namespace Wheelingful.ML.Models.Csv;
 
-public class AmazonReviewRecord
+public class NetflixReviewRecord
 {
-    [Name("Id")]
+    [Name("bookId")]
     public required string BookId { get; set; }
-    [Name("Title")]
-    public required string BookTitle { get; set; }
-    [Name("User_id")]
+
+    [Name("userId")]
     public required string UserId { get; set; }
-    [Name("review/score")]
+
+    [Name("rating")]
     public double ReviewScore { get; set; }
-    [Name("review/summary")]
-    public required string ReviewTitle { get; set; }
-    [Name("review/text")]
-    public required string ReviewText { get; set; }
 
-    public bool IsValidRecord()
+    public Book ToBook(int bookId, string userId, int status, DateTime date, string bookTitle)
     {
-        return !string.IsNullOrEmpty(BookId) 
-            && !string.IsNullOrEmpty(UserId)
-            && ReviewScore > 0 && ReviewScore <= 5;
-    }
-
-    public Book ToBook(int bookId, string userId, int status, DateTime date)
-    {
-        var truncatedTitle =  BookTitle.Length > 255 ? BookTitle[..255] : BookTitle;
+        var truncatedTitle = bookTitle.Length > 255 ? bookTitle[..255] : bookTitle;
 
         return new Book
         {
@@ -67,10 +56,10 @@ public class AmazonReviewRecord
         };
     }
 
-    public Review ToReview(int bookId, string userId, DateTime date)
+    public Review ToReview(int bookId, string userId, DateTime date, string reviewTitle, string reviewText)
     {
-        var truncatedTitle = ReviewTitle.Length > 255 ? ReviewTitle[..255] : ReviewTitle;
-        var truncatedText = ReviewText.Length > 1000 ? ReviewText[..1000] : ReviewText;
+        var truncatedTitle = reviewTitle.Length > 255 ? reviewTitle[..255] : reviewTitle;
+        var truncatedText = reviewText.Length > 1000 ? reviewText[..1000] : reviewText;
 
         return new Review
         {
