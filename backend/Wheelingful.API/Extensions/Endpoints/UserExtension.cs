@@ -17,7 +17,7 @@ public static class UserExtension
     public static void MapUserApi(this IEndpointRouteBuilder endpoints)
     {
         endpoints.MapPost("/current/books/{bookId}/reviews", async Task<Results<Created, ValidationProblem>> (
-             [FromBody] CreateReviewBinding request, [FromServices] IMediator mediator) =>
+             [AsParameters] CreateReviewBinding request, [FromServices] IMediator mediator) =>
         {
             await mediator.Send(request.To());
 

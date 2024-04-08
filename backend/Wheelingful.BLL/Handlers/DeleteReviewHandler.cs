@@ -32,8 +32,6 @@ public class DeleteReviewHandler(
 
         var listPrefix = nameof(Review).ToCachePrefix();
 
-        var key = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
-
-        await cacheService.RemoveByKey(key);
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 }

@@ -36,8 +36,6 @@ public class UpdateReviewHandler(
 
         var listPrefix = nameof(Review).ToCachePrefix();
 
-        var key = CacheHelper.GetCacheKey(listPrefix, new { request.BookId });
-
-        await cacheService.RemoveByPrefix(key);
+        await cacheService.RemoveByPrefix(listPrefix);
     }
 }
