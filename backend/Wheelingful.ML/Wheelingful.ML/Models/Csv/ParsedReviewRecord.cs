@@ -11,6 +11,8 @@ public class ParsedReviewRecord
     public required string BookTitle { get; set; }
     [Name("BookStatus")]
     public required int BookStatus { get; set; }
+    [Name("BookAuthorId")]
+    public required string BookAuthorId { get; set; }
     [Name("UserId")]
     public required string UserId { get; set; }
     [Name("UserEmail")]
@@ -36,6 +38,7 @@ public class ParsedReviewRecord
             CreatedAt = CreatedAt,
             UpdatedAt = CreatedAt,
             CoverId = string.Empty,
+            UserId = UserId,
         };
     }
 
