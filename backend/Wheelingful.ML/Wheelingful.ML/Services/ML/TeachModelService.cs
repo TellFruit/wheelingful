@@ -52,7 +52,7 @@ public class TeachModelService
             MatrixColumnIndexColumnName = "UserIdEncoded",
             MatrixRowIndexColumnName = "BookIdEncoded",
             LabelColumnName = "ReviewScore",
-            NumberOfIterations = 10,
+            NumberOfIterations = 20,
             ApproximationRank = 100
         };
 
@@ -80,7 +80,7 @@ public class TeachModelService
         Console.WriteLine("=============== Making a prediction ===============");
         var predictionEngine = mlContext.Model.CreatePredictionEngine<BookRating, BookRatingPrediction>(model);
 
-        var testInput = new BookRating { UserId = "6e094ee3-7d99-41d0-b285-6d9e274f18a2", BookId = 10 };
+        var testInput = new BookRating { UserId = "00518cca-dab0-4433-bc92-8b03bc26495f", BookId = 10 };
 
         var movieRatingPrediction = predictionEngine.Predict(testInput);
 
