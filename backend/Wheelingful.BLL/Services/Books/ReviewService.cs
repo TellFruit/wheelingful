@@ -49,7 +49,10 @@ public class ReviewService(
             Text = r.Text,
             Title = r.Title,
             Score = r.Score,
+            CreatedAt = r.CreatedAt.ToString("M/d/yyyy, h:mm tt"),
         });
+
+        selected = selected.OrderByDescending(r => r.UserId == currentUser.Id);
 
         var fetchValue = () => selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
 
@@ -57,11 +60,11 @@ public class ReviewService(
         {
             var prefix = nameof(Review).ToCachePrefix();
 
-            var key = CacheHelper.GetCacheKey(prefix, request);
+            var key = CacheHelper.GetCacheKey(prefix, new { request.BookId });
 
             if (doFetchByCurrentUser)
             {
-                key = CacheHelper.GetCacheKey(prefix, new { request, currentUser.Id });
+                key = CacheHelper.GetCacheKey(prefix, new { request.BookId, currentUser.Id });
             }
 
             return cacheService.GetAndSet(key, fetchValue, CacheHelper.DefaultCacheExpiration);
@@ -89,6 +92,7 @@ public class ReviewService(
                 Text = r.Text,
                 Title = r.Title,
                 Score = r.Score,
+                CreatedAt = r.CreatedAt.ToString("M/d/yyyy, h:mm tt"),
             })
             .FirstAsync(r => r.BookId == request.BookId && r.UserId == currentUser.Id);
         },
