@@ -1,21 +1,6 @@
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from '../../../auth';
 
-// eslint-disable-next-line no-unused-vars
-// import { setReviewed, setNotReviewed } from '../slices/reviewSlice'
-
-// async function onPublishReviewQueryStarted(arg, { dispatch, queryFulfilled }) {
-//   try {
-//     const { data } = await queryFulfilled;
-//     if (data) {
-//       dispatch(setReviewed());
-//     }
-//     dispatch(setReviewed());
-//   } catch (error) {
-//     // TODO: Remove throwing error in production
-//     console.error(error);
-//   }
-// }
 
 export const publishReviewApi = createApi({
   reducerPath: "publishReviewApi",
@@ -35,7 +20,20 @@ export const publishReviewApi = createApi({
             method: "POST",
           };
         },
-        // onQueryStarted: onPublishReviewQueryStarted,
+      }),
+      updateReview: builder.mutation({
+        invalidatesTags: ['Review'],
+        query: (review) => {
+          return {
+            url: `/users/current/books/${review.bookId}/reviews`,
+            body: {
+              score: review.score,
+              title: review.title,
+              text: review.text,
+            },
+            method: "PUT",
+          };
+        },
       }),
       getReviewByBook: builder.query({
         providesTags: ['Review'],
@@ -54,9 +52,22 @@ export const publishReviewApi = createApi({
             method: "DELETE",
           };
         },
+      }),
+      fetchReviewsByBook: builder.query({
+        providesTags: ['Review'],
+        query: (pagination) => {
+          return {
+            url: `/books/${pagination.bookId}/reviews`,
+            params: {
+              pageNumber: pagination.pageNumber,
+              pageSize: pagination.pageSize,
+            },
+            method: 'GET',
+          };
+        },
       })
     };
   },
 });
 
-export const { usePublishReviewMutation, useGetReviewByBookQuery, useDeleteReviewByBookMutation } = publishReviewApi;
+export const { usePublishReviewMutation, useUpdateReviewMutation, useGetReviewByBookQuery, useDeleteReviewByBookMutation, useFetchReviewsByBookQuery } = publishReviewApi;

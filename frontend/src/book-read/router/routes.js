@@ -5,7 +5,8 @@ import BrowseBooks from '../components/browse-books.page';
 import ViewBook from '../components/view-book.page';
 import ViewChapter from '../components/view-chapter';
 
-import PublishReview from '../components/publish-review.page';
+import PublishReview from '../components/review-create.page';
+import UpdateReview from '../components/review-update.page';
 
 export default function ReadRouter() {
   return (
@@ -17,6 +18,7 @@ export default function ReadRouter() {
         />
         <Route path={READ_CONFIG.routes.readBook} element={<ViewBook />} />
         <Route path={READ_CONFIG.routes.publishReview} element={<PublishReview />} />
+        <Route path={READ_CONFIG.routes.updateReview} element={<UpdateReview />} />
         <Route
           path={READ_CONFIG.routes.readChapter}
           element={<ViewChapter />}

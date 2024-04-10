@@ -11,7 +11,7 @@ import {
   ListItemText,
   Divider,
 } from "@mui/material";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import { Link, Outlet, useParams } from "react-router-dom";
 import { READ_CONFIG } from "../configuration/read.config";
@@ -27,7 +27,8 @@ export default function ReadDrawer() {
   const { bookId } = useParams();
   const { isSignedIn } = useSelector((state) => state.authSlice);
 
-  const { data, error, isFetching, isError } = useGetReviewByBookQuery(bookId);
+  const { data, error, isFetching, isError, isSuccess } = useGetReviewByBookQuery(bookId);
+  
   const [deleteReview] = useDeleteReviewByBookMutation();
 
   if (!(bookId && isSignedIn)) {
@@ -94,11 +95,11 @@ export default function ReadDrawer() {
                 <ListItemText primary={"Browse books"} />
               </ListItemButton>
             </ListItem>
-            {!data ? (
+            {!isSuccess ? (
               <ListItem
                 component={Link}
                 sx={ListItemStyle}
-                to={`/${READ_CONFIG.routes.group}/${bookId}/review`}
+                to={`/${READ_CONFIG.routes.group}/${bookId}/review/new`}
               >
                 <ListItemButton>
                   <ListItemIcon>
@@ -113,7 +114,7 @@ export default function ReadDrawer() {
                 <ListItem
                   component={Link}
                   sx={ListItemStyle}
-                  to={`/${READ_CONFIG.routes.group}/${bookId}/review`}
+                  to={`/${READ_CONFIG.routes.group}/${bookId}/review/update`}
                 >
                   <ListItemButton>
                     <ListItemIcon>

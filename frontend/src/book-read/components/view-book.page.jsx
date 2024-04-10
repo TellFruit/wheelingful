@@ -11,7 +11,7 @@ import { SHARED_CONFIG, renderValidationErrorsObject } from "../../shared";
 import {
   useFetchBooksByIdQuery,
   useFetchChaptersByBookQuery,
-} from "../store/apis/read.api";
+} from "../store/apis/read";
 import Reviews from "./reviews.component";
 import { READ_CONFIG } from "../configuration/read.config";
 

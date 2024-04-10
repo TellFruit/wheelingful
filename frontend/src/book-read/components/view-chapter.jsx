@@ -9,7 +9,7 @@ import {
   Box,
 } from '@mui/material';
 import Markdown from 'react-markdown';
-import { useFetchChapterByIdQuery } from '../store/apis/read.api';
+import { useFetchChapterByIdQuery } from '../store/apis/read';
 import { READ_CONFIG } from '../configuration/read.config';
 
 export default function ViewChapter() {

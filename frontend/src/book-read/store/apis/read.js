@@ -46,19 +46,6 @@ export const readApi = createApi({
           };
         },
       }),
-      fetchReviewsByBook: builder.query({
-        providesTags: ['Review'],
-        query: (pagination) => {
-          return {
-            url: `/books/${pagination.bookId}/reviews`,
-            params: {
-              pageNumber: pagination.pageNumber,
-              pageSize: pagination.pageSize,
-            },
-            method: 'GET',
-          };
-        },
-      })
     };
   },
 });
@@ -68,5 +55,4 @@ export const {
   useFetchBooksByIdQuery,
   useFetchChaptersByBookQuery,
   useFetchChapterByIdQuery,
-  useFetchReviewsByBookQuery,
 } = readApi;

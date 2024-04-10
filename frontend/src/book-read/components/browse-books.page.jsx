@@ -1,4 +1,4 @@
-import { useFetchBooksFilteredQuery } from '../store/apis/read.api';
+import { useFetchBooksFilteredQuery } from '../store/apis/read';
 import { useState } from 'react';
 import { BookPaginatedList, SHARED_CONFIG } from '../../shared';
 import { READ_CONFIG } from '../configuration/read.config';

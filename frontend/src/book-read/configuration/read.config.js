@@ -4,6 +4,7 @@ export const READ_CONFIG = {
     browseBooks: 'list',
     readBook: ':bookId',
     readChapter: ':bookId/chapters/:chapterId',
-    publishReview: ':bookId/review'
+    publishReview: ':bookId/review/new',
+    updateReview: ':bookId/review/update',
   },
 };
