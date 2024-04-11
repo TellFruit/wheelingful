@@ -1,19 +1,19 @@
-import { Paper, Box, Stack, Typography, Alert, Button } from "@mui/material";
-import Grid from "@mui/material/Unstable_Grid2";
-import { useParams, useNavigate } from "react-router";
-import Markdown from "react-markdown";
-import AutoStoriesIcon from "@mui/icons-material/AutoStories";
-import NotificationAddIcon from "@mui/icons-material/NotificationAdd";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import ChaptersByBook from "./chapters-by-book.component";
-import { SHARED_CONFIG, renderValidationErrorsObject } from "../../shared";
+import { Paper, Box, Stack, Typography, Alert, Button } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import { useParams, useNavigate } from 'react-router';
+import Markdown from 'react-markdown';
+import AutoStoriesIcon from '@mui/icons-material/AutoStories';
+import NotificationAddIcon from '@mui/icons-material/NotificationAdd';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import ChaptersByBook from './chapters-by-book.component';
+import { SHARED_CONFIG, renderValidationErrorsObject } from '../../shared';
 import {
   useFetchBooksByIdQuery,
   useFetchChaptersByBookQuery,
-} from "../store/apis/read";
-import Reviews from "./reviews.component";
-import { READ_CONFIG } from "../configuration/read.config";
+} from '../store/apis/read';
+import Reviews from './reviews.component';
+import { READ_CONFIG } from '../configuration/read.config';
 
 export default function ViewBook() {
   const { bookId } = useParams();
@@ -67,24 +67,24 @@ export default function ViewBook() {
         <Grid lg={3}>
           <Paper elevation={6}>
             <Box
-              sx={{ overflow: "hidden", textAlign: "center", paddingTop: 1 }}
+              sx={{ overflow: 'hidden', textAlign: 'center', paddingTop: 1 }}
             >
               <img
                 src={book.coverUrl}
                 alt="[Book cover image is displayed here]"
-                style={{ width: "90%", height: "auto" }}
+                style={{ width: '90%', height: 'auto' }}
               ></img>
             </Box>
           </Paper>
         </Grid>
         <Grid lg={5}>
-          <Stack height={"100%"} spacing={2}>
+          <Stack height={'100%'} spacing={2}>
             <Paper elevation={6} sx={{ padding: 2 }}>
               <Typography variant="h4">{book.title}</Typography>
             </Paper>
             <Paper elevation={6} sx={{ flexGrow: 1, padding: 2 }}>
-              <Stack height={"100%"}>
-                <Stack direction={"row"} spacing={1}>
+              <Stack height={'100%'}>
+                <Stack direction={'row'} spacing={1}>
                   <Typography variant="body2" color="textSecondary">
                     {book.category}
                   </Typography>
@@ -94,7 +94,7 @@ export default function ViewBook() {
                 </Stack>
                 <Box>
                   <Typography variant="body2" component="div">
-                    <Markdown components={{ h1: "h3", h2: "h3" }}>
+                    <Markdown components={{ h1: 'h3', h2: 'h3' }}>
                       {book.description}
                     </Markdown>
                   </Typography>
@@ -115,7 +115,7 @@ export default function ViewBook() {
               >
                 Mark as not interested
               </Button>
-              <Stack direction={"row"} spacing={2}>
+              <Stack direction={'row'} spacing={2}>
                 <Button
                   variant="outlined"
                   color="primary"

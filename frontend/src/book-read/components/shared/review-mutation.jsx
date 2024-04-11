@@ -1,5 +1,4 @@
 import {
-  //   Box,
   Paper,
   Rating,
   TextField,
@@ -8,28 +7,28 @@ import {
   Typography,
   Container,
   Alert,
-} from "@mui/material";
-import { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+} from '@mui/material';
+import { useState, useEffect } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import Markdown from 'react-markdown';
 
 const initialFormState = {
   score: 0,
-  title: "",
-  text: "",
+  title: '',
+  text: '',
 };
 
 export default function ReviewMutationComponent({
   onSubmit,
-  //   onDelete,
-  //   headerTitle,
   mutationTitle,
   error,
   review,
-  //   isLoading,
+  isLoading,
   isSuccess,
   isError,
 }) {
   const [formState, setFormState] = useState(initialFormState);
+  const [showMarkdown, setShowMarkdown] = useState(false);
   const { bookId } = useParams();
   const navigate = useNavigate();
 
@@ -50,33 +49,37 @@ export default function ReviewMutationComponent({
     }, [score, title, text]);
   }
 
-  function handleRatingChange(event, value) {
+  const handleRatingChange = (event, value) => {
     setFormState({
       ...formState,
       score: value,
     });
-  }
+  };
 
-  function handleTitleChange(event) {
+  const handleTitleChange = (event) => {
     setFormState({
       ...formState,
       title: event.target.value,
     });
-  }
+  };
 
-  function handleTextChange(event) {
+  const handleTextChange = (event) => {
     setFormState({
       ...formState,
       text: event.target.value,
     });
-  }
+  };
 
-  function handleSubmit() {
+  const handleSubmit = () => {
     onSubmit({ ...formState, bookId });
-  }
+  };
+
+  const handleShowMarkdown = () => {
+    setShowMarkdown(!showMarkdown);
+  };
 
   return (
-    <Container sx={{ width: "55%" }}>
+    <Container sx={{ width: '55%' }}>
       <Paper
         sx={{
           paddingLeft: 4,
@@ -85,19 +88,19 @@ export default function ReviewMutationComponent({
           paddingBottom: 3,
         }}
       >
-        <Stack direction={"column"} spacing={3} alignItems={"center"}>
-          <Typography component="legend" sx={{ fontWeight: "bold" }}>
+        <Stack direction={'column'} spacing={3} alignItems={'center'}>
+          <Typography component="legend" sx={{ fontWeight: 'bold' }}>
             Score
           </Typography>
           <Rating
-            name={"score"}
+            name={'score'}
             size="large"
             value={formState.score}
             onChange={handleRatingChange}
           />
           <TextField
             required
-            name={"title"}
+            name={'title'}
             id="outlined-basic"
             label="Title"
             variant="outlined"
@@ -106,23 +109,57 @@ export default function ReviewMutationComponent({
             value={formState.title}
             fullWidth
           />
-          <TextField
-            required
-            id="outlined-multiline-static"
-            name={"text"}
-            label="Summary"
-            multiline
-            rows={5}
-            size="large"
-            onChange={handleTextChange}
-            value={formState.text}
-            fullWidth
-          />
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={handleShowMarkdown}
+            sx={{ width: '100%' }}
+          >
+            Switch text view
+          </Button>
+          {showMarkdown ? (
+            <Paper
+              elevation={0}
+              sx={{
+                border: '1px grey solid',
+                paddingLeft: 2,
+                paddingRight: 2,
+                width: '100%',
+              }}
+            >
+              <Typography variant="body2" component="div">
+                {formState.text === '' ? (
+                  <Markdown components={{ h1: 'h3', h2: 'h3' }}>
+                    *No text provided*
+                  </Markdown>
+                ) : (
+                  <Markdown components={{ h1: 'h3', h2: 'h3' }}>
+                    {formState.text}
+                  </Markdown>
+                )}
+              </Typography>
+            </Paper>
+          ) : (
+            <TextField
+              required
+              id="outlined-multiline-static"
+              name={'text'}
+              label="Summary"
+              multiline
+              rows={5}
+              size="large"
+              onChange={handleTextChange}
+              value={formState.text}
+              fullWidth
+            />
+          )}
+
           <Button
             variant="contained"
             color="primary"
             size="large"
             onClick={handleSubmit}
+            disabled={isLoading}
           >
             {mutationTitle}
           </Button>

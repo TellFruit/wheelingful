@@ -17,8 +17,14 @@ export default function ReadRouter() {
           element={<BrowseBooks />}
         />
         <Route path={READ_CONFIG.routes.readBook} element={<ViewBook />} />
-        <Route path={READ_CONFIG.routes.publishReview} element={<PublishReview />} />
-        <Route path={READ_CONFIG.routes.updateReview} element={<UpdateReview />} />
+        <Route
+          path={READ_CONFIG.routes.publishReview}
+          element={<PublishReview />}
+        />
+        <Route
+          path={READ_CONFIG.routes.updateReview}
+          element={<UpdateReview />}
+        />
         <Route
           path={READ_CONFIG.routes.readChapter}
           element={<ViewChapter />}

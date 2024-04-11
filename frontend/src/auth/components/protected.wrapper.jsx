@@ -4,7 +4,7 @@ import { AUTH_CONFIG } from '../configuration/auth.config';
 
 export default function ProtectedWrapper({ children }) {
   const { isSignedIn } = useSelector((state) => state.authSlice);
-  
+
   const location = useLocation();
 
   return isSignedIn ? (

@@ -7,7 +7,7 @@ export default function AuthRouter() {
   return (
     <Routes>
       <Route path={AUTH_CONFIG.routes.login} element={<LoginPage />} />
-      <Route path={AUTH_CONFIG.routes.register} element={<RegisterPage/>} />
+      <Route path={AUTH_CONFIG.routes.register} element={<RegisterPage />} />
     </Routes>
   );
 }

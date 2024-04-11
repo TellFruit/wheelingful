@@ -11,8 +11,8 @@ export default function Footer() {
       }}
     >
       <Typography variant="body2" color="textSecondary">
-        © {new Date().getFullYear()} Wheelingful project. Released under the MIT
-        License.
+        © {new Date().getFullYear()} Wheelingful project. Released under the
+        MIT License.
       </Typography>
     </Box>
   );

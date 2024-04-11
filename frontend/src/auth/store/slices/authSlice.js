@@ -47,3 +47,5 @@ export const selectIsExpired = createSelector(
     return elapsedTimeSinceSignIn >= expiresInMilliseconds;
   }
 );
+
+export const selectIsSignedIn = (state) => state.authSlice.isSignedIn;

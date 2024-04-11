@@ -1,4 +1,4 @@
-import FormatQuoteIcon from "@mui/icons-material/FormatQuote";
+import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import {
   Box,
   Stack,
@@ -8,44 +8,45 @@ import {
   Avatar,
   Rating,
   CircularProgress,
-} from "@mui/material";
+} from '@mui/material';
+import Markdown from 'react-markdown';
 
 function ReviewItem({ title, text, score, userName, createdAt }) {
   return (
     <Box>
-      <Stack spacing={2} direction={"row"} alignItems={"center"} sx={{ mb: 2 }}>
-        <Stack spacing={2} direction={"column"} alignItems={"center"}>
-          <Avatar>JD</Avatar>
+      <Stack spacing={2} direction={'row'} alignItems={'center'} sx={{ mb: 2 }}>
+        <Stack spacing={2} direction={'column'} alignItems={'center'}>
+          <Avatar>{userName[0].toUpperCase()}</Avatar>
           <Typography component="legend">Overall</Typography>
           <Rating value={score} precision={0.5} readOnly />
         </Stack>
         <Stack
           spacing={2}
-          direction={"column"}
-          alignItems={"left"}
-          sx={{ width: "100%" }}
+          direction={'column'}
+          alignItems={'left'}
+          sx={{ width: '100%' }}
         >
           <Typography
             variant="h6"
-            sx={{ textAlign: "left", fontWeight: "bold" }}
+            sx={{ textAlign: 'left', fontWeight: 'bold' }}
           >
             {title}
           </Typography>
-          <Stack direction={"row"} justifyContent={"space-between"}>
-            <Typography variant="subtitle1" sx={{ textAlign: "left" }}>
-              <span style={{ color: "#1E40AF", fontWeight: "bold" }}>BY:</span>{" "}
+          <Stack direction={'row'} justifyContent={'space-between'}>
+            <Typography variant="subtitle1" sx={{ textAlign: 'left' }}>
+              <span style={{ color: '#1E40AF', fontWeight: 'bold' }}>BY:</span>{' '}
               {userName}
             </Typography>
             <Typography
               variant="subtitle1"
-              sx={{ textAlign: "left" }}
+              sx={{ textAlign: 'left' }}
               color="primary"
             >
               {createdAt}
             </Typography>
           </Stack>
-          <Typography variant="body1" sx={{ textAlign: "left" }}>
-            {text}
+          <Typography variant="body1" sx={{ textAlign: 'left' }}>
+            <Markdown components={{ h1: 'h3', h2: 'h3' }}>{text}</Markdown>
           </Typography>
         </Stack>
       </Stack>
@@ -56,7 +57,6 @@ function ReviewItem({ title, text, score, userName, createdAt }) {
 
 export function ReviewPaginatedList({
   isFetching,
-//   isError,
   serverPaginated,
   pageNumber,
   onPageChange,
@@ -66,12 +66,12 @@ export function ReviewPaginatedList({
       <Box>
         <Stack
           spacing={1}
-          direction={"row"}
-          alignItems={"center"}
+          direction={'row'}
+          alignItems={'center'}
           marginTop={2}
         >
           <FormatQuoteIcon />
-          <Typography variant="h5" sx={{ textAlign: "left" }}>
+          <Typography variant="h5" sx={{ textAlign: 'left' }}>
             Reviews
           </Typography>
         </Stack>
@@ -85,9 +85,9 @@ export function ReviewPaginatedList({
 
   return (
     <Box>
-      <Stack spacing={1} direction={"row"} alignItems={"center"} marginTop={2}>
+      <Stack spacing={1} direction={'row'} alignItems={'center'} marginTop={2}>
         <FormatQuoteIcon />
-        <Typography variant="h5" sx={{ textAlign: "left" }}>
+        <Typography variant="h5" sx={{ textAlign: 'left' }}>
           Reviews
         </Typography>
       </Stack>

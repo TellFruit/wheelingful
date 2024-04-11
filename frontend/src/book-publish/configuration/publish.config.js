@@ -5,6 +5,6 @@ export const PUBLISH_CONFIG = {
     publishBook: 'new',
     publishChapter: ':bookId/chapters/new',
     updateBook: ':bookId',
-    updateChapter: ':bookId/chapters/:chapterId'
+    updateChapter: ':bookId/chapters/:chapterId',
   },
 };

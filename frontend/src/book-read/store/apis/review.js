@@ -1,10 +1,20 @@
-import { createApi } from "@reduxjs/toolkit/query/react";
-import { baseQueryWithReauth } from '../../../auth';
+import { createApi } from '@reduxjs/toolkit/query/react';
+import { baseQueryWithReauth, selectIsSignedIn } from '../../../auth';
+import { baseQuery } from '../../../shared';
 
+const dynamicBaseQuery = async (args, api, extraOptions) => {
+  const isSignedIn = selectIsSignedIn(api.getState());
+
+  if (isSignedIn) {
+    return baseQueryWithReauth(args, api, extraOptions);
+  }
+
+  return baseQuery(args, api, extraOptions);
+};
 
 export const publishReviewApi = createApi({
-  reducerPath: "publishReviewApi",
-  baseQuery: baseQueryWithReauth,
+  reducerPath: 'publishReviewApi',
+  baseQuery: dynamicBaseQuery,
   endpoints(builder) {
     return {
       publishReview: builder.mutation({
@@ -17,7 +27,7 @@ export const publishReviewApi = createApi({
               title: review.title,
               text: review.text,
             },
-            method: "POST",
+            method: 'POST',
           };
         },
       }),
@@ -31,25 +41,25 @@ export const publishReviewApi = createApi({
               title: review.title,
               text: review.text,
             },
-            method: "PUT",
+            method: 'PUT',
           };
         },
       }),
-      getReviewByBook: builder.query({
+      fetchReviewByBook: builder.query({
         providesTags: ['Review'],
         query: (bookId) => {
           return {
             url: `/users/current/books/${bookId}/reviews`,
-            method: "GET"
-          }
-        }
+            method: 'GET',
+          };
+        },
       }),
       deleteReviewByBook: builder.mutation({
         invalidatesTags: ['Review'],
         query: (bookId) => {
           return {
             url: `/users/current/books/${bookId}/reviews`,
-            method: "DELETE",
+            method: 'DELETE',
           };
         },
       }),
@@ -65,9 +75,15 @@ export const publishReviewApi = createApi({
             method: 'GET',
           };
         },
-      })
+      }),
     };
   },
 });
 
-export const { usePublishReviewMutation, useUpdateReviewMutation, useGetReviewByBookQuery, useDeleteReviewByBookMutation, useFetchReviewsByBookQuery } = publishReviewApi;
+export const {
+  usePublishReviewMutation,
+  useUpdateReviewMutation,
+  useFetchReviewByBookQuery,
+  useDeleteReviewByBookMutation,
+  useFetchReviewsByBookQuery,
+} = publishReviewApi;

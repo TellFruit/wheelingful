@@ -1,5 +1,5 @@
-import React from "react";
-import { APP_CONFIG } from "../configuration/app-config";
+import React from 'react';
+import { APP_CONFIG } from '../configuration/app-config';
 
 function AppWrapper({ children }) {
   return APP_CONFIG.isDevelopment ? (

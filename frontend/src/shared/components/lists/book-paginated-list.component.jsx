@@ -37,7 +37,7 @@ export function BookPaginatedList({
   }
 
   return (
-    <Box sx={{width: "100%"}}>
+    <Box sx={{ width: '100%' }}>
       <Grid container spacing={3}>
         {serverPaginated.items.map((book) => (
           <Grid item key={book.id} xs={12} sm={12} md={6} lg={6}>

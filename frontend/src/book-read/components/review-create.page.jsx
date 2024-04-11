@@ -1,6 +1,6 @@
-import ReviewMutationComponent from "./shared/review-mutation";
-import { usePublishReviewMutation } from "../store/apis/review";
-import { renderValidationErrorsObject } from "../../shared";
+import ReviewMutationComponent from './shared/review-mutation';
+import { usePublishReviewMutation } from '../store/apis/review';
+import { renderValidationErrorsObject } from '../../shared';
 
 export default function ReviewCreatePage() {
   const [publishReview, publishResults] = usePublishReviewMutation();
@@ -18,7 +18,7 @@ export default function ReviewCreatePage() {
     <ReviewMutationComponent
       mutationTitle="Publish"
       onSubmit={handleSubmit}
-      // isLoading={updateResults.isLoading}
+      isLoading={publishResults.isLoading}
       error={error}
       isSuccess={publishResults.isSuccess}
       isError={publishResults.isError}

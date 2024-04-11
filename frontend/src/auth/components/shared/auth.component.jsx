@@ -28,7 +28,7 @@ export default function AuthComponent({
 
   useEffect(() => {
     if (isSuccess) {
-      const from = location.state?.from?.pathname || "/";
+      const from = location.state?.from?.pathname || '/';
       navigate(from);
     }
   }, [isSuccess, navigate]);

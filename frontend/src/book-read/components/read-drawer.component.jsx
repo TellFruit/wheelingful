@@ -10,78 +10,38 @@ import {
   ListItemIcon,
   ListItemText,
   Divider,
-} from "@mui/material";
-import { useState, useEffect } from "react";
-import ListAltIcon from "@mui/icons-material/ListAlt";
-import { Link, Outlet, useParams } from "react-router-dom";
-import { READ_CONFIG } from "../configuration/read.config";
-import { useSelector } from "react-redux";
-import { useGetReviewByBookQuery, useDeleteReviewByBookMutation } from "../store/apis/review";
+} from '@mui/material';
+import { useState, useEffect } from 'react';
+import ListAltIcon from '@mui/icons-material/ListAlt';
+import AddCommentIcon from '@mui/icons-material/AddComment';
+import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
+import UpdateIcon from '@mui/icons-material/Update';
+import { Link, Outlet, useParams } from 'react-router-dom';
+import { READ_CONFIG } from '../configuration/read.config';
+import { useSelector } from 'react-redux';
+import {
+  useFetchReviewByBookQuery,
+  useDeleteReviewByBookMutation,
+} from '../store/apis/review';
 
 const ListItemStyle = {
-  textDecoration: "none",
-  color: "inherit",
+  textDecoration: 'none',
+  color: 'inherit',
 };
 
-export default function ReadDrawer() {
-  const { bookId } = useParams();
-  const { isSignedIn } = useSelector((state) => state.authSlice);
-
-  const { data, error, isFetching, isError, isSuccess } = useGetReviewByBookQuery(bookId);
-  
-  const [deleteReview] = useDeleteReviewByBookMutation();
-
-  if (!(bookId && isSignedIn)) {
-    return (
-      <Stack direction={"row"}>
-        <Drawer
-          variant="permanent"
-          sx={{
-            width: 240,
-            flexShrink: 0,
-            [`& .MuiDrawer-paper`]: { width: 240, boxSizing: "border-box" },
-          }}
-        >
-          <Toolbar />
-          <Box sx={{ overflow: "auto" }}>
-            <List>
-              <ListItem
-                component={Link}
-                sx={ListItemStyle}
-                to={`/${READ_CONFIG.routes.group}/${READ_CONFIG.routes.browseBooks}`}
-              >
-                <ListItemButton>
-                  <ListItemIcon>
-                    <ListAltIcon />
-                  </ListItemIcon>
-                  <ListItemText primary={"Browse books"} />
-                </ListItemButton>
-              </ListItem>
-            </List>
-            <Divider />
-          </Box>
-        </Drawer>
-        <Outlet />
-      </Stack>
-    );
-  }
-
-  function handleReviewDelete() {
-    deleteReview(bookId)
-  }
-
+function DefaultDrawer() {
   return (
-    <Stack direction={"row"}>
+    <Stack direction={'row'}>
       <Drawer
         variant="permanent"
         sx={{
           width: 240,
           flexShrink: 0,
-          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: "border-box" },
+          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
         }}
       >
         <Toolbar />
-        <Box sx={{ overflow: "auto" }}>
+        <Box sx={{ overflow: 'auto' }}>
           <List>
             <ListItem
               component={Link}
@@ -92,7 +52,50 @@ export default function ReadDrawer() {
                 <ListItemIcon>
                   <ListAltIcon />
                 </ListItemIcon>
-                <ListItemText primary={"Browse books"} />
+                <ListItemText primary={'Browse books'} />
+              </ListItemButton>
+            </ListItem>
+          </List>
+          <Divider />
+        </Box>
+      </Drawer>
+      <Outlet />
+    </Stack>
+  );
+}
+
+function SignedInDrawer({ bookId }) {
+  const [deleteReview] = useDeleteReviewByBookMutation();
+  const { data, error, isFetching, isError, isSuccess } =
+    useFetchReviewByBookQuery(bookId);
+
+  function handleReviewDelete() {
+    deleteReview(bookId);
+  }
+
+  return (
+    <Stack direction={'row'}>
+      <Drawer
+        variant="permanent"
+        sx={{
+          width: 240,
+          flexShrink: 0,
+          [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
+        }}
+      >
+        <Toolbar />
+        <Box sx={{ overflow: 'auto' }}>
+          <List>
+            <ListItem
+              component={Link}
+              sx={ListItemStyle}
+              to={`/${READ_CONFIG.routes.group}/${READ_CONFIG.routes.browseBooks}`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <ListAltIcon />
+                </ListItemIcon>
+                <ListItemText primary={'Browse books'} />
               </ListItemButton>
             </ListItem>
             {!isSuccess ? (
@@ -103,14 +106,14 @@ export default function ReadDrawer() {
               >
                 <ListItemButton>
                   <ListItemIcon>
-                    <ListAltIcon />
+                    <AddCommentIcon />
                   </ListItemIcon>
-                  <ListItemText primary={"Review book"} />
+                  <ListItemText primary={'Review book'} />
                 </ListItemButton>
               </ListItem>
             ) : (
               <>
-                {" "}
+                {' '}
                 <ListItem
                   component={Link}
                   sx={ListItemStyle}
@@ -118,19 +121,17 @@ export default function ReadDrawer() {
                 >
                   <ListItemButton>
                     <ListItemIcon>
-                      <ListAltIcon />
+                      <UpdateIcon />
                     </ListItemIcon>
-                    <ListItemText primary={"Update review"} />
+                    <ListItemText primary={'Update review'} />
                   </ListItemButton>
                 </ListItem>
-                <ListItem
-                  sx={ListItemStyle}
-                >
+                <ListItem sx={ListItemStyle}>
                   <ListItemButton onClick={handleReviewDelete}>
                     <ListItemIcon>
-                      <ListAltIcon />
+                      <RemoveCircleIcon />
                     </ListItemIcon>
-                    <ListItemText primary={"Delete review"} />
+                    <ListItemText primary={'Delete review'} />
                   </ListItemButton>
                 </ListItem>
               </>
@@ -142,4 +143,15 @@ export default function ReadDrawer() {
       <Outlet />
     </Stack>
   );
+}
+
+export default function ReadDrawer() {
+  const { bookId } = useParams();
+  const { isSignedIn } = useSelector((state) => state.authSlice);
+
+  if (!(bookId && isSignedIn)) {
+    return <DefaultDrawer />;
+  }
+
+  return <SignedInDrawer bookId={bookId} />;
 }

@@ -40,9 +40,7 @@ export default function ChapterMutationComponent({
 
   useEffect(() => {
     if (isSuccess) {
-      navigate(
-        `/${PUBLISH_CONFIG.routes.group}/${bookId}`
-      );
+      navigate(`/${PUBLISH_CONFIG.routes.group}/${bookId}`);
     }
   }, [isSuccess, navigate]);
 
@@ -77,14 +75,23 @@ export default function ChapterMutationComponent({
             value={title}
             onChange={(e) => setTitle(e.target.value)}
           />
-          <Button variant="outlined" size="small" onClick={handleShowMarkdown}>
-            {' '}
+          <Button
+            variant="outlined"
+            size="small"
+            onClick={handleShowMarkdown}
+            sx={{ width: '100%' }}
+          >
             Switch text view
           </Button>
           {showMarkdown ? (
             <Paper
               elevation={0}
-              sx={{ border: '1px grey solid', paddingLeft: 2, paddingRight: 2 }}
+              sx={{
+                border: '1px grey solid',
+                paddingLeft: 2,
+                paddingRight: 2,
+                width: '100%',
+              }}
             >
               <Typography variant="body2" component="div">
                 {text === '' ? (

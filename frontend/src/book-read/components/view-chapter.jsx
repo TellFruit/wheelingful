@@ -61,13 +61,17 @@ export default function ViewChapter() {
             paddingBottom: 1,
           }}
         >
-          <Stack direction={'row'} justifyContent={'space-between'} alignItems={'center'}>
+          <Stack
+            direction={'row'}
+            justifyContent={'space-between'}
+            alignItems={'center'}
+          >
             <Box>
               <Typography variant="h3" sx={{ textAlign: 'left' }}>
                 {data.title}
               </Typography>
             </Box>
-            <Button variant='outlined' onClick={handleBackToBook}>
+            <Button variant="outlined" onClick={handleBackToBook}>
               Back to book
             </Button>
           </Stack>
