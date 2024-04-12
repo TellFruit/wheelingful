@@ -13,7 +13,7 @@ import {
 import storage from 'redux-persist/lib/storage';
 import { authApi, authReducer } from '../../auth';
 import { publishBookApi, publishChapterApi } from '../../book-publish';
-import { readApi } from '../../book-read';
+import { readApi, publishReviewApi } from '../../book-read';
 
 const rootReducer = combineReducers({
   authSlice: authReducer,
@@ -21,6 +21,7 @@ const rootReducer = combineReducers({
   [publishBookApi.reducerPath]: publishBookApi.reducer,
   [publishChapterApi.reducerPath]: publishChapterApi.reducer,
   [readApi.reducerPath]: readApi.reducer,
+  [publishReviewApi.reducerPath]: publishReviewApi.reducer,
 });
 
 const persistedReducer = persistReducer(
@@ -33,6 +34,7 @@ const persistedReducer = persistReducer(
       publishBookApi.reducerPath,
       publishChapterApi.reducerPath,
       readApi.reducerPath,
+      publishReviewApi.reducerPath,
     ],
   },
   rootReducer
@@ -49,7 +51,8 @@ export const store = configureStore({
       .concat(authApi.middleware)
       .concat(publishBookApi.middleware)
       .concat(publishChapterApi.middleware)
-      .concat(readApi.middleware);
+      .concat(readApi.middleware)
+      .concat(publishReviewApi.middleware);
   },
 });
 

@@ -3,3 +3,4 @@ export * from './store/slices/authSlice';
 export * from './store/apis/authApi';
 export * from './store/apis/baseQueryWithReauth';
 export * from './router/routes';
+export { default as ProtectedWrapper } from './components/protected.wrapper';

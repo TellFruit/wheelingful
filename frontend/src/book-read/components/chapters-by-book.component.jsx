@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { ChapterPaginatedList, SHARED_CONFIG } from '../../shared';
-import { useFetchChaptersByBookQuery } from '../store/apis/read.api';
+import { useFetchChaptersByBookQuery } from '../store/apis/read';
 import { READ_CONFIG } from '../configuration/read.config';
 
 export default function ChaptersByBook() {

@@ -11,7 +11,8 @@ import { SHARED_CONFIG, renderValidationErrorsObject } from '../../shared';
 import {
   useFetchBooksByIdQuery,
   useFetchChaptersByBookQuery,
-} from '../store/apis/read.api';
+} from '../store/apis/read';
+import Reviews from './reviews.component';
 import { READ_CONFIG } from '../configuration/read.config';
 
 export default function ViewBook() {
@@ -166,6 +167,19 @@ export default function ViewBook() {
             }}
           >
             <ChaptersByBook />
+          </Paper>
+        </Grid>
+        <Grid lg={8}>
+          <Paper
+            elevation={6}
+            sx={{
+              paddingLeft: 3,
+              paddingRight: 3,
+              paddingTop: 1,
+              paddingBottom: 2,
+            }}
+          >
+            <Reviews />
           </Paper>
         </Grid>
       </Grid>

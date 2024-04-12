@@ -1,7 +1,7 @@
 import { Routes, Route } from 'react-router';
 import { PUBLISH_CONFIG } from '../configuration/publish.config';
 import BooksByCurrentUser from '../components/books-by-current-user.page';
-import ProtectedWrapper from '../../auth/components/protected.wrapper';
+import { ProtectedWrapper } from '../../auth';
 import BookCreatePage from '../components/book-create.page';
 import BookUpdatePage from '../components/book-update.page';
 import PublishDrawer from '../components/publish-drawer.component';
