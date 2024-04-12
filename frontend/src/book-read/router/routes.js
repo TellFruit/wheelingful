@@ -4,7 +4,7 @@ import ReadDrawer from '../components/read-drawer.component';
 import BrowseBooks from '../components/browse-books.page';
 import ViewBook from '../components/view-book.page';
 import ViewChapter from '../components/view-chapter';
-import ProtectedWrapper from '../../auth/components/protected.wrapper';
+import { ProtectedWrapper } from '../../auth';
 import ProtectedReviewWrapper from '../components/protected-review.wrapper';
 
 import PublishReview from '../components/review-create.page';

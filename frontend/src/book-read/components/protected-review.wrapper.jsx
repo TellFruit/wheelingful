@@ -1,4 +1,4 @@
-import ProtectedWrapper from '../../auth/components/protected.wrapper';
+import { ProtectedWrapper } from '../../auth';
 import { useFetchReviewByBookQuery } from '../store/apis/review';
 import { useParams, Navigate, useLocation } from 'react-router-dom';
 import { READ_CONFIG } from '../configuration/read.config';

@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {
   Box,
   Stack,
@@ -11,7 +10,6 @@ import {
   ListItemText,
   Divider,
 } from '@mui/material';
-import { useState, useEffect } from 'react';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
@@ -66,8 +64,7 @@ function DefaultDrawer() {
 
 function SignedInDrawer({ bookId }) {
   const [deleteReview] = useDeleteReviewByBookMutation();
-  const { data, error, isFetching, isError, isSuccess } =
-    useFetchReviewByBookQuery(bookId);
+  const { isSuccess } = useFetchReviewByBookQuery(bookId);
 
   const handleReviewDelete = () => {
     deleteReview(bookId);
