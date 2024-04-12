@@ -1,8 +1,7 @@
 import { useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { useFetchReviewsByBookQuery } from '../store/apis/review';
-import { SHARED_CONFIG } from '../../shared';
-import { ReviewPaginatedList } from '../../shared/components/lists/reviews-paginated-list.jsx';
+import { SHARED_CONFIG, ReviewPaginatedList } from '../../shared';
 
 export default function Reviews() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -13,9 +12,9 @@ export default function Reviews() {
     pageSize: SHARED_CONFIG.pagination.defaultPageSize,
   });
 
-  function handlePageChange(event, value) {
+  const handlePageChange = (event, value) => {
     setCurrentPage(value);
-  }
+  };
 
   return (
     <ReviewPaginatedList

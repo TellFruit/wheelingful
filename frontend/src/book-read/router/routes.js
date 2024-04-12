@@ -4,6 +4,8 @@ import ReadDrawer from '../components/read-drawer.component';
 import BrowseBooks from '../components/browse-books.page';
 import ViewBook from '../components/view-book.page';
 import ViewChapter from '../components/view-chapter';
+import ProtectedWrapper from '../../auth/components/protected.wrapper';
+import ProtectedReviewWrapper from '../components/protected-review.wrapper';
 
 import PublishReview from '../components/review-create.page';
 import UpdateReview from '../components/review-update.page';
@@ -19,11 +21,19 @@ export default function ReadRouter() {
         <Route path={READ_CONFIG.routes.readBook} element={<ViewBook />} />
         <Route
           path={READ_CONFIG.routes.publishReview}
-          element={<PublishReview />}
+          element={
+            <ProtectedReviewWrapper>
+              <PublishReview />
+            </ProtectedReviewWrapper>
+          }
         />
         <Route
           path={READ_CONFIG.routes.updateReview}
-          element={<UpdateReview />}
+          element={
+            <ProtectedWrapper>
+              <UpdateReview />
+            </ProtectedWrapper>
+          }
         />
         <Route
           path={READ_CONFIG.routes.readChapter}

@@ -69,9 +69,9 @@ function SignedInDrawer({ bookId }) {
   const { data, error, isFetching, isError, isSuccess } =
     useFetchReviewByBookQuery(bookId);
 
-  function handleReviewDelete() {
+  const handleReviewDelete = () => {
     deleteReview(bookId);
-  }
+  };
 
   return (
     <Stack direction={'row'}>
