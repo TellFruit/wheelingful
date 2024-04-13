@@ -9,7 +9,7 @@ using Wheelingful.DAL.DbContexts;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.Helpers;
 
-namespace Wheelingful.BLL.Handlers;
+namespace Wheelingful.BLL.Handlers.Commands;
 
 public class UpdateReviewHandler(
     ICurrentUser currentUser,

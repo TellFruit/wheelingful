@@ -9,6 +9,7 @@ using Wheelingful.DAL.DbContexts;
 using Wheelingful.API.Extensions.Endpoints;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using Wheelingful.BLL.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -44,7 +45,7 @@ builder.Services.AddAuthorizationBuilder()
             .RequireRole(nameof(UserRoleEnum.Admin), nameof(UserRoleEnum.Author)))
   .AddPolicy(PolicyContants.AuthorizeReader, policy =>
         policy
-            .RequireRole(nameof(UserRoleEnum.Reader)));
+            .RequireRole(nameof(UserRoleEnum.Admin), nameof(UserRoleEnum.Reader)));
 
 var app = builder.Build();
 
@@ -63,7 +64,7 @@ app.MapIdentityPartialApi<AppUser>();
 
 app.MapApiGroups();
 
-Directory.CreateDirectory("App_Data");
+Directory.CreateDirectory(FileConstants.AppDataFolderName);
 
 using var scope = app.Services.CreateScope();
 var dbContext = scope.ServiceProvider.GetRequiredService<WheelingfulDbContext>();

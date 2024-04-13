@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Models.Requests.Commands;
@@ -9,22 +8,31 @@ using Wheelingful.DAL.DbContexts;
 using Wheelingful.DAL.Entities;
 using Wheelingful.DAL.Helpers;
 
-namespace Wheelingful.BLL.Handlers;
+namespace Wheelingful.BLL.Handlers.Commands;
 
-public class DeleteReviewHandler(
+public class CreateReviewHandler(
     ICurrentUser currentUser,
     ILogger<ReviewService> logger,
     ICacheService cacheService,
-    WheelingfulDbContext dbContext) : IRequestHandler<DeleteReviewCommand>
+    WheelingfulDbContext dbContext) : IRequestHandler<CreateReviewCommand>
 {
-    public async Task Handle(DeleteReviewCommand request, CancellationToken cancellationToken)
+    public async Task Handle(CreateReviewCommand request, CancellationToken cancellationToken)
     {
-        logger.LogInformation("User {UserId} deleted a review: {@Request}",
+        logger.LogInformation("User {UserId} created a review: {@Request}",
             currentUser.Id, request);
 
-        await dbContext.Reviews
-            .Where(r => r.BookId == request.BookId && r.UserId == currentUser.Id)
-            .ExecuteDeleteAsync();
+        var newReview = new Review
+        {
+            BookId = request.BookId,
+            UserId = currentUser.Id,
+            Title = request.Title,
+            Text = request.Text,
+            Score = request.Score,
+        };
+
+        dbContext.Add(newReview);
+
+        await dbContext.SaveChangesAsync();
 
         var entryKey = nameof(Review).ToCachePrefix(request.BookId) + currentUser.Id;
 
