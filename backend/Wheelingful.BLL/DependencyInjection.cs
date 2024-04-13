@@ -29,6 +29,7 @@ public static class DependencyInjection
         services.AddScoped<IBookCoverService, BookCoverService>();
         services.AddScoped<IBookReaderService, BookReaderService>();
         services.AddScoped<IReviewService, ReviewService>();
+        services.AddScoped<IBookRecommenderService, BookRecommenderService>();
 
         services.AddScoped<IChapterAuthorService, ChapterAuthorService>();
         services.AddScoped<IChapterTextService, ChapterTextService>();
