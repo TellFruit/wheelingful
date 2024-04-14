@@ -9,6 +9,7 @@ using Wheelingful.BLL.Models.Responses;
 using Wheelingful.API.Models;
 using MediatR;
 using Wheelingful.BLL.Models.Requests.Commands;
+using Wheelingful.BLL.Models.Requests.Queries;
 
 namespace Wheelingful.API.Extensions.Endpoints;
 
@@ -43,7 +44,7 @@ public static class UserExtension
         })
             .RequireAuthorization(PolicyContants.AuthorizeReader);
 
-        endpoints.MapGet("/current/reviews", 
+        endpoints.MapGet("/current/reviews",
             async Task<Results<Ok<FetchPaginationResponse<FetchReviewResponse>>, ValidationProblem>>
                 ([AsParameters] FetchReviewsByCurrentUserRequest request, [FromServices] IReviewService handler) =>
             {
@@ -51,7 +52,7 @@ public static class UserExtension
 
                 return TypedResults.Ok(result);
             })
-                .RequireAuthorization(PolicyContants.AuthorizeReader); ;
+                .RequireAuthorization(PolicyContants.AuthorizeReader);
 
         endpoints.MapGet("/current/books/{bookId}/reviews",
             async Task<Results<Ok<FetchReviewResponse>, ValidationProblem>>
@@ -61,6 +62,16 @@ public static class UserExtension
 
                 return TypedResults.Ok(result);
             })
-                .RequireAuthorization(PolicyContants.AuthorizeReader); ;
+                .RequireAuthorization(PolicyContants.AuthorizeReader);
+
+        endpoints.MapGet("/current/recommendations",
+            async Task<Results<Ok<IEnumerable<FetchBookResponse>>, ValidationProblem>>
+                ([AsParameters] RecommendByUserQuery request, [FromServices] IMediator mediator) =>
+            {
+                var resut = await mediator.Send(request);
+
+                return TypedResults.Ok(resut);
+            })
+                .RequireAuthorization(PolicyContants.AuthorizeReader);
     }
 }

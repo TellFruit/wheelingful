@@ -73,10 +73,6 @@ public class BookReaderService(
         logger.LogInformation("User {UserId} fetched the book: {@Request}",
             currentUser.Id, request);
 
-        var isReviewedByCurrentUser = await dbContext.Reviews
-            .AnyAsync(r => r.BookId == request.BookId 
-                        && r.UserId == currentUser.Id);
-
         var key = nameof(Book).ToCachePrefix(request.BookId);
 
         return await cacheService.GetAndSet(key, () =>
@@ -91,7 +87,6 @@ public class BookReaderService(
                 Status = b.Status,
                 CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId),
                 AuthorUserName = b.User.UserName!,
-                IsReviewedByCurrentUser = isReviewedByCurrentUser
             })
             .FirstAsync(b => b.Id == request.BookId);
         },
