@@ -8,9 +8,8 @@ public class FetchBookResponse
     public int Id { get; set; }
     public required string Title { get; set; }
     public required string Description { get; set; }
-    public required string CoverUrl { get; set; }
+    public string CoverUrl { get; set; } = string.Empty;
     public required string AuthorUserName { get; set; }
-    public bool IsReviewedByCurrentUser { get; set; }
 
     [JsonConverter(typeof(JsonStringEnumConverter<BookCategoryEnum>))]
     public BookCategoryEnum Category { get; set; }

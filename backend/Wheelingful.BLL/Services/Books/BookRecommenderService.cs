@@ -20,7 +20,7 @@ public class BookRecommenderService(
 {
     public async Task<PredictionEngine<ModelInput, ModelOutput>> BuildPredictionEngine(IEnumerable<ModelInput>? newData = null)
     {
-        var prefix = nameof(Book).ToCachePrefix() + nameof(BookRecommenderService);
+        var prefix = nameof(Review).ToCachePrefix();
 
         var selected = dbContext.Reviews
             .Select(r => new ModelInput
@@ -36,7 +36,7 @@ public class BookRecommenderService(
 
         if (newData != null)
         {
-            reviews.AddRange(newData);
+            reviews.InsertRange(0, newData);
         }
 
         var mlContext = new MLContext();

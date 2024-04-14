@@ -9,4 +9,9 @@ public static class ValidateReviewExtension
     {
         return reviews.AnyAsync(r => r.BookId == bookId && r.UserId == userId);
     }
+
+    public static Task<bool> HaveReviews(this DbSet<Review> reviews, string userId)
+    {
+        return reviews.AnyAsync(review => review.UserId == userId);
+    }
 }

@@ -1,10 +1,12 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
+﻿using MediatR;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Wheelingful.API.Constants;
 using Wheelingful.API.Models;
 using Wheelingful.API.Models.Bindings;
 using Wheelingful.BLL.Contracts.Books;
 using Wheelingful.BLL.Models.Requests;
+using Wheelingful.BLL.Models.Requests.Queries;
 using Wheelingful.BLL.Models.Responses;
 using Wheelingful.BLL.Models.Responses.Generic;
 
@@ -64,6 +66,15 @@ public static class BookExtension
                 ([AsParameters] FetchReviewsByBookRequest request, [FromServices] IReviewService handler) =>
             {
                 var result = await handler.GetReviews(request);
+
+                return TypedResults.Ok(result);
+            });
+
+        endpoints.MapGet("/{bookId}/recommendations",
+            async Task<Results<Ok<IEnumerable<FetchBookResponse>>, ValidationProblem>>
+                ([AsParameters] RecommendByBookQuery request, [FromServices] IMediator mediator) =>
+            {
+                var result = await mediator.Send(request);
 
                 return TypedResults.Ok(result);
             });
