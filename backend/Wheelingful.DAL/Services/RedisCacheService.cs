@@ -11,7 +11,7 @@ public class RedisCacheService(
 {
     private readonly IDatabase _redisDb = redis.GetDatabase();
 
-    public async Task<T> GetAndSet<T>(string key, Func<Task<T>> fetchData, TimeSpan expirationTime)
+    public async Task<T> GetAndSet<T>(string key, Func<Task<T>> fetchValue, TimeSpan expirationTime)
         where T : class
     {
         var cache = await distributedCache.GetAsync(key);
@@ -21,7 +21,32 @@ public class RedisCacheService(
             return JsonSerializer.Deserialize<T>(cache)!;
         }
 
-        var data = await fetchData();
+        var data = await fetchValue();
+
+        var newCache = JsonSerializer.SerializeToUtf8Bytes(data);
+
+        var options = new DistributedCacheEntryOptions
+        {
+            AbsoluteExpiration = DateTime.UtcNow.Add(expirationTime),
+            SlidingExpiration = expirationTime,
+        };
+
+        await distributedCache.SetAsync(key, newCache, options);
+
+        return data;
+    }
+
+    public async Task<T> GetAndSet<T>(string key, Func<T> fetchValue, TimeSpan expirationTime) 
+        where T : class
+    {
+        var cache = await distributedCache.GetAsync(key);
+
+        if (cache != null)
+        {
+            return JsonSerializer.Deserialize<T>(cache)!;
+        }
+
+        var data = fetchValue();
 
         var newCache = JsonSerializer.SerializeToUtf8Bytes(data);
 
