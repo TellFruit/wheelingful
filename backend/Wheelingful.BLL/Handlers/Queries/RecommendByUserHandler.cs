@@ -33,6 +33,7 @@ public class RecommendByUserHandler(
 
         var query = dbContext.Books
             .Include(b => b.User)
+            .Include(b => b.Reviews)
             .AsQueryable();
 
         var selected = query.Select(b => new
@@ -45,6 +46,7 @@ public class RecommendByUserHandler(
             b.CoverId,
             AuthorUserName = b.User.UserName!,
             AuthorUserId = b.UserId,
+            b.Reviews
         });
 
         var fetchValue = () => selected.ToListAsync();
@@ -81,6 +83,7 @@ public class RecommendByUserHandler(
                 Status = o.Book.Status,
                 CoverUrl = bookCover.GetCoverUrl(o.Book.Id, o.Book.AuthorUserId, o.Book.CoverId),
                 AuthorUserName = o.Book.AuthorUserName,
+                AverageScore = (int)o.Book.Reviews.Average(r => r.Score)
             })
             .Take(PaginationConstants.DefaultPageSize);
     }
