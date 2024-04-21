@@ -28,6 +28,7 @@ public class BookReaderService(
 
         var query = dbContext.Books
             .Include(b => b.User)
+            .Include(b => b.Reviews)
             .AsQueryable();
 
         var doFetchByCurrentUser = request.DoFetchByCurrentUser.HasValue
@@ -41,7 +42,8 @@ public class BookReaderService(
             Category = b.Category,
             Status = b.Status,
             CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId),
-            AuthorUserName = b.User.UserName!
+            AuthorUserName = b.User.UserName!,
+            AverageScore = (int)b.Reviews.Average(b => b.Score)
         });
 
         if (doFetchByCurrentUser)
@@ -87,6 +89,7 @@ public class BookReaderService(
                 Status = b.Status,
                 CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId),
                 AuthorUserName = b.User.UserName!,
+                AverageScore = (int)b.Reviews.Average(r => r.Score)
             })
             .FirstAsync(b => b.Id == request.BookId);
         },

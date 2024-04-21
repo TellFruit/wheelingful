@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Wheelingful.BLL.Constants;
 using Wheelingful.BLL.Contracts.Auth;
 using Wheelingful.BLL.Contracts.Books;
+using Wheelingful.BLL.Extensions.Generic;
 using Wheelingful.BLL.Models.Predictions;
 using Wheelingful.BLL.Models.Requests.Queries;
 using Wheelingful.BLL.Models.Responses;
@@ -45,6 +46,7 @@ public class RecommendByBookHandler(
 
         var query = dbContext.Books
             .Include(b => b.User)
+            .Include(b => b.Reviews)
             .AsQueryable();
 
         var selected = query.Select(b => new
@@ -57,6 +59,7 @@ public class RecommendByBookHandler(
             b.CoverId,
             AuthorUserName = b.User.UserName!,
             AuthorUserId = b.UserId,
+            b.Reviews
         });
 
         var fetchBooks = () => selected.ToListAsync();
@@ -101,6 +104,7 @@ public class RecommendByBookHandler(
                 Status = o.Book.Status,
                 CoverUrl = bookCover.GetCoverUrl(o.Book.Id, o.Book.AuthorUserId, o.Book.CoverId),
                 AuthorUserName = o.Book.AuthorUserName,
+                AverageScore = (int)o.Book.Reviews.Average(r => r.Score)
             })
             .Take(PaginationConstants.DefaultPageSize);
 
