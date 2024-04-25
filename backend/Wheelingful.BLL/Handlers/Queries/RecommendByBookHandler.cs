@@ -104,7 +104,7 @@ public class RecommendByBookHandler(
                 Status = o.Book.Status,
                 CoverUrl = bookCover.GetCoverUrl(o.Book.Id, o.Book.AuthorUserId, o.Book.CoverId),
                 AuthorUserName = o.Book.AuthorUserName,
-                AverageScore = (int)o.Book.Reviews.Average(r => r.Score)
+                Reviews = o.Book.Reviews,
             })
             .Take(PaginationConstants.DefaultPageSize);
 

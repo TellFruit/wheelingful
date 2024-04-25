@@ -43,7 +43,7 @@ public class BookReaderService(
             Status = b.Status,
             CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId),
             AuthorUserName = b.User.UserName!,
-            AverageScore = (int)b.Reviews.Average(b => b.Score)
+            Reviews = b.Reviews,
         });
 
         if (doFetchByCurrentUser)
@@ -89,7 +89,7 @@ public class BookReaderService(
                 Status = b.Status,
                 CoverUrl = bookCover.GetCoverUrl(b.Id, b.UserId, b.CoverId),
                 AuthorUserName = b.User.UserName!,
-                AverageScore = (int)b.Reviews.Average(r => r.Score)
+                Reviews = b.Reviews,
             })
             .FirstAsync(b => b.Id == request.BookId);
         },
