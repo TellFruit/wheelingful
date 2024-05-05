@@ -9,10 +9,7 @@ import {
   Typography,
   Alert,
   Pagination,
-<<<<<<< HEAD
-=======
   Rating,
->>>>>>> eaa6f9e (✨ Implementing the functionality of recommendations)
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
@@ -57,10 +54,6 @@ export function BookPaginatedList({
                     alt={book.title}
                     sx={{ width: 200 }}
                   />
-<<<<<<< HEAD
-                  <Stack direction={'column'} spacing={1}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-=======
 
                   <CardContent sx={{ width: '100%' }}>
                     <Stack
@@ -68,7 +61,6 @@ export function BookPaginatedList({
                       spacing={1}
                       sx={{ width: '100%' }}
                     >
->>>>>>> eaa6f9e (✨ Implementing the functionality of recommendations)
                       <Typography variant="h6">{book.title}</Typography>
                       <Stack direction={'row'} spacing={1}>
                         <Typography variant="body2" color="textSecondary">
@@ -88,10 +80,6 @@ export function BookPaginatedList({
                           </Markdown>
                         </Typography>
                       </Box>
-<<<<<<< HEAD
-                    </CardContent>
-                  </Stack>
-=======
                       <Rating
                         value={book.averageScore}
                         precision={0.5}
@@ -101,7 +89,6 @@ export function BookPaginatedList({
                       />
                     </Stack>
                   </CardContent>
->>>>>>> eaa6f9e (✨ Implementing the functionality of recommendations)
                 </Stack>
               </CardActionArea>
             </Card>

@@ -10,6 +10,7 @@ import {
   CardActionArea,
   Divider,
   Pagination,
+  Alert,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import RecommendIcon from '@mui/icons-material/Recommend';
@@ -49,7 +50,13 @@ function RecommendationItem({ book, redirectByGroup }) {
 
 const PAGE_SIZE = 3;
 
-export function RecommendationPaginatedList({ data, redirectByGroup }) {
+export function RecommendationPaginatedList({
+  data,
+  redirectByGroup,
+  isFetching,
+  isError,
+  error,
+}) {
   const [pagination, setPagination] = useState({
     pageCount: data ? Math.ceil(data.length / PAGE_SIZE) : null,
     pageNumber: 1,
@@ -77,6 +84,20 @@ export function RecommendationPaginatedList({ data, redirectByGroup }) {
       pageNumber: page,
     });
   };
+
+  if (isFetching) {
+    return (
+      <Typography variant="h5" component="div">
+        Pending...
+      </Typography>
+    );
+  } else if (isError) {
+    return (
+      <Stack>
+        <Alert severity="error">{error}</Alert>
+      </Stack>
+    );
+  }
 
   return (
     <Box>

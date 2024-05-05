@@ -7,11 +7,21 @@ export default function Recommendations() {
   const { bookId } = useParams();
 
   // eslint-disable-next-line no-unused-vars
-  const { data, isFetching } = useFetchRecommendationsByBookQuery(bookId);
+  const { data, isFetching, isError, error } =
+    useFetchRecommendationsByBookQuery(bookId);
+
+  let errorMessage;
+  if (isError) {
+    errorMessage = error.error;
+  }
+
   return (
     <RecommendationPaginatedList
       data={data}
       redirectByGroup={`${READ_CONFIG.routes.group}`}
+      isFetching={isFetching}
+      isError={isError}
+      error={errorMessage}
     />
   );
 }
