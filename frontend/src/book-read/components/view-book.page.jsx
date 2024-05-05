@@ -1,4 +1,12 @@
-import { Paper, Box, Stack, Typography, Alert, Button } from '@mui/material';
+import {
+  Paper,
+  Box,
+  Stack,
+  Typography,
+  Alert,
+  Button,
+  Rating,
+} from '@mui/material';
 import Grid from '@mui/material/Unstable_Grid2';
 import { useParams, useNavigate } from 'react-router';
 import Markdown from 'react-markdown';
@@ -65,7 +73,7 @@ export default function ViewBook() {
     <Box sx={{ flexGrow: 1 }}>
       <Grid container spacing={2}>
         <Grid lg={3}>
-          <Paper elevation={6}>
+          <Paper elevation={6} sx={{ padding: 1 }}>
             <Box
               sx={{ overflow: 'hidden', textAlign: 'center', paddingTop: 1 }}
             >
@@ -74,6 +82,12 @@ export default function ViewBook() {
                 alt="[Book cover image is displayed here]"
                 style={{ width: '90%', height: 'auto' }}
               ></img>
+              <Rating
+                value={book.averageScore}
+                precision={0.5}
+                size={'large'}
+                readOnly
+              />
             </Box>
           </Paper>
         </Grid>

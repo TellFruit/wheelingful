@@ -22,6 +22,7 @@ const rootReducer = combineReducers({
   [publishChapterApi.reducerPath]: publishChapterApi.reducer,
   [readApi.reducerPath]: readApi.reducer,
   [publishReviewApi.reducerPath]: publishReviewApi.reducer,
+  [recommendationApi.reducerPath]: recommendationApi.reducer,
 });
 
 const persistedReducer = persistReducer(
@@ -35,6 +36,7 @@ const persistedReducer = persistReducer(
       publishChapterApi.reducerPath,
       readApi.reducerPath,
       publishReviewApi.reducerPath,
+      recommendationApi.reducerPath,
     ],
   },
   rootReducer

@@ -62,7 +62,7 @@ export default function Header() {
             component={Link}
             to={`/${AUTH_CONFIG.routes.group}/${AUTH_CONFIG.routes.login}`}
           >
-            Sign Up
+            Sign In
           </Button>
         )}
       </Toolbar>

@@ -9,6 +9,7 @@ import ProtectedReviewWrapper from '../components/protected-review.wrapper';
 
 import PublishReview from '../components/review-create.page';
 import UpdateReview from '../components/review-update.page';
+import PersonalPick from '../components/personal-pick.component';
 
 export default function ReadRouter() {
   return (
@@ -38,6 +39,14 @@ export default function ReadRouter() {
         <Route
           path={READ_CONFIG.routes.readChapter}
           element={<ViewChapter />}
+        />
+        <Route
+          path={READ_CONFIG.routes.personalPick}
+          element={
+            <ProtectedWrapper>
+              <PersonalPick />
+            </ProtectedWrapper>
+          }
         />
       </Route>
     </Routes>

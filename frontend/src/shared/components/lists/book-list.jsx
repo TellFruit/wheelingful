@@ -8,23 +8,17 @@ import {
   Stack,
   Typography,
   Alert,
-  Pagination,
-<<<<<<< HEAD
-=======
   Rating,
->>>>>>> eaa6f9e (✨ Implementing the functionality of recommendations)
 } from '@mui/material';
 import { Link } from 'react-router-dom';
 import Markdown from 'react-markdown';
 
-export function BookPaginatedList({
+export function BookList({
   isFetching,
   isError,
   error,
   redirectByGroup,
-  serverPaginated,
-  pageNumber,
-  onPageChange,
+  data,
 }) {
   if (isFetching) {
     return (
@@ -39,11 +33,12 @@ export function BookPaginatedList({
       </Stack>
     );
   }
+  console.log(data);
 
   return (
     <Box sx={{ width: '100%' }}>
       <Grid container spacing={3}>
-        {serverPaginated.items.map((book) => (
+        {data.map((book) => (
           <Grid item key={book.id} xs={12} sm={12} md={6} lg={6}>
             <Card>
               <CardActionArea
@@ -57,10 +52,6 @@ export function BookPaginatedList({
                     alt={book.title}
                     sx={{ width: 200 }}
                   />
-<<<<<<< HEAD
-                  <Stack direction={'column'} spacing={1}>
-                    <CardContent sx={{ flex: '1 0 auto' }}>
-=======
 
                   <CardContent sx={{ width: '100%' }}>
                     <Stack
@@ -68,7 +59,6 @@ export function BookPaginatedList({
                       spacing={1}
                       sx={{ width: '100%' }}
                     >
->>>>>>> eaa6f9e (✨ Implementing the functionality of recommendations)
                       <Typography variant="h6">{book.title}</Typography>
                       <Stack direction={'row'} spacing={1}>
                         <Typography variant="body2" color="textSecondary">
@@ -88,10 +78,6 @@ export function BookPaginatedList({
                           </Markdown>
                         </Typography>
                       </Box>
-<<<<<<< HEAD
-                    </CardContent>
-                  </Stack>
-=======
                       <Rating
                         value={book.averageScore}
                         precision={0.5}
@@ -101,25 +87,12 @@ export function BookPaginatedList({
                       />
                     </Stack>
                   </CardContent>
->>>>>>> eaa6f9e (✨ Implementing the functionality of recommendations)
                 </Stack>
               </CardActionArea>
             </Card>
           </Grid>
         ))}
       </Grid>
-      <Box display="flex" justifyContent="center" alignItems="center">
-        <Pagination
-          count={serverPaginated.pageCount}
-          page={pageNumber}
-          onChange={onPageChange}
-          showFirstButton
-          showLastButton
-          color="primary"
-          size="large"
-          sx={{ marginTop: 3 }}
-        />
-      </Box>
     </Box>
   );
 }
