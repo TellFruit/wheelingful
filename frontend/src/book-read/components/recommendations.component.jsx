@@ -6,7 +6,6 @@ import { READ_CONFIG } from '../configuration/read.config';
 export default function Recommendations() {
   const { bookId } = useParams();
 
-  // eslint-disable-next-line no-unused-vars
   const { data, isFetching, isError, error } =
     useFetchRecommendationsByBookQuery(bookId);
 
