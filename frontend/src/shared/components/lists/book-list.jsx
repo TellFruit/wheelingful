@@ -33,7 +33,6 @@ export function BookList({
       </Stack>
     );
   }
-  console.log(data);
 
   return (
     <Box sx={{ width: '100%' }}>

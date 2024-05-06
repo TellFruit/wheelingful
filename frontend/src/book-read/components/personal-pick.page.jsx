@@ -3,7 +3,6 @@ import { useFetchRecommendationsByUserQuery } from '../store/apis/recommendation
 import { useFetchReviewsByUserQuery } from '../store/apis/review';
 import { READ_CONFIG } from '../configuration/read.config';
 import { Alert, Stack, Button } from '@mui/material';
-
 import CachedIcon from '@mui/icons-material/Cached';
 
 function RecommendationItems() {
@@ -22,6 +21,7 @@ function RecommendationItems() {
   return (
     <Stack direction={'column'} alignItems={'center'} sx={{ width: '100%' }}>
       <Button
+        disabled={isFetching}
         variant="contained"
         onClick={onReload}
         sx={{ marginBottom: '30px', width: '50%' }}
@@ -45,14 +45,13 @@ export default function PersonalPick() {
     pageSize: 1,
   });
 
-  if (!isError && !isFetching && data.items.length) {
-    return <RecommendationItems />;
+  if (!isError && !isFetching && data.items.length === 0) {
+    return (
+      <Alert severity="info">
+        Leave more reviews to generate a selection of recommendations
+      </Alert>
+    );
   }
 
-  console.log(data);
-  return (
-    <Alert severity="info">
-      Leave more reviews to generate a selection of recommendations
-    </Alert>
-  );
+  return <RecommendationItems />;
 }

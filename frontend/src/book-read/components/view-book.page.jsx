@@ -21,7 +21,7 @@ import {
   useFetchChaptersByBookQuery,
 } from '../store/apis/read';
 import Reviews from './reviews.component';
-import Recommendations from './recommendations.component';
+import BookPaginatedSlick from './recommendations.component';
 import { READ_CONFIG } from '../configuration/read.config';
 
 export default function ViewBook() {
@@ -194,7 +194,7 @@ export default function ViewBook() {
               paddingBottom: 2,
             }}
           >
-            <Recommendations />
+            <BookPaginatedSlick />
           </Paper>
         </Grid>
         <Grid lg={8}>

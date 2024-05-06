@@ -9,7 +9,7 @@ import ProtectedReviewWrapper from '../components/protected-review.wrapper';
 
 import PublishReview from '../components/review-create.page';
 import UpdateReview from '../components/review-update.page';
-import PersonalPick from '../components/personal-pick.component';
+import PersonalPick from '../components/personal-pick.page';
 
 export default function ReadRouter() {
   return (

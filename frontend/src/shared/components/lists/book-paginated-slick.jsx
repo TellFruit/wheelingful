@@ -48,7 +48,7 @@ function RecommendationItem({ book, redirectByGroup }) {
 
 const PAGE_SIZE = 3;
 
-export function RecommendationPaginatedList({
+export function BookPaginatedSlick({
   data,
   redirectByGroup,
   isFetching,

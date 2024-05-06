@@ -1,9 +1,9 @@
-import { RecommendationPaginatedList } from '../../shared';
+import { BookPaginatedSlick } from '../../shared';
 import { useParams } from 'react-router-dom';
 import { useFetchRecommendationsByBookQuery } from '../store/apis/recommendation';
 import { READ_CONFIG } from '../configuration/read.config';
 
-export default function Recommendations() {
+export default function SimilarBooks() {
   const { bookId } = useParams();
 
   const { data, isFetching, isError, error } =
@@ -15,7 +15,7 @@ export default function Recommendations() {
   }
 
   return (
-    <RecommendationPaginatedList
+    <BookPaginatedSlick
       data={data}
       redirectByGroup={`${READ_CONFIG.routes.group}`}
       isFetching={isFetching}

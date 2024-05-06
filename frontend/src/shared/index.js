@@ -8,4 +8,4 @@ export * from './components/lists/book-paginated-list.component';
 export * from './components/lists/book-list';
 export * from './components/lists/chapter-paginated-list.component';
 export * from './components/lists/reviews-paginated-list';
-export * from './components/lists/recommendation-paginated-list';
+export * from './components/lists/book-paginated-slick';

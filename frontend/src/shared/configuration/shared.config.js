@@ -1,6 +1,7 @@
 export const SHARED_CONFIG = {
   api: {
-    url: '#{SERVER_API_URL}#',
+    // url: '#{SERVER_API_URL}#',
+    url: 'https://wheelingfulapi.azurewebsites.net/',
   },
   pagination: {
     defaultPageSize: 8,
