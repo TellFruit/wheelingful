@@ -35,7 +35,16 @@ function RecommendationItem({ book, redirectByGroup }) {
               alt={book.title}
               sx={{ width: 200 }}
             />
-            <Typography variant="body2" color="textSecondary">
+            <Typography
+              variant="body2"
+              color="textSecondary"
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                whiteSpace: 'nowrap',
+                maxWidth: '200px',
+              }}
+            >
               {book.title}
             </Typography>
             <Rating value={book.averageScore} precision={0.5} readOnly />
@@ -114,15 +123,14 @@ export function BookPaginatedSlick({
           justifyContent={'space-evenly'}
           marginTop={2}
         >
-          {items
-            ? items.map((book) => (
-                <RecommendationItem
-                  key={book.id}
-                  book={book}
-                  redirectByGroup={redirectByGroup}
-                />
-              ))
-            : null}
+          {items &&
+            items.map((book) => (
+              <RecommendationItem
+                key={book.id}
+                book={book}
+                redirectByGroup={redirectByGroup}
+              />
+            ))}
         </Stack>
       </Box>
       <Box display="flex" justifyContent="center" alignItems="center">
