@@ -11,7 +11,6 @@ import {
   Alert,
 } from '@mui/material';
 import { Link } from 'react-router-dom';
-import RecommendIcon from '@mui/icons-material/Recommend';
 import { useState, useEffect } from 'react';
 
 function RecommendationItem({ book, redirectByGroup }) {
@@ -108,12 +107,6 @@ export function BookPaginatedSlick({
 
   return (
     <Box>
-      <Stack spacing={1} direction={'row'} alignItems={'center'} marginTop={2}>
-        <RecommendIcon />
-        <Typography variant="h5" sx={{ textAlign: 'left' }}>
-          Recommendations
-        </Typography>
-      </Stack>
       <Box marginTop={2}>
         <Divider sx={{ mb: 2 }} />
         <Stack
