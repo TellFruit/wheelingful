@@ -1,4 +1,3 @@
-import FormatQuoteIcon from '@mui/icons-material/FormatQuote';
 import {
   Box,
   Stack,
@@ -64,17 +63,6 @@ export function ReviewPaginatedList({
   if (isFetching) {
     return (
       <Box>
-        <Stack
-          spacing={1}
-          direction={'row'}
-          alignItems={'center'}
-          marginTop={2}
-        >
-          <FormatQuoteIcon />
-          <Typography variant="h5" sx={{ textAlign: 'left' }}>
-            Reviews
-          </Typography>
-        </Stack>
         <Box marginTop={2}>
           <Divider sx={{ mb: 2 }} />
           <CircularProgress />
@@ -85,12 +73,6 @@ export function ReviewPaginatedList({
 
   return (
     <Box>
-      <Stack spacing={1} direction={'row'} alignItems={'center'} marginTop={2}>
-        <FormatQuoteIcon />
-        <Typography variant="h5" sx={{ textAlign: 'left' }}>
-          Reviews
-        </Typography>
-      </Stack>
       <Box marginTop={2}>
         <Divider sx={{ mb: 2 }} />
         {serverPaginated.items.map((review, idx) => (

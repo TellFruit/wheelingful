@@ -10,13 +10,15 @@ import {
   ListItemText,
   Divider,
 } from '@mui/material';
+
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import AddCommentIcon from '@mui/icons-material/AddComment';
 import RemoveCircleIcon from '@mui/icons-material/RemoveCircle';
 import UpdateIcon from '@mui/icons-material/Update';
+import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
+
 import { Link, Outlet, useParams } from 'react-router-dom';
 import { READ_CONFIG } from '../configuration/read.config';
-import { useSelector } from 'react-redux';
 import {
   useFetchReviewByBookQuery,
   useDeleteReviewByBookMutation,
@@ -53,6 +55,18 @@ function DefaultDrawer() {
                 <ListItemText primary={'Browse books'} />
               </ListItemButton>
             </ListItem>
+            <ListItem
+              component={Link}
+              sx={ListItemStyle}
+              to={`/${READ_CONFIG.routes.group}/${READ_CONFIG.routes.personalPick}`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <LocalLibraryIcon />
+                </ListItemIcon>
+                <ListItemText primary={'Personal Pick'} />
+              </ListItemButton>
+            </ListItem>
           </List>
           <Divider />
         </Box>
@@ -62,7 +76,7 @@ function DefaultDrawer() {
   );
 }
 
-function SignedInDrawer({ bookId }) {
+function BookDrawer({ bookId }) {
   const [deleteReview] = useDeleteReviewByBookMutation();
   const { isSuccess } = useFetchReviewByBookQuery(bookId);
 
@@ -95,6 +109,20 @@ function SignedInDrawer({ bookId }) {
                 <ListItemText primary={'Browse books'} />
               </ListItemButton>
             </ListItem>
+
+            <ListItem
+              component={Link}
+              sx={ListItemStyle}
+              to={`/${READ_CONFIG.routes.group}/${READ_CONFIG.routes.personalPick}`}
+            >
+              <ListItemButton>
+                <ListItemIcon>
+                  <LocalLibraryIcon />
+                </ListItemIcon>
+                <ListItemText primary={'Personal Pick'} />
+              </ListItemButton>
+            </ListItem>
+
             {!isSuccess ? (
               <ListItem
                 component={Link}
@@ -110,7 +138,6 @@ function SignedInDrawer({ bookId }) {
               </ListItem>
             ) : (
               <>
-                {' '}
                 <ListItem
                   component={Link}
                   sx={ListItemStyle}
@@ -144,11 +171,10 @@ function SignedInDrawer({ bookId }) {
 
 export default function ReadDrawer() {
   const { bookId } = useParams();
-  const { isSignedIn } = useSelector((state) => state.authSlice);
 
-  if (!(bookId && isSignedIn)) {
+  if (!bookId) {
     return <DefaultDrawer />;
   }
 
-  return <SignedInDrawer bookId={bookId} />;
+  return <BookDrawer bookId={bookId} />;
 }

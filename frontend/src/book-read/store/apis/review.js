@@ -1,16 +1,5 @@
 import { createApi } from '@reduxjs/toolkit/query/react';
-import { baseQueryWithReauth, selectIsSignedIn } from '../../../auth';
-import { baseQuery } from '../../../shared';
-
-const dynamicBaseQuery = async (args, api, extraOptions) => {
-  const isSignedIn = selectIsSignedIn(api.getState());
-
-  if (isSignedIn) {
-    return baseQueryWithReauth(args, api, extraOptions);
-  }
-
-  return baseQuery(args, api, extraOptions);
-};
+import { dynamicBaseQuery } from '../../../shared';
 
 export const publishReviewApi = createApi({
   reducerPath: 'publishReviewApi',
@@ -76,6 +65,19 @@ export const publishReviewApi = createApi({
           };
         },
       }),
+      fetchReviewsByUser: builder.query({
+        providesTags: ['Review'],
+        query: (pagination) => {
+          return {
+            url: `/users/current/reviews`,
+            params: {
+              pageNumber: pagination.pageNumber,
+              pageSize: pagination.pageSize,
+            },
+            method: 'GET',
+          };
+        },
+      }),
     };
   },
 });
@@ -86,4 +88,5 @@ export const {
   useFetchReviewByBookQuery,
   useDeleteReviewByBookMutation,
   useFetchReviewsByBookQuery,
+  useFetchReviewsByUserQuery,
 } = publishReviewApi;
