@@ -170,6 +170,6 @@ public class BookEndpointsTest : BaseTest
         // Assert
 
         Assert.NotNull(result);
-        Assert.Single(result.Items);
+        Assert.Equal(2, result.Items.Count);
     }
 }

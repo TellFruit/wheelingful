@@ -67,6 +67,7 @@ public class BookAuthorServiceTests
         var requestJson = JsonSerializer.Serialize(new Book
         {
             Id = book.Id,
+            UserId = mockCurrentUser.Id,
             Title = request.Title,
             Description = request.Description,
             Category = request.Category,
