@@ -46,8 +46,10 @@ public class BookRecommenderService(
             testFraction: 0.2
         );
 
-        IEstimator<ITransformer> estimator = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "UserIdEncoded", inputColumnName: "UserId")
-            .Append(mlContext.Transforms.Conversion.MapValueToKey(outputColumnName: "BookIdEncoded", inputColumnName: "BookId"));
+        IEstimator<ITransformer> estimator = mlContext.Transforms.Conversion
+            .MapValueToKey(outputColumnName: "UserIdEncoded", inputColumnName: "UserId")
+            .Append(mlContext.Transforms.Conversion
+            .MapValueToKey(outputColumnName: "BookIdEncoded", inputColumnName: "BookId"));
 
         var options = new MatrixFactorizationTrainer.Options
         {
@@ -58,13 +60,15 @@ public class BookRecommenderService(
             ApproximationRank = 100
         };
 
-        var trainerEstimator = estimator.Append(mlContext.Recommendation().Trainers.MatrixFactorization(options));
+        var trainerEstimator = estimator
+            .Append(mlContext.Recommendation().Trainers.MatrixFactorization(options));
 
         ITransformer model = trainerEstimator.Fit(splitData.TrainSet);
 
         var prediction = model.Transform(splitData.TestSet);
 
-        var metrics = mlContext.Regression.Evaluate(prediction, labelColumnName: "ReviewScore", scoreColumnName: "Score");
+        var metrics = mlContext.Regression
+            .Evaluate(prediction, labelColumnName: "ReviewScore", scoreColumnName: "Score");
 
         logger.LogInformation("User {UserId} finished model training: {@Metrics}",
             currentUser.Id, metrics);

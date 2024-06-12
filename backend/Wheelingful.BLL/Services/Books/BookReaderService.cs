@@ -34,6 +34,11 @@ public class BookReaderService(
         var doFetchByCurrentUser = request.DoFetchByCurrentUser.HasValue
             && request.DoFetchByCurrentUser.Value;
 
+        if (doFetchByCurrentUser)
+        {
+            query = query.Where(b => b.UserId == currentUser.Id);
+        }
+
         var selected = query.Select(b => new FetchBookResponse
         {
             Id = b.Id,
@@ -45,11 +50,6 @@ public class BookReaderService(
             AuthorUserName = b.User.UserName!,
             Reviews = b.Reviews,
         });
-
-        if (doFetchByCurrentUser)
-        {
-            query = query.Where(b => b.UserId == currentUser.Id);
-        }
 
         var fetchValue = () => selected.ToPagedListAsync(request.PageNumber.Value, request.PageSize.Value);
 
@@ -77,9 +77,10 @@ public class BookReaderService(
 
         var key = nameof(Book).ToCachePrefix(request.BookId);
 
-        return await cacheService.GetAndSet(key, () =>
+        var s = await cacheService.GetAndSet(key, () =>
         {
             return dbContext.Books
+            .Include(b => b.Reviews)
             .Select(b => new FetchBookResponse
             {
                 Id = b.Id,
@@ -94,6 +95,7 @@ public class BookReaderService(
             .FirstAsync(b => b.Id == request.BookId);
         },
         CacheHelper.DefaultCacheExpiration);
+        return s;
     }
 
     private bool FiltersAreStandard(FetchBookPaginationRequest request)
